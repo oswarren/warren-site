@@ -1,0 +1,203 @@
+# yaml-language-server: $schema=./quartz/plugins/quartz-plugins.schema.json
+#
+# warren.systems — Quartz 5 configuration.
+# Site-wide settings and the plugin list live here. The custom warren components
+# (Nav, Log, Home, ...) are core components in quartz/components/warren/ and are
+# placed into the layout by the TS override in quartz.ts, because their placement
+# depends on the page slug (something the YAML `condition` presets cannot express).
+configuration:
+  pageTitle: warren.systems
+  pageTitleSuffix: ""
+  enableSPA: true
+  enablePopovers: false
+  analytics: null
+  locale: en-US
+  baseUrl: oswarren.github.io/warren-site
+  ignorePatterns:
+    - private
+    - templates
+    - .obsidian
+  theme:
+    fontOrigin: googleFonts
+    cdnCaching: true
+    typography:
+      header: Space Grotesk
+      body: Space Grotesk
+      code: IBM Plex Mono
+    colors:
+      lightMode:
+        light: "#f4f4f1"
+        lightgray: "#dcdcd7"
+        gray: "#8a8a85"
+        darkgray: "#4a4a46"
+        dark: "#141414"
+        secondary: "#1d5bd6"
+        tertiary: "#1d5bd6"
+        highlight: rgba(29, 91, 214, 0.08)
+        textHighlight: rgba(29, 91, 214, 0.25)
+      darkMode:
+        light: "#111311"
+        lightgray: "#2a2d29"
+        gray: "#6f746c"
+        darkgray: "#a9aea5"
+        dark: "#d6dbd2"
+        secondary: "#9be37a"
+        tertiary: "#9be37a"
+        highlight: rgba(155, 227, 122, 0.1)
+        textHighlight: rgba(155, 227, 122, 0.3)
+
+plugins:
+  # ---- transformers ---------------------------------------------------------
+  # note-properties is the v5 frontmatter parser (required); the properties panel is hidden
+  - source: "@quartz-community/note-properties"
+    enabled: true
+    options:
+      includeAll: false
+      includedProperties: []
+      hidePropertiesView: true
+      delimiters: ---
+      language: yaml
+    order: 5
+  - source: "@quartz-community/created-modified-date"
+    enabled: true
+    options:
+      defaultDateType: modified
+      priority:
+        - frontmatter
+        - git
+        - filesystem
+    order: 10
+  - source: "@quartz-community/syntax-highlighting"
+    enabled: true
+    options:
+      theme:
+        light: github-light
+        dark: github-dark
+      keepBackground: false
+    order: 20
+  - source: "@quartz-community/obsidian-flavored-markdown"
+    enabled: true
+    options:
+      enableInHtmlEmbed: false
+      enableCheckbox: true
+    order: 30
+  - source: "@quartz-community/github-flavored-markdown"
+    enabled: true
+    order: 40
+  # TableOfContents: the transformer fills fileData.toc; the component is wrapped
+  # as "on this page" in quartz/components/warren/Rail.tsx, so no layout entry here.
+  - source: "@quartz-community/table-of-contents"
+    enabled: true
+    options:
+      minEntries: 0
+      maxDepth: 3
+    order: 50
+  - source: "@quartz-community/crawl-links"
+    enabled: true
+    options:
+      markdownLinkResolution: shortest
+    order: 60
+  - source: "@quartz-community/description"
+    enabled: true
+    order: 70
+  - source: "@quartz-community/latex"
+    enabled: false
+  - source: "@quartz-community/quartz-fonts"
+    enabled: false
+  - source: "@quartz-themes/core"
+    enabled: false
+
+  # ---- filters --------------------------------------------------------------
+  - source: "@quartz-community/remove-draft"
+    enabled: true
+  - source: "@quartz-community/explicit-publish"
+    enabled: false
+
+  # ---- emitters -------------------------------------------------------------
+  - source: "@quartz-community/alias-redirects"
+    enabled: true
+  - source: "@quartz-community/content-index"
+    enabled: true
+    options:
+      enableSiteMap: true
+      enableRSS: true
+      rssFullHtml: false
+  - source: "@quartz-community/favicon"
+    enabled: true
+  - source: "@quartz-community/og-image"
+    enabled: false
+  - source: "@quartz-community/cname"
+    enabled: false
+  - source: "@quartz-community/canvas-page"
+    enabled: false
+  - source: "@quartz-community/bases-page"
+    enabled: false
+  - source: "@quartz-community/unlisted-pages"
+    enabled: false
+  - source: "@quartz-community/encrypted-pages"
+    enabled: false
+
+  # ---- page types -----------------------------------------------------------
+  - source: "@quartz-community/content-page"
+    enabled: true
+  - source: "@quartz-community/folder-page"
+    enabled: true
+  - source: "@quartz-community/tag-page"
+    enabled: true
+
+  # ---- layout components ----------------------------------------------------
+  # ArticleTitle is the only stock layout component we keep; everything else
+  # (nav, meta line, rail blocks, footer) is a warren component placed in quartz.ts.
+  - source: "@quartz-community/article-title"
+    enabled: true
+    layout:
+      position: beforeBody
+      priority: 10
+  # no graph, explorer, search, breadcrumbs, dark-mode toggle, backlinks, stock footer
+  - source: "@quartz-community/explorer"
+    enabled: false
+  - source: "@quartz-community/graph"
+    enabled: false
+  - source: "@quartz-community/search"
+    enabled: false
+  - source: "@quartz-community/breadcrumbs"
+    enabled: false
+  - source: "@quartz-community/backlinks"
+    enabled: false
+  - source: "@quartz-community/content-meta"
+    enabled: false
+  - source: "@quartz-community/tag-list"
+    enabled: false
+  - source: "@quartz-community/page-title"
+    enabled: false
+  - source: "@quartz-community/darkmode"
+    enabled: false
+  - source: "@quartz-community/reader-mode"
+    enabled: false
+  - source: "@quartz-community/footer"
+    enabled: false
+  - source: "@quartz-community/comments"
+    enabled: false
+  - source: "@quartz-community/recent-notes"
+    enabled: false
+  - source: "@quartz-community/spacer"
+    enabled: false
+  - source: "@quartz-community/stacked-pages"
+    enabled: false
+
+layout:
+  groups: {}
+  byPageType:
+    # every page type renders inside the warren frame (quartz/components/frames/WarrenFrame.tsx)
+    content:
+      template: warren
+    folder:
+      template: warren
+    tag:
+      template: warren
+    "404":
+      template: warren
+      positions:
+        beforeBody: []
+        left: []
+        right: []

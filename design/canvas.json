@@ -1,0 +1,73 @@
+{
+  "artboards": [
+    {
+      "file": "Main.dc.html",
+      "title": "Home",
+      "x": 0,
+      "y": 0,
+      "w": 1200,
+      "h": 980,
+      "page": "page-1"
+    },
+    {
+      "file": "Note.dc.html",
+      "title": "Note page",
+      "x": 1320,
+      "y": 0,
+      "w": 1200,
+      "h": 1020,
+      "page": "page-1"
+    },
+    {
+      "file": "Tools.dc.html",
+      "title": "Tools page",
+      "x": 2640,
+      "y": 0,
+      "w": 1200,
+      "h": 960,
+      "page": "page-1"
+    },
+    {
+      "file": "Terminal.dc.html",
+      "title": "B · Terminal",
+      "x": 0,
+      "y": 0,
+      "w": 1200,
+      "h": 920,
+      "page": "page-2"
+    },
+    {
+      "file": "Pipeline.dc.html",
+      "title": "C · Pipeline",
+      "x": 1320,
+      "y": 0,
+      "w": 1200,
+      "h": 940,
+      "page": "page-2"
+    }
+  ],
+  "annotations": [
+    {
+      "id": "log-note",
+      "x": 0,
+      "y": -140,
+      "w": 420,
+      "page": "page-1",
+      "text": "The when / what happened / source log is the spine of the whole site: the homepage shows the last few lines, the tools page is the same idea per tool, and every note carries its own 'last edited / rendered' lines."
+    }
+  ],
+  "launch": {
+    "view": "canvas",
+    "page": "page-1"
+  },
+  "pages": [
+    {
+      "id": "page-1",
+      "name": "Status board"
+    },
+    {
+      "id": "page-2",
+      "name": "Other directions"
+    }
+  ]
+}

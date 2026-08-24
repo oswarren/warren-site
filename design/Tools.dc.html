@@ -1,0 +1,101 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap">
+  <style>
+    body { margin: 0; background: #f4f4f1; color: #141414; font-family: "Space Grotesk", "Helvetica Neue", Arial, sans-serif; }
+    a { color: #141414; text-decoration: none; } a:hover { color: #1d5bd6; }
+    .mono { font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace; }
+  </style>
+</helmet>
+<div style="width: 1200px; min-height: 940px; background: #f4f4f1; display: flex; flex-direction: column;">
+
+  <div class="mono" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 48px; border-bottom: 1px solid #141414; font-size: 13px;">
+    <a href="/" style="font-weight: 500;">warren.systems</a>
+    <div style="display: flex; gap: 28px;">
+      <a href="/letter">letter</a>
+      <a href="/tools" style="color: #1d5bd6;">tools</a>
+      <a href="/notes">notes</a>
+      <a href="/about">about</a>
+    </div>
+    <span style="color: #4a4a46;"></span>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; padding: 56px 48px 32px 48px;">
+    <div style="grid-column: span 7; display: flex; flex-direction: column; gap: 16px;">
+      <h1 style="margin: 0; font-size: 40px; line-height: 1.1; font-weight: 500; letter-spacing: -0.02em;">Tools for one</h1>
+      <p style="margin: 0; font-size: 17px; line-height: 1.55; color: #4a4a46; max-width: 540px;">Ultra-specific scripts, each built for exactly one problem. This table is written by the tools themselves: every run appends a line, and the build reads the last one.</p>
+    </div>
+    <div class="mono" style="grid-column: 9 / span 4; display: flex; flex-direction: column; gap: 6px; font-size: 12px; color: #4a4a46; padding-top: 8px; border-top: 1px solid #141414;">
+      <div style="display: flex; justify-content: space-between;"><span>tools</span><span>6</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>running</span><span style="color: #2bb673;">5</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>retired</span><span>1</span></div>
+      <div style="display: flex; justify-content: space-between;"><span>total lines</span><span>412</span></div>
+    </div>
+  </div>
+
+  <div style="padding: 8px 48px 64px 48px; display: flex; flex-direction: column;">
+    <div class="mono" style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; font-size: 12px; color: #4a4a46; padding: 10px 0; border-bottom: 1px solid #141414;">
+      <span style="grid-column: span 3;">tool</span><span style="grid-column: span 5;">what it does</span><span style="grid-column: span 2;">runs</span><span style="grid-column: span 2;">last run</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; padding: 16px 0; border-bottom: 1px solid #dcdcd7; align-items: baseline;">
+      <a href="/tools/library-sale-watch" class="mono" style="grid-column: span 3; font-size: 14px; font-weight: 500;">library-sale-watch</a>
+      <span style="grid-column: span 5; font-size: 15px; line-height: 1.5; color: #4a4a46;">Checks the library’s page for sale dates and drops any new one into the letter draft. Exists because I missed one, once.</span>
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #4a4a46;">hourly</span>
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #2bb673;">● 2h ago</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; padding: 16px 0; border-bottom: 1px solid #dcdcd7; align-items: baseline;">
+      <a href="/tools/event-page-diff" class="mono" style="grid-column: span 3; font-size: 14px; font-weight: 500;">event-page-diff</a>
+      <span style="grid-column: span 5; font-size: 15px; line-height: 1.5; color: #4a4a46;">Diffs a handful of local venue pages and keeps only the lines that changed.</span>
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #4a4a46;">every 6h</span>
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #2bb673;">● 4h ago</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; padding: 16px 0; border-bottom: 1px solid #dcdcd7; align-items: baseline;">
+      <a href="/tools/screenshots-to-notes" class="mono" style="grid-column: span 3; font-size: 14px; font-weight: 500;">screenshots-to-notes</a>
+      <span style="grid-column: span 5; font-size: 15px; line-height: 1.5; color: #4a4a46;">Turns the day’s screenshots folder into one dated markdown note with the text pulled out.</span>
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #4a4a46;">nightly</span>
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #2bb673;">● yesterday</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; padding: 16px 0; border-bottom: 1px solid #dcdcd7; align-items: baseline;">
+      <a href="/tools/letter-assembler" class="mono" style="grid-column: span 3; font-size: 14px; font-weight: 500;">letter-assembler</a>
+      <span style="grid-column: span 5; font-size: 15px; line-height: 1.5; color: #4a4a46;">Collects the week’s finds, ranks by distance from home, writes the draft, and sends it Friday at seven.</span>
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #4a4a46;">fridays</span>
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #2bb673;">● Fri 07:02</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; padding: 16px 0; border-bottom: 1px solid #dcdcd7; align-items: baseline;">
+      <a href="/tools/site-rebuild" class="mono" style="grid-column: span 3; font-size: 14px; font-weight: 500;">site-rebuild</a>
+      <span style="grid-column: span 5; font-size: 15px; line-height: 1.5; color: #4a4a46;">Rebuilds this site whenever any of the above writes a line. You are looking at its output.</span>
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #4a4a46;">on change</span>
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #2bb673;">● 06:14 today</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; padding: 16px 0; border-bottom: 1px solid #dcdcd7; align-items: baseline; color: #8a8a85;">
+      <a href="/tools/gumroad-builder" class="mono" style="grid-column: span 3; font-size: 14px; font-weight: 500; color: #8a8a85;">gumroad-builder</a>
+      <span style="grid-column: span 5; font-size: 15px; line-height: 1.5;">Built one product end-to-end with an assistant, then stopped. Kept for the build log.</span>
+      <span class="mono" style="grid-column: span 2; font-size: 12px;">once</span>
+      <span class="mono" style="grid-column: span 2; font-size: 12px;">retired · Jul</span>
+    </div>
+  </div>
+
+  <div class="mono" style="margin-top: auto; display: flex; justify-content: space-between; padding: 16px 48px 24px 48px; font-size: 12px; color: #4a4a46; border-top: 1px solid #141414;">
+    <span>built today 06:14 · build.py → quartz · 2.8s · <a href="https://github.com" style="color: #4a4a46;">source</a></span>
+    <div style="display: flex; gap: 20px;">
+      <a href="/feed.xml" style="color: #4a4a46;">rss</a>
+      <a href="mailto:hello@example.com" style="color: #4a4a46;">email</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

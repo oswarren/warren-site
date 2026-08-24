@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap">
+  <style>
+    body { margin: 0; background: #f4f4f1; color: #141414; font-family: "Space Grotesk", "Helvetica Neue", Arial, sans-serif; }
+    a { color: #141414; text-decoration: none; } a:hover { color: #1d5bd6; }
+    .mono { font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace; }
+    .prose a { border-bottom: 1px solid #141414; } .prose a:hover { border-color: #1d5bd6; }
+  </style>
+</helmet>
+<div style="width: 1200px; min-height: 1000px; background: #f4f4f1; display: flex; flex-direction: column;">
+
+  <div class="mono" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 48px; border-bottom: 1px solid #141414; font-size: 13px;">
+    <a href="/" style="font-weight: 500;">warren.systems</a>
+    <div style="display: flex; gap: 28px;">
+      <a href="/letter">letter</a>
+      <a href="/tools">tools</a>
+      <a href="/notes" style="color: #1d5bd6;">notes</a>
+      <a href="/about">about</a>
+    </div>
+    <span style="color: #4a4a46;"></span>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 24px; padding: 56px 48px 64px 48px;">
+
+    <div style="grid-column: span 8; display: flex; flex-direction: column; gap: 28px;">
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <div class="mono" style="display: flex; gap: 20px; font-size: 12px; color: #4a4a46;">
+          <span>notes/home-cooked.md</span><span>2026-08-18</span><span>4 min</span>
+        </div>
+        <h1 style="margin: 0; font-size: 40px; line-height: 1.1; font-weight: 500; letter-spacing: -0.02em; text-wrap: pretty;">Home-cooked software, and why I stopped polishing</h1>
+      </div>
+
+      <div class="prose" style="display: flex; flex-direction: column; gap: 20px; font-size: 18px; line-height: 1.6; max-width: 620px;">
+        <p style="margin: 0;">Most of the tools I use every day were built in an afternoon, for exactly one problem, and never shown to anyone. A script that turns a folder of screenshots into a dated note. A watcher that tells me when the library posts its sale dates. None of them would survive a code review, and none of them need to.</p>
+        <p style="margin: 0;">Robin Sloan called this <a href="#">home-cooked software</a>: a meal for the people in your house, not a restaurant. The metaphor stuck because it explains the feeling when I finish one. It isn’t pride. It’s closer to being fed.</p>
+        <h2 class="mono" style="margin: 8px 0 0 0; font-size: 13px; font-weight: 500; color: #4a4a46;">## what changed</h2>
+        <p style="margin: 0;">I used to finish a tool and immediately start on a README, a settings file, a second user. That’s the moment it stopped being cooking. Now the rule is that a tool stays a single file until it has earned a second one by being used for a month.</p>
+        <pre class="mono" style="margin: 0; padding: 16px 18px; background: #fbfbf9; border: 1px solid #141414; font-size: 13px; line-height: 1.6; overflow-x: auto;">$ ls tools/
+library-sale-watch.py     # 61 lines, runs hourly
+screenshots-to-notes.py   # 40 lines, runs nightly
+letter-assembler.py       # 118 lines, runs fridays</pre>
+        <p style="margin: 0;">Two of those build the <a href="/letter">weekly letter</a>. The rest of the shelf is on the <a href="/tools">tools page</a>, each with its last run.</p>
+      </div>
+
+      <div class="mono" style="display: flex; flex-direction: column; font-size: 12px; color: #4a4a46; padding-top: 20px; border-top: 1px solid #141414;">
+        <div style="display: grid; grid-template-columns: 120px 1fr; gap: 6px 16px;">
+          <span>linked from</span><div style="display: flex; flex-direction: column; gap: 4px;"><a href="/tools">tools — the shelf</a><a href="/letter/31">letter no. 31</a></div>
+          <span>last edited</span><span>2026-08-18 21:40 · by hand</span>
+          <span>rendered</span><span>2026-08-22 06:14 · build.py → quartz</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mono" style="grid-column: 10 / span 3; display: flex; flex-direction: column; gap: 28px; font-size: 12px; color: #4a4a46; padding-top: 6px;">
+      <div style="display: flex; flex-direction: column; gap: 8px; padding-top: 8px; border-top: 1px solid #141414;">
+        <span style="color: #141414;">on this page</span>
+        <a href="#" style="color: #4a4a46;">what changed</a>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px; padding-top: 8px; border-top: 1px solid #141414;">
+        <span style="color: #141414;">tagged</span>
+        <div style="display: flex; gap: 12px;"><a href="/tags/tools" style="color: #4a4a46;">#tools</a><a href="/tags/making" style="color: #4a4a46;">#making</a></div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 8px; padding-top: 8px; border-top: 1px solid #141414;">
+        <span style="color: #141414;">reply</span>
+        <a href="mailto:hello@example.com" style="color: #4a4a46;">email me</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="mono" style="margin-top: auto; display: flex; justify-content: space-between; padding: 16px 48px 24px 48px; font-size: 12px; color: #4a4a46; border-top: 1px solid #141414;">
+    <span>built today 06:14 · build.py → quartz · 2.8s · <a href="https://github.com" style="color: #4a4a46;">source</a></span>
+    <div style="display: flex; gap: 20px;">
+      <a href="/feed.xml" style="color: #4a4a46;">rss</a>
+      <a href="mailto:hello@example.com" style="color: #4a4a46;">email</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+</body>
+</html>

@@ -1,0 +1,86 @@
+# warren.systems: build and deploy to GitHub Pages.
+#
+# Two ways in:
+#   push to main            -> build public/ and deploy it
+#   repository_dispatch log -> append the payload as one line to log.jsonl, commit, then build and deploy
+#
+# The second is how systems without a clone of this repo write to the site (see README, "Writing to the site").
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  repository_dispatch:
+    types: [log]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  TZ: America/New_York
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Append the dispatched line to log.jsonl
+        if: github.event_name == 'repository_dispatch'
+        env:
+          PAYLOAD: ${{ toJSON(github.event.client_payload) }}
+          SOURCE: ${{ github.event.client_payload.source }}
+        run: |
+          python3 - <<'PY'
+          import json, os, datetime
+          p = json.loads(os.environ["PAYLOAD"])
+          line = {
+              "when": p.get("when") or datetime.datetime.now().replace(microsecond=0).isoformat(),
+              "what": p["what"],
+              "source": p["source"],
+          }
+          for k in ("href", "status"):
+              if p.get(k):
+                  line[k] = p[k]
+          with open("log.jsonl", "a", encoding="utf-8") as fh:
+              fh.write(json.dumps(line, ensure_ascii=False) + "\n")
+          print(line)
+          PY
+          git config user.name "site-log"
+          git config user.email "site-log@users.noreply.github.com"
+          git add log.jsonl
+          git commit -m "log: $SOURCE"
+          git push
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Build
+        run: node scripts/build.mjs
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: public
+
+  deploy:
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,8 @@
+[
+  {"name":"library-sale-watch","what":"Checks the library’s page for sale dates and drops any new one into the letter draft. Exists because I missed one, once.","runs":"hourly","lines":61},
+  {"name":"event-page-diff","what":"Diffs a handful of local venue pages and keeps only the lines that changed.","runs":"every 6h","lines":54},
+  {"name":"screenshots-to-notes","what":"Turns the day’s screenshots folder into one dated markdown note with the text pulled out.","runs":"nightly","lines":40},
+  {"name":"letter-assembler","what":"Collects the week’s finds, ranks by distance from home, writes the draft, and sends it Friday at seven.","runs":"fridays","lines":118},
+  {"name":"site-rebuild","what":"Rebuilds this site whenever any of the above writes a line. You are looking at its output.","runs":"on change","lines":49},
+  {"name":"gumroad-builder","what":"Built one product end-to-end with an assistant, then stopped. Kept for the build log.","runs":"once","lines":90,"retired":"2026-07"}
+]

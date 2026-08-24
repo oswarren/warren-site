@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600&display=swap">
+  <style>
+    body { margin: 0; background: #f4f4f1; color: #141414; font-family: "Space Grotesk", "Helvetica Neue", Arial, sans-serif; }
+    a { color: #141414; text-decoration: none; } a:hover { color: #1d5bd6; }
+    .mono { font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace; }
+    @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+    .cursor { display: inline-block; width: 7px; height: 13px; background: #141414; vertical-align: -2px; margin-left: 2px; animation: blink 1s steps(1) infinite; }
+  </style>
+</helmet>
+<div style="width: 1200px; min-height: 960px; background: #f4f4f1; display: flex; flex-direction: column;">
+
+  <div class="mono" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 48px; border-bottom: 1px solid #141414; font-size: 13px;">
+    <a href="/" style="font-weight: 500;">warren.systems</a>
+    <div style="display: flex; gap: 28px;">
+      <a href="/letter">letter</a>
+      <a href="/tools">tools</a>
+      <a href="/notes">notes</a>
+      <a href="/about">about</a>
+    </div>
+    <span style="color: #4a4a46;">{{ clock }}</span>
+  </div>
+
+  <div style="padding: 64px 48px 48px 48px; max-width: 780px;">
+    <h1 style="margin: 0; font-size: 48px; line-height: 1.05; font-weight: 500; letter-spacing: -0.02em; text-wrap: pretty;">I build small systems that run without me. This page is one of them.</h1>
+  </div>
+
+  <div style="padding: 0 48px 48px 48px; display: flex; flex-direction: column;">
+    <div class="mono" style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; font-size: 12px; color: #4a4a46; padding: 10px 0; border-bottom: 1px solid #141414;">
+      <span style="grid-column: span 2;">when</span><span style="grid-column: span 7;">what happened</span><span style="grid-column: span 3;">source</span>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; padding: 14px 0; border-bottom: 1px solid #dcdcd7; font-size: 15px; align-items: baseline;">
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #1d5bd6;">{{ nextRun }}</span><span style="grid-column: span 7; color: #4a4a46;">letter no. 32 goes out<span class="cursor"></span></span><span class="mono" style="grid-column: span 3; font-size: 12px; color: #4a4a46;">letter-assembler</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; padding: 14px 0; border-bottom: 1px solid #dcdcd7; font-size: 15px; align-items: baseline;">
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #4a4a46;">today 06:14</span><span style="grid-column: span 7;">this page was rebuilt, 2.8s, because a line below changed</span><span class="mono" style="grid-column: span 3; font-size: 12px; color: #4a4a46;">site-rebuild</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; padding: 14px 0; border-bottom: 1px solid #dcdcd7; font-size: 15px; align-items: baseline;">
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #4a4a46;">today 04:00</span><a href="/tools/library-sale-watch" style="grid-column: span 7;">library sale page checked, nothing new</a><span class="mono" style="grid-column: span 3; font-size: 12px; color: #4a4a46;">library-sale-watch</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; padding: 14px 0; border-bottom: 1px solid #dcdcd7; font-size: 15px; align-items: baseline;">
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #4a4a46;">Aug 21 07:02</span><a href="/letter/31" style="grid-column: span 7;">Letter no. 31 sent to 84 people</a><span class="mono" style="grid-column: span 3; font-size: 12px; color: #4a4a46;">letter-assembler</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; padding: 14px 0; border-bottom: 1px solid #dcdcd7; font-size: 15px; align-items: baseline;">
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #4a4a46;">Aug 20 23:10</span><a href="/notes/2026-08-20" style="grid-column: span 7;">11 screenshots became one note</a><span class="mono" style="grid-column: span 3; font-size: 12px; color: #4a4a46;">screenshots-to-notes</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; padding: 14px 0; border-bottom: 1px solid #dcdcd7; font-size: 15px; align-items: baseline;">
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #4a4a46;">Aug 18</span><a href="/notes/home-cooked" style="grid-column: span 7;">Note: Home-cooked software, and why I stopped polishing</a><span class="mono" style="grid-column: span 3; font-size: 12px; color: #4a4a46;">warren, by hand</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; padding: 14px 0; border-bottom: 1px solid #dcdcd7; font-size: 15px; align-items: baseline;">
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #4a4a46;">Aug 16 14:40</span><a href="/tools/library-sale-watch" style="grid-column: span 7;">library-sale-watch found a new date and added it to the letter draft</a><span class="mono" style="grid-column: span 3; font-size: 12px; color: #4a4a46;">library-sale-watch</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; padding: 14px 0; border-bottom: 1px solid #dcdcd7; font-size: 15px; align-items: baseline;">
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #4a4a46;">Aug 11</span><a href="/notes/gumroad-build" style="grid-column: span 7;">Note: Building a product entirely with an assistant</a><span class="mono" style="grid-column: span 3; font-size: 12px; color: #4a4a46;">warren, by hand</span>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px; padding: 14px 0; border-bottom: 1px solid #dcdcd7; font-size: 15px; align-items: baseline;">
+      <span class="mono" style="grid-column: span 2; font-size: 12px; color: #4a4a46;">Jul 30 19:55</span><a href="/notes/gumroad-build" style="grid-column: span 7;">first sale</a><span class="mono" style="grid-column: span 3; font-size: 12px; color: #4a4a46;">gumroad → webhook</span>
+    </div>
+
+    <a href="/log" class="mono" style="font-size: 12px; color: #4a4a46; padding-top: 14px;">older lines → /log (1,204 so far)</a>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; padding: 8px 48px 64px 48px;">
+    <div style="display: flex; flex-direction: column; gap: 8px; padding-top: 14px; border-top: 1px solid #141414;">
+      <a href="/letter" style="font-size: 20px; font-weight: 500;">The letter</a>
+      <span style="font-size: 15px; line-height: 1.5; color: #4a4a46;">Interesting things within reach of [your town], every Friday. Collected by the watchers, sent before I’m up.</span>
+      <span class="mono" style="font-size: 12px; color: #4a4a46;">31 issues · 84 readers</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px; padding-top: 14px; border-top: 1px solid #141414;">
+      <a href="/tools" style="font-size: 20px; font-weight: 500;">Tools</a>
+      <span style="font-size: 15px; line-height: 1.5; color: #4a4a46;">Scripts that each do one thing for one person. The lines above are theirs.</span>
+      <span class="mono" style="font-size: 12px; color: #4a4a46;">5 running · 1 retired</span>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px; padding-top: 14px; border-top: 1px solid #141414;">
+      <a href="/notes" style="font-size: 20px; font-weight: 500;">Notes</a>
+      <span style="font-size: 15px; line-height: 1.5; color: #4a4a46;">The part written by hand.</span>
+      <span class="mono" style="font-size: 12px; color: #4a4a46;">last: Aug 18</span>
+    </div>
+  </div>
+
+  <div class="mono" style="margin-top: auto; display: flex; justify-content: space-between; padding: 16px 48px 24px 48px; font-size: 12px; color: #4a4a46; border-top: 1px solid #141414;">
+    <span>built today 06:14 · build.py → quartz · 2.8s · <a href="https://github.com" style="color: #4a4a46;">source</a></span>
+    <div style="display: flex; gap: 20px;">
+      <a href="/feed.xml" style="color: #4a4a46;">rss</a>
+      <a href="mailto:hello@example.com" style="color: #4a4a46;">email</a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script data-dc-script data-props='{}'>
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { now: new Date() }; }
+  componentDidMount() { this.t = setInterval(() => this.setState({ now: new Date() }), 1000); }
+  componentWillUnmount() { clearInterval(this.t); }
+  renderVals() {
+    const n = this.state.now;
+    const pad = (x) => String(x).padStart(2, '0');
+    const clock = pad(n.getHours()) + ':' + pad(n.getMinutes()) + ':' + pad(n.getSeconds());
+    // next Friday 07:00 local
+    const next = new Date(n); next.setHours(7, 0, 0, 0);
+    let d = (5 - n.getDay() + 7) % 7; if (d === 0 && next <= n) d = 7; next.setDate(n.getDate() + d);
+    const s = Math.max(0, Math.floor((next - n) / 1000));
+    const dd = Math.floor(s / 86400), hh = Math.floor((s % 86400) / 3600), mm = Math.floor((s % 3600) / 60), ss = s % 60;
+    const nextRun = 'in ' + dd + 'd ' + pad(hh) + ':' + pad(mm) + ':' + pad(ss);
+    return { clock, nextRun };
+  }
+}
+</script>
+</body>
+</html>

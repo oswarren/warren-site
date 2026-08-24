@@ -1,0 +1,380 @@
+@use "./variables.scss" as *;
+
+// Quartz 5 puts base.scss and every component's CSS in `@layer quartz-base` and leaves this
+// file unlayered, so that user rules always win. This skin's generic rules (`a`, `article`)
+// must NOT beat the warren components' own colours, so the whole file joins the same layer:
+// inside one layer ordinary specificity and source order apply, and custom.scss comes last.
+@layer quartz-base {
+
+// warren.systems — status-board skin over Quartz 5.
+// The mockups are 1200px wide with 48px side padding, hairline rules (#141414 and #dcdcd7),
+// mono for every piece of metadata, no rounded cards, no underlines.
+// Component-specific rules live next to each component in quartz/components/warren/;
+// this file owns the page frame (quartz/components/frames/WarrenFrame.tsx), the type scale
+// and the quietened stock bits (folder/tag listings, toc).
+
+:root {
+  --ok: #2bb673;
+  --mono: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
+}
+:root[saved-theme="dark"] {
+  --ok: #9be37a;
+}
+
+.mono,
+.mono a {
+  font-family: var(--mono);
+}
+
+body {
+  color: var(--dark);
+}
+
+a {
+  color: var(--dark);
+  font-weight: inherit;
+  text-decoration: none;
+  transition: color 0.1s ease;
+  &:hover {
+    color: var(--secondary);
+  }
+}
+
+// ---- page frame -------------------------------------------------------------
+// WarrenFrame renders six blocks straight into #quartz-body:
+//   .warren-nav-area .warren-head .warren-body .warren-after .warren-rail .warren-footer-area
+// and this grid places them. Rail-less pages collapse to full width below.
+
+.page[data-frame="warren"] {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 48px;
+  box-sizing: border-box;
+
+  & > #quartz-body {
+    display: grid;
+    min-height: 100vh;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows: auto auto auto 1fr auto; // spare height goes above the footer
+    grid-template-areas:
+      "nav nav nav nav nav nav nav nav nav nav nav nav"
+      "head head head head head head head head . right right right"
+      "body body body body body body body body . right right right"
+      "pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot . right right right"
+      "footer footer footer footer footer footer footer footer footer footer footer footer";
+    column-gap: 24px;
+    row-gap: 0;
+    padding: 0;
+    margin: 0;
+
+    & > .warren-nav-area {
+      grid-area: nav;
+    }
+    & > .warren-head {
+      grid-area: head;
+      padding-top: 56px;
+    }
+    & > .warren-body {
+      grid-area: body;
+      margin-top: 28px;
+      & > article,
+      & > .popover-hint {
+        margin: 0;
+        padding: 0;
+      }
+      &:empty {
+        display: none;
+      }
+    }
+    & > .warren-after {
+      grid-area: pfoot;
+      padding-bottom: 64px;
+    }
+    & > .warren-rail {
+      grid-area: right;
+      padding-top: 62px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+      &:empty {
+        display: none;
+      }
+    }
+    & > .warren-footer-area {
+      grid-area: footer;
+      & > footer {
+        max-width: 100%;
+        min-width: 100%;
+        margin: 0;
+      }
+    }
+  }
+}
+
+// pages without a rail (home, tools, log, folder listings) use the full width
+body[data-slug="index"],
+body[data-slug="tools/index"],
+body[data-slug="log"],
+body[data-slug="notes/index"],
+body[data-slug="letter/index"],
+body[data-slug="404"],
+body[data-slug^="tags/"],
+body[data-slug="tags"] {
+  .page[data-frame="warren"] > #quartz-body {
+    grid-template-areas:
+      "nav nav nav nav nav nav nav nav nav nav nav nav"
+      "head head head head head head head head head head head head"
+      "body body body body body body body body body body body body"
+      "pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot"
+      "footer footer footer footer footer footer footer footer footer footer footer footer";
+  }
+}
+// tools: title + intro on the left, stats block on the right (cols 9-12)
+body[data-slug="tools/index"] .page[data-frame="warren"] > #quartz-body {
+  grid-template-areas:
+    "nav nav nav nav nav nav nav nav nav nav nav nav"
+    "head head head head head head head . right right right right"
+    "body body body body body body body . right right right right"
+    "pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot"
+    "footer footer footer footer footer footer footer footer footer footer footer footer";
+  & > .warren-rail {
+    padding-top: 64px;
+  }
+}
+
+@media all and ($mobile) {
+  .page[data-frame="warren"] {
+    padding: 0 20px;
+  }
+  .page[data-frame="warren"] > #quartz-body,
+  body[data-slug] .page[data-frame="warren"] > #quartz-body {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto 1fr auto;
+    grid-template-areas: "nav" "head" "body" "right" "pfoot" "footer";
+    & > .warren-rail {
+      padding-top: 32px;
+    }
+  }
+}
+
+// ---- type scale -------------------------------------------------------------
+h1.article-title {
+  margin: 0;
+  font-size: 40px;
+  line-height: 1.1;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  text-wrap: pretty;
+  color: var(--dark);
+}
+body[data-slug="index"] {
+  .warren-head {
+    padding: 64px 0 48px 0 !important;
+    max-width: 780px;
+  }
+  h1.article-title {
+    font-size: 48px;
+    line-height: 1.05;
+  }
+  .warren-body {
+    margin-top: 0 !important;
+  }
+  article.popover-hint:empty {
+    display: none;
+  }
+}
+body[data-slug="tools/index"] {
+  h1.article-title {
+    margin-bottom: 16px;
+  }
+  .warren-body {
+    margin-top: 0 !important;
+  }
+  article p {
+    font-size: 17px;
+    line-height: 1.55;
+    color: var(--darkgray);
+    max-width: 540px;
+    margin: 0;
+  }
+  .page-listing {
+    display: none;
+  }
+  .warren-after {
+    padding-top: 24px;
+  }
+}
+
+// the prose of a note
+article {
+  font-size: 18px;
+  line-height: 1.6;
+  max-width: 620px;
+  color: var(--dark);
+
+  p,
+  li {
+    color: var(--dark);
+    margin: 0 0 20px 0;
+  }
+  & > :last-child {
+    margin-bottom: 0;
+  }
+
+  a,
+  a.internal {
+    color: var(--dark);
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    line-height: inherit;
+    border-bottom: 1px solid var(--dark);
+    &:hover {
+      color: var(--secondary);
+      border-color: var(--secondary);
+    }
+    &.external .external-icon {
+      display: none;
+    }
+  }
+
+  h2,
+  h3,
+  h4 {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--darkgray);
+    margin: 8px 0 20px 0;
+    line-height: 1.4;
+    &::before {
+      content: "## ";
+    }
+    & > a[role="anchor"],
+    &[id] > a[href^="#"] {
+      display: none;
+    }
+  }
+  h3::before {
+    content: "### ";
+  }
+
+  pre {
+    margin: 0 0 20px 0;
+    padding: 16px 18px;
+    background: #fbfbf9;
+    border: 1px solid var(--dark);
+    border-radius: 0;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-x: auto;
+    & > code {
+      padding: 0;
+      font-size: 13px;
+      line-height: 1.6;
+      background: transparent;
+    }
+  }
+  code {
+    font-family: var(--mono);
+    font-size: 0.85em;
+    background: var(--highlight);
+    border-radius: 0;
+  }
+  blockquote {
+    border-left: 1px solid var(--dark);
+    margin: 0 0 20px 0;
+    padding-left: 18px;
+    color: var(--darkgray);
+  }
+  hr {
+    border: 0;
+    border-top: 1px solid var(--lightgray);
+  }
+  img {
+    max-width: 100%;
+    border-radius: 0;
+  }
+}
+:root[saved-theme="dark"] article pre {
+  background: #171a17;
+}
+
+// ---- folder / tag listings --------------------------------------------------
+.page-listing {
+  margin-top: 28px;
+  & > p {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--darkgray);
+  }
+  ul.section-ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--dark);
+  }
+  li.section-li {
+    margin: 0;
+    border-bottom: 1px solid var(--lightgray);
+    & > .section {
+      display: grid;
+      grid-template-columns: 120px 1fr auto;
+      gap: 16px;
+      padding: 14px 0;
+      align-items: baseline;
+    }
+    .meta {
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--darkgray);
+      opacity: 1;
+      margin: 0;
+    }
+    .desc h3 {
+      font-family: inherit;
+      font-size: 15px;
+      font-weight: 400;
+      margin: 0;
+      &::before {
+        content: none;
+      }
+      a {
+        color: var(--dark);
+        border: 0;
+        background: transparent;
+        &:hover {
+          color: var(--secondary);
+        }
+      }
+    }
+    .tags {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 12px;
+      list-style: none;
+      a.internal.tag-link {
+        font-family: var(--mono);
+        font-size: 12px;
+        color: var(--darkgray);
+        background: transparent;
+        border: 0;
+        padding: 0;
+        border-radius: 0;
+        &::before {
+          content: "#";
+        }
+      }
+    }
+  }
+}
+
+// ---- misc Quartz bits we keep but quieten ----------------------------------
+.toc-content a {
+  border: 0;
+}
+body[data-slug="404"] article {
+  margin-top: 56px;
+}
+}
