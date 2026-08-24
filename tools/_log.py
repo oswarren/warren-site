@@ -6,6 +6,8 @@
 Each line is a JSON object: when (local ISO, seconds), what, source, optional href,
 optional status ("scheduled" for future lines the site shows with a countdown).
 """
+from __future__ import annotations
+
 import json
 import pathlib
 from datetime import datetime

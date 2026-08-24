@@ -67,7 +67,10 @@ the push runs the workflow, which rebuilds and deploys. Two write paths, one for
 2. **Does not have a clone** (a cloud routine, a webhook, anything with only a GitHub token):
 
    ```
-   gh api repos/oswarren/warren-site/dispatches -f event_type=log      -f 'client_payload[what]=Letter no. 31 sent to 84 people'      -f 'client_payload[source]=letter-assembler'      -f 'client_payload[href]=/letter/31'
+   gh api repos/oswarren/warren-site/dispatches -f event_type=log \
+     -f 'client_payload[what]=Letter no. 31 sent to 84 people' \
+     -f 'client_payload[source]=letter-assembler' \
+     -f 'client_payload[href]=/letter/31'
    ```
 
    Or the same as a plain POST to `https://api.github.com/repos/oswarren/warren-site/dispatches` with a token
