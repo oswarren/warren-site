@@ -9,7 +9,7 @@ interface Options {
   town: string
   letterReaders: number
 }
-const defaultOptions: Options = { town: "[your town]", letterReaders: 84 }
+const defaultOptions: Options = { town: "[your town]", letterReaders: 0 }
 
 export default ((userOpts?: Partial<Options>) => {
   const opts = { ...defaultOptions, ...userOpts }
@@ -29,7 +29,7 @@ export default ((userOpts?: Partial<Options>) => {
     const notes = allFiles
       .filter((f) => f.slug?.startsWith("notes/") && f.slug !== "notes/index" && f.dates?.modified)
       .sort((a, b) => b.dates!.modified.getTime() - a.dates!.modified.getTime())
-    const lastNoteDate = lastNote ? monthDay(parseWhen(lastNote.when)) : notes[0] ? monthDay(notes[0].dates!.modified) : "—"
+    const lastNoteDate = lastNote ? monthDay(parseWhen(lastNote.when)) : notes[0] ? monthDay(notes[0].dates!.modified) : "none yet"
     const issueCount = Math.max(
       issues,
       ...log
@@ -44,9 +44,9 @@ export default ((userOpts?: Partial<Options>) => {
           <div class="home-section">
             <a href={rel("letter")} class="title">The letter</a>
             <span class="blurb">
-              Interesting things within reach of {opts.town}, every Friday. Collected by the watchers, sent before I’m up.
+              Interesting things within reach of {opts.town}, once a week.
             </span>
-            <span class="mono meta">{issueCount} issues · {opts.letterReaders} readers</span>
+            <span class="mono meta">{issueCount === 0 ? "no issues yet" : `${issueCount} issues · ${opts.letterReaders} readers`}</span>
           </div>
           <div class="home-section">
             <a href={rel("tools")} class="title">Tools</a>

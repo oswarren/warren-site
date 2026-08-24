@@ -1,10 +1,1 @@
-{"when": "2026-07-28T10:00:00", "what": "2 lines changed on the hall's events page", "source": "event-page-diff", "href": "/tools/event-page-diff"}
-{"when": "2026-07-30T19:55:00", "what": "first sale", "source": "gumroad → webhook", "href": "/notes/gumroad-build"}
-{"when": "2026-08-09T04:00:00", "what": "library sale page checked, nothing new", "source": "library-sale-watch", "href": "/tools/library-sale-watch"}
-{"when": "2026-08-11", "what": "Note: Building a product entirely with an assistant", "source": "warren, by hand", "href": "/notes/gumroad-build"}
-{"when": "2026-08-16T14:40:00", "what": "library-sale-watch found a new date and added it to the letter draft", "source": "library-sale-watch", "href": "/tools/library-sale-watch"}
-{"when": "2026-08-22", "what": "Note: library-sale-watch, 61 lines", "source": "warren, by hand", "href": "/notes/home-cooked"}
-{"when": "2026-08-20T23:10:00", "what": "11 screenshots became one note", "source": "screenshots-to-notes", "href": "/notes/2026-08-20"}
-{"when": "2026-08-21T07:02:00", "what": "Letter no. 31 sent to 84 people", "source": "letter-assembler", "href": "/letter/31"}
-{"when": "2026-08-22T04:00:00", "what": "library sale page checked, nothing new", "source": "library-sale-watch", "href": "/tools/library-sale-watch"}
-{"when": "2026-08-28T07:00:00", "what": "letter no. 32 goes out", "source": "letter-assembler", "status": "scheduled"}
+{"when": "2026-08-24T16:29:53", "what": "site went live; nothing has written to it yet", "source": "warren, by hand", "href": "/about"}

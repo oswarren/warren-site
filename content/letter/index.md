@@ -1,6 +1,6 @@
 ---
 title: The letter
-description: Interesting things within reach of [your town], every Friday.
+description: Interesting things within reach of [your town], once a week.
 ---
 
-Interesting things within reach of [your town], every Friday. Collected by the watchers, sent before I’m up. Past issues are below; to get the next one, write to [hello@example.com](mailto:hello@example.com).
+Interesting things within reach of [your town], once a week. No issue has gone out yet; when one does, it is listed below. To get the next one, write to [hello@example.com](mailto:hello@example.com).

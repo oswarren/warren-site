@@ -17,7 +17,7 @@ import * as Warren from "./quartz/components/warren"
  */
 
 const EMAIL = "hello@example.com"
-const SOURCE = "https://github.com"
+const SOURCE = "https://github.com/oswarren/warren-site"
 
 const isHome = (slug: string) => slug === "index"
 const isTools = (slug: string) => slug === "tools/index"
