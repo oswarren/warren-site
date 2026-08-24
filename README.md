@@ -45,7 +45,7 @@ open `public/index.html`. `python3 tools/letter-assembler.py` (re)schedules the 
 ## Commands
 
 - `npm install` — installs Quartz and the community plugins (Node 22+, npm 10.9+).
-- `node scripts/build.mjs` — the build (wraps `npx quartz build`; extra flags are passed through,
+- `node scripts/build.mjs` — the build (runs `node quartz/bootstrap-cli.mjs build`; extra flags are passed through,
   e.g. `node scripts/build.mjs --serve`).
 - `npx quartz build --serve` — plain Quartz dev server (does not update `build.json`).
 - `npx tsc --noEmit` — type-check the components and `quartz.ts`.

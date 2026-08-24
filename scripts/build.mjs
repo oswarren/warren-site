@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // build.mjs → quartz
-// Records when the build started, runs `npx quartz build`, then writes build.json
+// Records when the build started, runs the Quartz CLI (`quartz build`), then writes build.json
 // ({ when, seconds }) which the Footer, Log and ProvenanceFooter components read.
 //
 // Ordering note: the site is rendered *during* this script, so the page can only
@@ -30,7 +30,9 @@ const start = new Date()
 writeFileSync(buildFile, JSON.stringify({ when: localIso(start), seconds: previousSeconds }, null, 2) + "\n")
 
 const extra = process.argv.slice(2)
-const result = spawnSync("npx", ["quartz", "build", ...extra], { cwd: root, stdio: "inherit", shell: process.platform === "win32" })
+// Run the CLI through node directly (not `npx quartz`): no reliance on an executable bit or a shell.
+const cli = join(root, "quartz", "bootstrap-cli.mjs")
+const result = spawnSync(process.execPath, [cli, "build", ...extra], { cwd: root, stdio: "inherit" })
 
 const seconds = Math.round(((Date.now() - start.getTime()) / 1000) * 10) / 10
 writeFileSync(buildFile, JSON.stringify({ when: localIso(start), seconds }, null, 2) + "\n")
