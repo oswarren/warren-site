@@ -1,9 +1,9 @@
 ---
 title: events-radar
-description: A weekly self-running agent that finds real local events and emails a digest.
+description: A weekly email of events near me, built to make meeting people easier.
 log: events-radar
 ---
 
-A weekly agent, not a script: a prompt, a cron schedule, and a Gmail connection living in Anthropic's cloud. Every Thursday evening it searches the web for real, upcoming, in-person events, verifies the dates and links against today, and emails a digest that takes under a minute to skim. Nothing runs on this machine; it works with the computer off.
+I built this events radar after a year at an artist residency for ceramics ([Cub Creek](https://www.cubcreek.org/)), when I realized I still had not met anyone outside the program itself. I can be a homebody, and I found I needed something that removed the barriers to meeting people, so I built this.
 
-It covers tech and maker, outdoors and rockhounding, and music and arts, across Pennsylvania. Each run writes its own line below.
+It sends me a weekly list of events near me that are of particular interest. Each list it sends shows up as a line below.
