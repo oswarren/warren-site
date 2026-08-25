@@ -9,7 +9,8 @@ tools write themselves; the notes are the only part typed by hand.
    `{"when":"2026-08-21T07:02:00","what":"the letter, a weekly email of things within reach: no. 31 sent to 84 people","source":"letter-assembler","href":"/letter/31"}`.
    `what` names the system, says briefly what it is, then what it delivered this time. The site shows it under
    "what it is"; the third column, "category", comes from the tool's `category` in `tools.json` (falls back to
-   `source` for lines that are not from a tool).
+   `source` for lines that are not from a tool). The home page and `/log` show one row per system, its newest
+   line, so the date updates in place each run; a tool's own page shows every line it wrote.
    Python tools use `tools/_log.py` (`log(what, source, href=None)`); anything that can write a line works.
    A line with `"status":"scheduled"` and a future `when` is shown first, in blue, with a live countdown.
 2. `node scripts/build.mjs` records the start time, runs `npx quartz build`, and writes `build.json`

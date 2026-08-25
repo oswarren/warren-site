@@ -1,6 +1,6 @@
 ---
 title: The log
-description: Every line the tools have written, oldest at the bottom.
+description: One row per system, newest run first.
 ---
 
-Every line the tools have written, newest first. The home page shows the last nine.
+One row per system, newest run first. The home page shows the first nine. Open a system for every line it has written.

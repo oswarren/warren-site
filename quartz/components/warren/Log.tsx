@@ -58,7 +58,12 @@ export default ((userOpts?: Partial<Options>) => {
     const scheduled = opts.next
       ? filtered.filter((l) => l.status === "scheduled" && parseWhen(l.when) > now)
       : []
-    const past: LogLine[] = filtered.filter((l) => l.status !== "scheduled")
+    const done = filtered.filter((l) => l.status !== "scheduled")
+    // Without a source filter the board is one row per system: its newest line, so the date updates
+    // in place each run. A tool's own page (source set) keeps every line it wrote.
+    const past: LogLine[] = source
+      ? done
+      : done.filter((l, i, arr) => arr.findIndex((m) => m.source === l.source) === i)
     const total = past.length
     const shown = opts.limit > 0 ? past.slice(0, opts.limit) : past
 
@@ -100,7 +105,8 @@ export default ((userOpts?: Partial<Options>) => {
         })}
         {opts.older && opts.limit > 0 && (
           <a href={resolveRelative(slug, "log" as FullSlug)} class="mono older">
-            older lines → /log ({total.toLocaleString("en-US")} so far)
+            {source ? "older lines" : "every system"} → /log ({total.toLocaleString("en-US")}
+            {source ? " so far" : ""})
           </a>
         )}
       </div>

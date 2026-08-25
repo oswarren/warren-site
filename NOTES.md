@@ -44,6 +44,8 @@ the home page. Design origin: `design/` (Claude Design canvas), screenshots in `
    description stays under about ten words, one number, one scope, no em dashes. Columns on the site are
    when / what it is / category; category comes from `tools.json`, so lines never carry it themselves.
    The site is framed as Pennsylvania (Warren personally); the routine still covers VA but logs the PA count
-   only. Next check: after the Thu Aug 27 run, the second events-radar line should appear on its own.
+   only. Later the same day Warren cut the line to the system's plain name, `Local events finder`, and
+   the board became one row per system (newest line per source; `Log.tsx`), so a run updates the date in
+   place. Next check: after the Thu Aug 27 run, the row's date should move to Aug 27.
 2. Fill the blanks: town, contact email. Custom domain later: set `baseUrl` in `quartz.config.yaml` to the bare
    domain and add a CNAME in the Pages settings.
