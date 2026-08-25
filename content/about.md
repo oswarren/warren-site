@@ -1,11 +1,14 @@
 ---
 title: About
-description: Who runs this, and why it is a log instead of a blog.
-tags: [meta]
+description: Who runs these systems, and why.
 ---
 
-I am Warren. I live near [your town] and write small programs for one person at a time, usually me.
+I am Warren. I live near [your town] and build small systems that keep working when I am not at the keyboard.
 
-This site is a status board. The tools append a line to `log.jsonl` when they do something, a build script turns that file into the page you are reading, and nothing on it is typed by hand except the notes. It went live on 2026-08-24 with an empty log; the lines fill in as the tools come online.
+Most of them started as a problem I kept running into. The events finder exists because I had spent a year somewhere new and was still not meeting anyone. The pattern is the same each time: notice something I do by hand every week, write the smallest program that does it for me, and let it run on a schedule.
 
-Write to [hello@example.com](mailto:hello@example.com) if a line looks wrong.
+What draws me to this is less the time saved than the design of the thing itself: how the parts fit together, what triggers what, and the moment a system starts producing something useful on its own. Each entry on this site is one of those systems, with why I built it, what it does, and a record of what it has sent.
+
+Some of them I share or sell so other people can run them too; where that is true, the system's page links to it.
+
+Write to [hello@example.com](mailto:hello@example.com) if you want to talk about any of them.

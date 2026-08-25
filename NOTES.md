@@ -2,9 +2,32 @@
 
 ## What this is
 
-warren.systems: a Quartz 5 status board. Tools append lines to `log.jsonl`; the build turns the file into
-the home page. Design origin: `design/` (Claude Design canvas), screenshots in `../home.png`, `../note.png`,
-`../tools.png`.
+warren.systems: a portfolio of the automated systems Warren runs (decided 2026-08-25, replacing the
+"status board the tools write themselves" framing). One entry per system: why it exists (his words), what it
+does, when it runs, and everything it has sent. The systems keep it current by posting a line per delivery.
+Design origin: `design/` (Claude Design canvas; predates the portfolio framing).
+
+## State, 2026-08-25 (restructure)
+
+Answers Warren gave, which the site now follows:
+- Home = the systems themselves (no intro paragraph, no log board). Tagline stays.
+- Sections: systems / about only. Letter, notes, /log and /tools pages are gone (notes can come back if he
+  writes some). `content/tools/` moved to `content/systems/`; old `/tools/events-radar` is an alias.
+- A system's page: his text, then facts from `tools.json` (what it does / schedule / next run / get it),
+  then run history (each line opens what was sent). `link: {label, href}` on the tools.json entry is the
+  optional "get it" row, for output or product (Gumroad) later.
+- Entry detail line on home: category · last sent <date> · next in <live countdown>. Flat list until four
+  or more systems, then group by category.
+- Plumbing hidden: footer is source / rss / email; no build times, line counts, provenance grid, or copy
+  about JSON lines. `build.json` is still written and used only as "now" at render time.
+- About page: a first-person draft from his profile, for him to edit; `[your town]` and
+  `hello@example.com` still blank on purpose.
+- Push live as you go.
+Components now: `Systems`, `SystemFacts`, `History`, `SentMeta`, `Nav`, `WarrenFooter`, `Rail`, plus
+`data.ts` and `countdown.ts`. Removed: `Home`, `Log`, `ToolsTable`, `ToolsStats`, `Meta`, `ProvenanceFooter`.
+The routine still dispatches `href=/tools/events-radar`; that works through the alias, and the board never
+used it anyway (lines with a body get a `/sent/...` href). Change it to `/systems/events-radar` when next
+editing the routine.
 
 ## State, 2026-08-24
 

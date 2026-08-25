@@ -1,5 +1,5 @@
-// Build-time readers for the three files at the repo root that drive the status board:
-// log.jsonl (one event per line), tools.json (the shelf), build.json (written by scripts/build.mjs).
+// Build-time readers for the files at the repo root that drive the site:
+// log.jsonl (one delivery per line), tools.json (the systems), build.json (written by scripts/build.mjs).
 import fs from "fs"
 import path from "path"
 
@@ -12,14 +12,14 @@ export interface LogLine {
 }
 
 export interface Tool {
-  name: string
-  what: string
-  runs: string
-  category?: string // shown in the log's third column for this tool's lines
+  name: string // the `source` its log lines carry; also the page name, systems/<name>
+  what: string // one sentence: what it does and what it sends
+  runs: string // the schedule in words, e.g. "Thu 6pm ET"
   cron?: string // the routine's schedule, UTC, e.g. "0 22 * * 4"; drives the "next run" countdown
-  lines?: number
+  category?: string // small label on the entry; grouping later, once there are enough systems
+  link?: { label: string; href: string } // where its output lives, or where to get it
   retired?: string // "2026-07"
-  href?: string
+  href?: string // page slug override; default systems/<name>
 }
 
 export interface BuildInfo {
@@ -97,7 +97,6 @@ export function readBuild(): BuildInfo {
 }
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-const DAYS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 const pad = (n: number) => String(n).padStart(2, "0")
 
 export function sameDay(a: Date, b: Date): boolean {
@@ -114,12 +113,13 @@ export function ymd(d: Date): string {
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
 }
 
-export function localIso(d: Date): string {
-  return `${ymd(d)}T${hhmm(d)}:${pad(d.getSeconds())}`
-}
-
 export function monthDay(d: Date): string {
   return `${MONTHS[d.getMonth()]} ${d.getDate()}`
+}
+
+/** "Aug 20, 2026" */
+export function longDate(d: Date): string {
+  return `${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`
 }
 
 /** "today 06:14" | "Aug 21 07:02" | "Aug 18" (date-only lines) */
@@ -130,32 +130,22 @@ export function formatWhen(when: string, now: Date): string {
   return `${monthDay(d)} ${hhmm(d)}`
 }
 
-/** Relative label for the tools table: "2h ago" | "yesterday" | "Fri 07:02" | "Aug 11" */
-export function formatLastRun(when: string, now: Date): string {
+/** Date only, for the entry's detail line: "today" | "Aug 20" | "Dec 3, 2025" (another year) */
+export function sentLabel(when: string, now: Date): string {
   const d = parseWhen(when)
-  const diffMs = now.getTime() - d.getTime()
-  const hours = diffMs / 36e5
-  if (hasTime(when) && sameDay(d, now)) {
-    if (hours < 1) return `${Math.max(1, Math.round(diffMs / 6e4))}m ago`
-    if (hours < 6) return `${Math.round(hours)}h ago`
-    return `${hhmm(d)} today`
-  }
-  const yesterday = new Date(now)
-  yesterday.setDate(now.getDate() - 1)
-  if (sameDay(d, yesterday)) return "yesterday"
-  if (diffMs < 7 * 864e5) return hasTime(when) ? `${DAYS[d.getDay()]} ${hhmm(d)}` : DAYS[d.getDay()]
-  return monthDay(d)
+  if (sameDay(d, now)) return "today"
+  return d.getFullYear() === now.getFullYear() ? monthDay(d) : longDate(d)
 }
 
-// The log's third column: the tool's category when the source is a tool, else the source itself.
-export function categoryFor(source: string): string {
-  return readTools().find((t) => t.name === source)?.category ?? source
+// The system's page slug (no leading slash).
+export function slugFor(t: Tool): string {
+  return t.href ?? `systems/${t.name}`
 }
 
-// The system's own page for a source, as a site-absolute path, or undefined if the source is not a tool.
+// The system's page for a source, as a site-absolute path, or undefined if the source is not a system.
 export function pageFor(source: string): string | undefined {
   const t = readTools().find((t) => t.name === source)
-  return t ? "/" + (t.href ?? `tools/${t.name}`) : undefined
+  return t ? "/" + slugFor(t) : undefined
 }
 
 export function latestRunFor(source: string): LogLine | undefined {

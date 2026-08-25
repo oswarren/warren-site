@@ -45,8 +45,8 @@ def to_markdown(body: str) -> str:
 def write_sent_page(source: str, when: str, title: str, body: str) -> str:
     day = when[:10]
     sent = datetime.fromisoformat(when).strftime("%b %d, %Y").replace(" 0", " ")
-    # Kept under sent/, not tools/: a subfolder named after the tool would make Quartz emit a bare
-    # folder listing at /tools/<source>/ that shadows the tool's own page.
+    # Kept under sent/, not systems/: a subfolder named after the system would make Quartz emit a bare
+    # folder listing at /systems/<source>/ that shadows the system's own page.
     path = ROOT / "content" / "sent" / source / f"{day}.md"
     path.parent.mkdir(parents=True, exist_ok=True)
     safe_title = title.replace('"', "'")

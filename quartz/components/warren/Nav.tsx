@@ -2,13 +2,21 @@ import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } fro
 import { resolveRelative, FullSlug } from "../../util/path"
 import { classNames } from "../../util/lang"
 
-// Top bar: warren.systems | letter tools notes about | live clock. No theme toggle.
+// Top bar: warren.systems | systems about | live clock. No theme toggle.
+interface Link {
+  label: string
+  target: string // slug
+  prefixes?: string[] // other slug prefixes that count as "here" (systems/…, sent/…)
+}
 interface Options {
-  links: Record<string, string> // label -> slug ("letter", "tools", ...)
+  links: Link[]
 }
 
 const defaultOptions: Options = {
-  links: { letter: "letter", tools: "tools", notes: "notes", about: "about" },
+  links: [
+    { label: "systems", target: "index", prefixes: ["systems/", "sent/"] },
+    { label: "about", target: "about" },
+  ],
 }
 
 const clockScript = `
@@ -37,8 +45,11 @@ export default ((userOpts?: Partial<Options>) => {
           {cfg.pageTitle}
         </a>
         <div class="nav-links">
-          {Object.entries(opts.links).map(([label, target]) => {
-            const active = slug === target || slug.startsWith(target + "/")
+          {opts.links.map(({ label, target, prefixes }) => {
+            const active =
+              slug === target ||
+              slug.startsWith(target + "/") ||
+              (prefixes ?? []).some((p) => slug.startsWith(p))
             return (
               <a href={resolveRelative(slug, target as FullSlug)} class={active ? "active" : ""}>
                 {label}

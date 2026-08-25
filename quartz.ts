@@ -12,19 +12,21 @@ import * as Warren from "./quartz/components/warren"
  * quartz.config.yaml holds the site configuration and the plugin list. This file
  * places the warren components (core components in quartz/components/warren/) into
  * the layout. They are placed here rather than in YAML because their presence depends
- * on the page slug (home vs tools vs note), which the YAML `condition` presets
- * (not-index, has-tags, ...) cannot express.
+ * on the page slug (home vs a system's page vs a sent page), which the YAML `condition`
+ * presets (not-index, has-tags, ...) cannot express.
  */
 
 const EMAIL = "hello@example.com"
 const SOURCE = "https://github.com/oswarren/warren-site"
 
-const isHome = (slug: string) => slug === "index"
-const isTools = (slug: string) => slug === "tools/index"
+const isHome = (slug: string) => slug === "index" || slug === "systems/index"
+const isSent = (slug: string) => /^sent\/[^/]+\/.+/.test(slug)
 const isFolderIndex = (slug: string) => slug === "index" || slug.endsWith("/index")
-// pages that are "documents" (notes, letters, about): they get the meta line and provenance grid
+// pages that are "documents" (about, a system's page, something sent): they get the rail blocks
 const isDoc = (slug: string) =>
-  !isFolderIndex(slug) && !["log", "tags", "404"].includes(slug) && !slug.startsWith("tags/")
+  !isFolderIndex(slug) && !["tags", "404"].includes(slug) && !slug.startsWith("tags/")
+// a system's own page: frontmatter `log: <name>` names its entry in tools.json
+const isSystem = (p: QuartzComponentProps) => typeof p.fileData.frontmatter?.log === "string"
 
 const when = (component: ReturnType<typeof Warren.Nav>, test: (slug: string) => boolean) =>
   ConditionalRender({ component, condition: (p: QuartzComponentProps) => test(p.fileData.slug!) })
@@ -37,25 +39,19 @@ const yaml = await loadQuartzLayout()
 
 const shared: Partial<FullPageLayout> = {
   header: [Warren.Nav()],
-  beforeBody: [when(Warren.Meta(), isDoc), ...(yaml.defaults.beforeBody ?? [])],
+  beforeBody: [when(Warren.SentMeta(), isSent), ...(yaml.defaults.beforeBody ?? [])],
   afterBody: [
-    when(Warren.Home(), isHome),
-    when(Warren.ToolsTable(), isTools),
-    // full log on /log
-    when(Warren.Log({ limit: 0, older: false }), (s) => s === "log"),
-    // per-tool pages: frontmatter `log: <tool name>` shows only that tool's lines
-    ConditionalRender({
-      component: Warren.Log({ limit: 0, older: false, rebuildRow: false, source: "frontmatter" }),
-      condition: (p: QuartzComponentProps) => typeof p.fileData.frontmatter?.log === "string",
-    }),
-    when(Warren.ProvenanceFooter(), isDoc),
+    // the portfolio, on the home page and /systems
+    when(Warren.Systems(), isHome),
+    // a system's page: its facts, then everything it has sent
+    ConditionalRender({ component: Warren.SystemFacts(), condition: isSystem }),
+    ConditionalRender({ component: Warren.History(), condition: isSystem }),
   ],
   left: [],
   right: [
     when(Warren.OnThisPage(TableOfContents()), isDoc),
     when(Warren.Tagged, isDoc),
     when(Warren.Reply({ email: EMAIL }), isDoc),
-    when(Warren.ToolsStats(), isTools),
   ],
   footer: [Warren.WarrenFooter({ source: SOURCE, email: EMAIL })],
 }

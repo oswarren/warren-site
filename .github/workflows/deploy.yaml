@@ -3,7 +3,7 @@
 # Two ways in:
 #   push to main            -> build public/ and deploy it
 #   repository_dispatch log -> append the payload as one line to log.jsonl, commit, then build and deploy
-#                              (a payload with title and body also becomes a page under content/tools/<source>/
+#                              (a payload with title and body also becomes a page under content/sent/<source>/
 #                               and the line links to it)
 #
 # The second is how systems without a clone of this repo write to the site (see README, "Writing to the site").
