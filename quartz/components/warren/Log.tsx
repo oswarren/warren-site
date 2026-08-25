@@ -1,21 +1,19 @@
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "../types"
 import { resolveRelative, FullSlug } from "../../util/path"
 import { classNames } from "../../util/lang"
-import { readLog, readBuild, formatWhen, parseWhen, localIso, LogLine } from "./data"
+import { readLog, readBuild, formatWhen, parseWhen, LogLine } from "./data"
 
 // The status board: when / what happened / source, read from log.jsonl at build time.
 interface Options {
   limit: number // 0 = everything
   source?: string // only lines from this source; "frontmatter" = read `log:` from the page's frontmatter
   next: boolean // show "scheduled" lines first with a live countdown
-  rebuildRow: boolean // synthesize a "this page was rebuilt" row from build.json
   older: boolean // trailing "older lines → /log" link
 }
 
 const defaultOptions: Options = {
   limit: 9,
   next: true,
-  rebuildRow: true,
   older: true,
 }
 
@@ -59,17 +57,7 @@ export default ((userOpts?: Partial<Options>) => {
     const scheduled = opts.next
       ? filtered.filter((l) => l.status === "scheduled" && parseWhen(l.when) > now)
       : []
-    let past: LogLine[] = filtered.filter((l) => l.status !== "scheduled")
-    if (opts.rebuildRow && !source) {
-      past = [
-        {
-          when: localIso(build.when),
-          what: `this page was rebuilt${build.seconds != null ? `, ${build.seconds}s` : ""}, because a line below changed`,
-          source: "site-rebuild",
-        },
-        ...past,
-      ]
-    }
+    const past: LogLine[] = filtered.filter((l) => l.status !== "scheduled")
     const total = past.length
     const shown = opts.limit > 0 ? past.slice(0, opts.limit) : past
 

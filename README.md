@@ -10,9 +10,10 @@ tools write themselves; the notes are the only part typed by hand.
    Python tools use `tools/_log.py` (`log(what, source, href=None)`); anything that can write a line works.
    A line with `"status":"scheduled"` and a future `when` is shown first, in blue, with a live countdown.
 2. `node scripts/build.mjs` records the start time, runs `npx quartz build`, and writes `build.json`
-   (`{when, seconds}`). The footer ("built today 06:14 · build.mjs → quartz · 2.8s"), the synthesized
-   "this page was rebuilt" row, and each note's "rendered" line all read that file. Because the page is
-   rendered during the build, the duration shown is the previous build's.
+   (`{when, seconds}`). The footer ("built today 06:14 · build.mjs → quartz · 2.8s") and each note's
+   "rendered" line read that file. Because the page is rendered during the build, the duration shown is
+   the previous build's. The build itself never writes a log line: the log is for systems that deliver
+   something, not for plumbing.
 3. The site is static HTML in `public/`. Push it, or let a runner do step 2 whenever `log.jsonl` changes.
 
 Try it: `python3 tools/library-sale-watch.py https://example.com/ && node scripts/build.mjs`, then

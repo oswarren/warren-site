@@ -1,7 +1,7 @@
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "../types"
 import { resolveRelative, FullSlug } from "../../util/path"
 import { classNames } from "../../util/lang"
-import { readTools, readBuild, latestRunFor, formatLastRun, parseWhen, hhmm } from "./data"
+import { readTools, readBuild, latestRunFor, formatLastRun, parseWhen } from "./data"
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
@@ -28,8 +28,6 @@ export default (() => {
           if (t.retired) {
             const d = parseWhen(t.retired + "-01")
             lastLabel = `retired · ${MONTHS[d.getMonth()]}`
-          } else if (t.name === "site-rebuild") {
-            lastLabel = `● ${hhmm(now)} today`
           } else if (last && last.when) {
             lastLabel = `● ${formatLastRun(last.when, now)}`
           } else {
