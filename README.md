@@ -29,7 +29,7 @@ open `public/index.html`. `python3 tools/letter-assembler.py` (re)schedules the 
 
 ## Where things live
 
-- `log.jsonl` — the log. `tools.json` — the shelf on /tools (name, what, runs, lines, retired). `build.json` — last build.
+- `log.jsonl` — the log. `tools.json` — the shelf on /tools (name, what, runs, cron, lines, retired); `cron` is the routine's schedule in UTC, weekly `m h * * d` or daily `m h * * *`, and drives the live "next run" countdown. `build.json` — last build.
 - `content/` — markdown. `index.md` is the home page; `tools/index.md` the shelf; `log.md` the full log;
   `notes/`, `letter/`, `about.md`. Frontmatter `log: <source>` on a page shows only that source's lines;
   `source:` marks a machine-written page in the provenance grid.

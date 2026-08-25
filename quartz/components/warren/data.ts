@@ -16,6 +16,7 @@ export interface Tool {
   what: string
   runs: string
   category?: string // shown in the log's third column for this tool's lines
+  cron?: string // the routine's schedule, UTC, e.g. "0 22 * * 4"; drives the "next run" countdown
   lines?: number
   retired?: string // "2026-07"
   href?: string
@@ -159,4 +160,41 @@ export function pageFor(source: string): string | undefined {
 
 export function latestRunFor(source: string): LogLine | undefined {
   return readLog().find((l) => l.source === source && l.status !== "scheduled")
+}
+
+// Schedules. tools.json carries the routine's cron verbatim (UTC, as the cloud shows it). Only the two
+// shapes a routine actually uses are understood: "m h * * d" (weekly) and "m h * * *" (daily).
+export interface Schedule {
+  minute: number
+  hour: number
+  dow: number | null // 0 = Sunday, null = every day
+}
+
+export function parseCron(cron: string | undefined): Schedule | null {
+  if (!cron) return null
+  const m = cron.trim().match(/^(\d{1,2})\s+(\d{1,2})\s+\*\s+\*\s+(\*|[0-6])$/)
+  if (!m) return null
+  return { minute: +m[1], hour: +m[2], dow: m[3] === "*" ? null : +m[3] }
+}
+
+/** Next instant (UTC) the schedule fires, strictly after `now`. Same arithmetic as the client script. */
+export function nextDue(s: Schedule, now: Date): Date {
+  const t = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), s.hour, s.minute, 0))
+  if (s.dow === null) {
+    if (t <= now) t.setUTCDate(t.getUTCDate() + 1)
+    return t
+  }
+  let delta = (s.dow - t.getUTCDay() + 7) % 7
+  if (delta === 0 && t <= now) delta = 7
+  t.setUTCDate(t.getUTCDate() + delta)
+  return t
+}
+
+/** "in 1d 06:43:12", the countdown text the client script keeps ticking. */
+export function formatCountdown(target: Date, now: Date): string {
+  const s = Math.max(0, Math.floor((target.getTime() - now.getTime()) / 1000))
+  const d = Math.floor(s / 86400)
+  const h = Math.floor((s % 86400) / 3600)
+  const m = Math.floor((s % 3600) / 60)
+  return `in ${d}d ${pad(h)}:${pad(m)}:${pad(s % 60)}`
 }

@@ -3,6 +3,7 @@
     "name": "events-radar",
     "category": "local events",
     "what": "searches the web for real local events, verifies them, emails a weekly digest",
-    "runs": "Thu 6pm"
+    "runs": "Thu 6pm",
+    "cron": "0 22 * * 4"
   }
 ]

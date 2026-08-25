@@ -54,6 +54,10 @@ the home page. Design origin: `design/` (Claude Design canvas), screenshots in `
    `events-radar.md` (the `source` key). Sent pages live under `sent/`, not `tools/<name>/`, because a
    subfolder named after the tool makes Quartz emit a bare folder listing at `/tools/<name>/` that
    shadows the tool's page (this happened once; do not move them back).
+   2026-08-25: /tools last column is now "next run": a live countdown ("in 2d 03:21:43") to the tool's
+   `cron` in `tools.json` (UTC, copied verbatim from the routine; weekly `m h * * d` or daily `m h * * *`).
+   The browser recomputes the next occurrence every second (`ToolsTable.tsx`, helpers in `data.ts`), so it
+   stays right however stale the build is. No cron: "not scheduled". Last-run info lives on the board rows.
    Next check: after the Thu Aug 27 run, the row's date should move to Aug 27 and
    `content/sent/events-radar/2026-08-27.md` should exist.
 2. Fill the blanks: town, contact email. Custom domain later: set `baseUrl` in `quartz.config.yaml` to the bare
