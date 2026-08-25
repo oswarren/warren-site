@@ -29,9 +29,11 @@ the home page. Design origin: `design/` (Claude Design canvas), screenshots in `
 
 ## Next
 
-1. Point one real self-running system at it and let it write its own line (the first one that already runs
-   on a schedule is the natural candidate). One line per run, `source` = the tool's name, `href` = its page.
-2. Give that tool a page: `content/tools/<name>.md` with frontmatter `log: <name>` (shows only its lines) and an
-   entry in `tools.json` (`name`, `what`, `runs`), so /tools stops being empty.
-3. Fill the blanks: town, contact email. Custom domain later: set `baseUrl` in `quartz.config.yaml` to the bare
+1. DONE 2026-08-25: events-radar is the first connected system. Page at `content/tools/events-radar.md`
+   (frontmatter `log: events-radar`), entry in `tools.json`. Both radar routines (personal VA+PA and the
+   ceramics residency one, ids in `../events-radar/`) post one line per run via the dispatch write path,
+   `source` = `events-radar`, `href` = `/tools/events-radar`. The Claude cloud environment carries a
+   GH_TOKEN, so the routines dispatch with curl; if the token is ever missing the routine skips the line
+   silently and the digest still sends.
+2. Fill the blanks: town, contact email. Custom domain later: set `baseUrl` in `quartz.config.yaml` to the bare
    domain and add a CNAME in the Pages settings.
