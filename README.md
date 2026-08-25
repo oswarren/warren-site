@@ -13,6 +13,11 @@ payload carries the email, a page under `content/sent/`.
   `tools.json` (what it does, schedule, next run, where to get it), then its run history, each line opening
   what it sent.
 - `/sent/<name>/<date>`: something a system sent, exactly as it went out, with a "sent by" line linking back.
+- A system's page can carry photos of what came of it: drop image files into `content/photos/<name>/` and
+  they appear in a grid under the text ("what came of it"), newest first, each opening the full image. The
+  caption is the file name: `2026-08-22-wolfswood-faire.jpg` shows "wolfswood faire" and "Aug 22, 2026"; a
+  file without a leading date is captioned by its name alone. Keep photos web-sized (about 1600px on the
+  long side, under 500 KB); the repo carries them forever.
 - `/about`.
 
 ## How a system gets on the site
@@ -67,7 +72,8 @@ the name; the description lives on the page. Lines with `"status": "scheduled"` 
 
 - `log.jsonl`: one line per delivery. `tools.json`: the systems. `build.json`: written by `scripts/build.mjs`,
   used as "now" when rendering.
-- `content/`: `index.md` (the tagline; the list renders under it), `systems/`, `sent/`, `about.md`.
+- `content/`: `index.md` (the tagline; the list renders under it), `systems/`, `sent/`, `photos/<name>/`,
+  `about.md`.
   Sent pages live under `sent/`, not `systems/<name>/`: a subfolder named after a system would make Quartz
   emit a bare folder listing at `/systems/<name>/` that shadows the system's page.
 - `quartz.config.yaml`: Quartz 5 configuration: site settings, palette, fonts, and the plugin list
@@ -77,7 +83,7 @@ the name; the description lives on the page. Lines with `"status": "scheduled"` 
   pieces depend on the page slug (home vs a system's page vs a sent page), so `quartz.ts` builds the layout
   with `ConditionalRender` and installs it in the `PageTypeDispatcher`.
 - `quartz/components/warren/`: the components, written as Quartz 5 core components: `Nav` (live clock),
-  `Systems` (the list), `SystemFacts`, `History`, `SentMeta`, `WarrenFooter`, `Rail` (on this page / tagged /
+  `Systems` (the list), `SystemFacts`, `History`, `Gallery`, `SentMeta`, `WarrenFooter`, `Rail` (on this page / tagged /
   reply), `data.ts` (readers, dates, cron) and `countdown.ts` (the client-side countdown shared by the list
   and the facts). Each carries its own CSS and `afterDOMLoaded` script, as in any Quartz component.
 - `quartz/components/frames/WarrenFrame.tsx`: a custom page frame (a v5 concept: the HTML shell inside

@@ -27,7 +27,11 @@ Answers Warren gave, which the site now follows:
   `events-radar`). The existing log line was renamed by hand. The cloud routine's step 7 still posts
   `what=Local events finder`; that text is never shown (the page title is), but change it to `Porch Light`
   next time the routine is edited.
-Components now: `Systems`, `SystemFacts`, `History`, `SentMeta`, `Nav`, `WarrenFooter`, `Rail`, plus
+- 2026-08-25: photo grid on a system's page (`Gallery.tsx`): images dropped into `content/photos/<source>/`
+  show under the text as "what came of it", newest first, captions from file names
+  (`YYYY-MM-DD-words.jpg` gives words plus a date). Folder exists for events-radar, empty (`.gitkeep`).
+  Warren adds photos by committing files; no resize step, so keep them web-sized.
+Components now: `Systems`, `SystemFacts`, `History`, `Gallery`, `SentMeta`, `Nav`, `WarrenFooter`, `Rail`, plus
 `data.ts` and `countdown.ts`. Removed: `Home`, `Log`, `ToolsTable`, `ToolsStats`, `Meta`, `ProvenanceFooter`.
 The routine still dispatches `href=/tools/events-radar`; that works through the alias, and the board never
 used it anyway (lines with a body get a `/sent/...` href). Change it to `/systems/events-radar` when next

@@ -43,7 +43,8 @@ const shared: Partial<FullPageLayout> = {
   afterBody: [
     // the portfolio, on the home page and /systems
     when(Warren.Systems(), isHome),
-    // a system's page: its facts, then everything it has sent
+    // a system's page: photos of what came of it, its facts, then everything it has sent
+    ConditionalRender({ component: Warren.Gallery(), condition: isSystem }),
     ConditionalRender({ component: Warren.SystemFacts(), condition: isSystem }),
     ConditionalRender({ component: Warren.History(), condition: isSystem }),
   ],
