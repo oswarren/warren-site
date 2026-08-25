@@ -1,7 +1,7 @@
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "../types"
 import { resolveRelative, FullSlug } from "../../util/path"
 import { classNames } from "../../util/lang"
-import { readLog, readBuild, formatWhen, parseWhen, categoryFor, LogLine } from "./data"
+import { readLog, readBuild, formatWhen, parseWhen, categoryFor, pageFor, LogLine } from "./data"
 
 // The status board: when / what it is / category, read from log.jsonl at build time.
 // Each line names the system, says briefly what it is, then what it delivered this time.
@@ -88,7 +88,9 @@ export default ((userOpts?: Partial<Options>) => {
         ))}
         {shown.map((l) => {
           const whenLabel = formatWhen(l.when, now)
-          const to = href(slug, l.href)
+          // On the board a row is the system, so it opens the system's page (the why, then its lines).
+          // On that page each line opens what was sent, its href.
+          const to = source ? href(slug, l.href) : href(slug, pageFor(l.source) ?? l.href)
           return (
             <div class="log-row">
               <span class="mono when">{whenLabel}</span>

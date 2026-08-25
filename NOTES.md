@@ -46,12 +46,15 @@ the home page. Design origin: `design/` (Claude Design canvas), screenshots in `
    The site is framed as Pennsylvania (Warren personally); the routine still covers VA but logs the PA count
    only. Later the same day Warren cut the line to the system's plain name, `Local events finder`, and
    the board became one row per system (newest line per source; `Log.tsx`), so a run updates the date in
-   place. Then: the line links to the email itself. A dispatch payload with `title` and `body` becomes a page
-   under `content/tools/<source>/<date>.md` via `tools/_page.py` (the workflow does this; the routine sends
-   the exact subject and body it emailed). The Aug 20 email was replayed through the same converter by hand.
-   Page heading is "Local events finder"; the file stays `events-radar.md` (the `source` key). Quartz also
-   emits an unlinked folder listing at `/tools/events-radar/` (trailing slash); harmless, ignore it.
-   Next check: after the Thu Aug 27 run, the row's date should move to Aug 27 and a
-   `content/tools/events-radar/2026-08-27.md` page should exist.
+   place. Then: on a tool's page each line links to the email itself. A dispatch payload with `title` and
+   `body` becomes a page under `content/sent/<source>/<date>.md` via `tools/_page.py` (the workflow does
+   this; the routine sends the exact subject and body it emailed). The Aug 20 email was replayed through the
+   same converter by hand. On the board (home, /log) a row links to the tool's page, not the email, so the
+   description of why it exists comes first. Page heading is "Local events finder"; the file stays
+   `events-radar.md` (the `source` key). Sent pages live under `sent/`, not `tools/<name>/`, because a
+   subfolder named after the tool makes Quartz emit a bare folder listing at `/tools/<name>/` that
+   shadows the tool's page (this happened once; do not move them back).
+   Next check: after the Thu Aug 27 run, the row's date should move to Aug 27 and
+   `content/sent/events-radar/2026-08-27.md` should exist.
 2. Fill the blanks: town, contact email. Custom domain later: set `baseUrl` in `quartz.config.yaml` to the bare
    domain and add a CNAME in the Pages settings.

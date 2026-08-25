@@ -151,6 +151,12 @@ export function categoryFor(source: string): string {
   return readTools().find((t) => t.name === source)?.category ?? source
 }
 
+// The system's own page for a source, as a site-absolute path, or undefined if the source is not a tool.
+export function pageFor(source: string): string | undefined {
+  const t = readTools().find((t) => t.name === source)
+  return t ? "/" + (t.href ?? `tools/${t.name}`) : undefined
+}
+
 export function latestRunFor(source: string): LogLine | undefined {
   return readLog().find((l) => l.source === source && l.status !== "scheduled")
 }

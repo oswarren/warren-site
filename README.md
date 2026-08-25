@@ -12,8 +12,9 @@ tools write themselves; the notes are the only part typed by hand.
    `source` for lines that are not from a tool). The home page and `/log` show one row per system, its newest
    line, so the date updates in place each run; a tool's own page shows every line it wrote.
    A line can carry what the tool actually sent: add `title` and `body` (plain text) to the payload and the
-   site keeps it as a page at `content/tools/<source>/<YYYY-MM-DD>.md` and points the line's `href` at it
-   (`tools/_page.py`). That is how "open one to read it" works on a tool's page.
+   site keeps it as a page at `content/sent/<source>/<YYYY-MM-DD>.md` and points the line's `href` at it
+   (`tools/_page.py`). That is how "open one to read it" works on a tool's page. On the home page and `/log`
+   a row links to the system's page instead (`/tools/<source>`), so the why comes before the what.
    Python tools use `tools/_log.py` (`log(what, source, href=None)`); anything that can write a line works.
    A line with `"status":"scheduled"` and a future `when` is shown first, in blue, with a live countdown.
 2. `node scripts/build.mjs` records the start time, runs `npx quartz build`, and writes `build.json`

@@ -2,7 +2,7 @@
 
     from _page import write_sent_page
     href = write_sent_page("events-radar", "2026-08-20T18:14:35", "Events Radar: Aug 20 to Aug 30", body)
-    # -> "/tools/events-radar/2026-08-20", file content/tools/events-radar/2026-08-20.md
+    # -> "/sent/events-radar/2026-08-20", file content/sent/events-radar/2026-08-20.md
 
 Formatting is deliberately plain so any tool's output reads the same way: a line in capitals becomes a
 heading, a line with a link becomes a list item, everything else is left as a paragraph.
@@ -45,10 +45,12 @@ def to_markdown(body: str) -> str:
 def write_sent_page(source: str, when: str, title: str, body: str) -> str:
     day = when[:10]
     sent = datetime.fromisoformat(when).strftime("%b %d, %Y").replace(" 0", " ")
-    path = ROOT / "content" / "tools" / source / f"{day}.md"
+    # Kept under sent/, not tools/: a subfolder named after the tool would make Quartz emit a bare
+    # folder listing at /tools/<source>/ that shadows the tool's own page.
+    path = ROOT / "content" / "sent" / source / f"{day}.md"
     path.parent.mkdir(parents=True, exist_ok=True)
     safe_title = title.replace('"', "'")
     front = f'---\ntitle: "{safe_title}"\ndescription: "Sent {sent}, exactly as it went out."\n---\n\n'
     with open(path, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(front + to_markdown(body))
-    return f"/tools/{source}/{day}"
+    return f"/sent/{source}/{day}"
