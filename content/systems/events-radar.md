@@ -1,5 +1,5 @@
 ---
-title: Local events finder
+title: Porch Light
 description: A weekly email of events near me, built to make meeting people easier.
 log: events-radar
 aliases: [tools/events-radar]

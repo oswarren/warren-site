@@ -23,6 +23,10 @@ Answers Warren gave, which the site now follows:
 - About page: a first-person draft from his profile, for him to edit; `[your town]` and
   `hello@example.com` still blank on purpose.
 - Push live as you go.
+- 2026-08-25: the events radar is named **Porch Light** on the site (page title; file and source key stay
+  `events-radar`). The existing log line was renamed by hand. The cloud routine's step 7 still posts
+  `what=Local events finder`; that text is never shown (the page title is), but change it to `Porch Light`
+  next time the routine is edited.
 Components now: `Systems`, `SystemFacts`, `History`, `SentMeta`, `Nav`, `WarrenFooter`, `Rail`, plus
 `data.ts` and `countdown.ts`. Removed: `Home`, `Log`, `ToolsTable`, `ToolsStats`, `Meta`, `ProvenanceFooter`.
 The routine still dispatches `href=/tools/events-radar`; that works through the alias, and the board never

@@ -4,7 +4,7 @@ import { resolveRelative, FullSlug } from "../../util/path"
 import { readLog, readTools, slugFor, parseWhen, longDate } from "./data"
 
 // The line above something a system sent (a page under sent/<source>/):
-// "sent by Local events finder · Aug 20, 2026", the name linking back to the system.
+// "sent by Porch Light · Aug 20, 2026", the name linking back to the system.
 export default (() => {
   const SentMeta: QuartzComponent = ({ fileData, allFiles, displayClass }: QuartzComponentProps) => {
     const slug = fileData.slug!

@@ -39,7 +39,7 @@ the push runs the workflow, which rebuilds and deploys. Two write paths, one for
 1. **Has a clone of the repo** (a script on this machine, a cron job):
 
    ```
-   python tools/post.py "Local events finder" events-radar --href /systems/events-radar
+   python tools/post.py "Porch Light" events-radar --href /systems/events-radar
    ```
 
    Pulls, appends the line, commits `log.jsonl`, pushes. Pages are ordinary markdown under `content/`:
@@ -49,7 +49,7 @@ the push runs the workflow, which rebuilds and deploys. Two write paths, one for
 
    ```
    gh api repos/oswarren/warren-site/dispatches -f event_type=log \
-     -f 'client_payload[what]=Local events finder' \
+     -f 'client_payload[what]=Porch Light' \
      -f 'client_payload[source]=events-radar' \
      -f 'client_payload[href]=/systems/events-radar'
    ```
