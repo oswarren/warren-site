@@ -32,14 +32,17 @@ the home page. Design origin: `design/` (Claude Design canvas), screenshots in `
 ## Next
 
 1. DONE 2026-08-25: events-radar is the first connected system. Page at `content/tools/events-radar.md`
-   (frontmatter `log: events-radar`), entry in `tools.json`. Both radar routines (personal VA+PA and the
-   ceramics residency one, ids in `../events-radar/`) post one line per run via the dispatch write path,
-   `source` = `events-radar`, `href` = `/tools/events-radar`. The Claude cloud environment carries a
+   (frontmatter `log: events-radar`), entry in `tools.json` with `category: local events`. The personal
+   routine (id in `../events-radar/`) posts one line per run via the dispatch write path,
+   `source` = `events-radar`, `href` = `/tools/events-radar`. The ceramics residency radar was taken off
+   this page 2026-08-25; it does not write here. The Claude cloud environment carries a
    GH_TOKEN, so the routines dispatch with curl; if the token is ever missing the routine skips the line
    silently and the digest still sends.
-   DONE 2026-08-25, first line and the shape every tool copies: `PA events digest sent: 11 events, Aug 20 to
-   Aug 30`, source `events-radar`, href `/tools/events-radar`, `when` in local ET. Pattern: "<what was
-   delivered> sent: <count> <unit>, <scope>"; one number, one scope, under about 60 characters, no em dashes.
+   DONE 2026-08-25, first line and the shape every tool copies: `PA events radar, a weekly email of real
+   events across Pennsylvania: 11 events, Aug 20 to Aug 30`, source `events-radar`, href
+   `/tools/events-radar`, `when` in local ET. Pattern: "<system>, <what it is>: <this delivery>"; the
+   description stays under about ten words, one number, one scope, no em dashes. Columns on the site are
+   when / what it is / category; category comes from `tools.json`, so lines never carry it themselves.
    The site is framed as Pennsylvania (Warren personally); the routine still covers VA but logs the PA count
    only. Next check: after the Thu Aug 27 run, the second events-radar line should appear on its own.
 2. Fill the blanks: town, contact email. Custom domain later: set `baseUrl` in `quartz.config.yaml` to the bare

@@ -1,9 +1,10 @@
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "../types"
 import { resolveRelative, FullSlug } from "../../util/path"
 import { classNames } from "../../util/lang"
-import { readLog, readBuild, formatWhen, parseWhen, LogLine } from "./data"
+import { readLog, readBuild, formatWhen, parseWhen, categoryFor, LogLine } from "./data"
 
-// The status board: when / what happened / source, read from log.jsonl at build time.
+// The status board: when / what it is / category, read from log.jsonl at build time.
+// Each line names the system, says briefly what it is, then what it delivered this time.
 interface Options {
   limit: number // 0 = everything
   source?: string // only lines from this source; "frontmatter" = read `log:` from the page's frontmatter
@@ -65,8 +66,8 @@ export default ((userOpts?: Partial<Options>) => {
       <div class={classNames(displayClass, "log")}>
         <div class="log-head mono">
           <span>when</span>
-          <span>what happened</span>
-          <span>source</span>
+          <span>what it is</span>
+          <span>category</span>
         </div>
         {scheduled.map((l) => (
           <div class="log-row next">
@@ -77,7 +78,7 @@ export default ((userOpts?: Partial<Options>) => {
               {l.what}
               <span class="cursor"></span>
             </span>
-            <span class="mono source">{l.source}</span>
+            <span class="mono source">{categoryFor(l.source)}</span>
           </div>
         ))}
         {shown.map((l) => {
@@ -93,7 +94,7 @@ export default ((userOpts?: Partial<Options>) => {
               ) : (
                 <span class="what">{l.what}</span>
               )}
-              <span class="mono source">{l.source}</span>
+              <span class="mono source">{categoryFor(l.source)}</span>
             </div>
           )
         })}

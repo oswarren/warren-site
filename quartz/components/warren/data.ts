@@ -15,6 +15,7 @@ export interface Tool {
   name: string
   what: string
   runs: string
+  category?: string // shown in the log's third column for this tool's lines
   lines?: number
   retired?: string // "2026-07"
   href?: string
@@ -143,6 +144,11 @@ export function formatLastRun(when: string, now: Date): string {
   if (sameDay(d, yesterday)) return "yesterday"
   if (diffMs < 7 * 864e5) return hasTime(when) ? `${DAYS[d.getDay()]} ${hhmm(d)}` : DAYS[d.getDay()]
   return monthDay(d)
+}
+
+// The log's third column: the tool's category when the source is a tool, else the source itself.
+export function categoryFor(source: string): string {
+  return readTools().find((t) => t.name === source)?.category ?? source
 }
 
 export function latestRunFor(source: string): LogLine | undefined {

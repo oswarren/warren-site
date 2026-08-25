@@ -6,7 +6,10 @@ tools write themselves; the notes are the only part typed by hand.
 ## The loop
 
 1. A tool runs (cron, a webhook, by hand) and appends one JSON line to `log.jsonl` at the repo root:
-   `{"when":"2026-08-21T07:02:00","what":"Letter no. 31 sent to 84 people","source":"letter-assembler","href":"/letter/31"}`.
+   `{"when":"2026-08-21T07:02:00","what":"the letter, a weekly email of things within reach: no. 31 sent to 84 people","source":"letter-assembler","href":"/letter/31"}`.
+   `what` names the system, says briefly what it is, then what it delivered this time. The site shows it under
+   "what it is"; the third column, "category", comes from the tool's `category` in `tools.json` (falls back to
+   `source` for lines that are not from a tool).
    Python tools use `tools/_log.py` (`log(what, source, href=None)`); anything that can write a line works.
    A line with `"status":"scheduled"` and a future `when` is shown first, in blue, with a live countdown.
 2. `node scripts/build.mjs` records the start time, runs `npx quartz build`, and writes `build.json`
