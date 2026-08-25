@@ -3,6 +3,8 @@
 # Two ways in:
 #   push to main            -> build public/ and deploy it
 #   repository_dispatch log -> append the payload as one line to log.jsonl, commit, then build and deploy
+#                              (a payload with title and body also becomes a page under content/tools/<source>/
+#                               and the line links to it)
 #
 # The second is how systems without a clone of this repo write to the site (see README, "Writing to the site").
 name: Build and deploy
@@ -51,13 +53,19 @@ jobs:
           for k in ("href", "status"):
               if p.get(k):
                   line[k] = p[k]
+          if p.get("body"):
+              # The tool sent something (an email); keep it as a page and point the line at it.
+              import sys
+              sys.path.insert(0, "tools")
+              from _page import write_sent_page
+              line["href"] = write_sent_page(p["source"], line["when"], p.get("title") or p["what"], p["body"])
           with open("log.jsonl", "a", encoding="utf-8") as fh:
               fh.write(json.dumps(line, ensure_ascii=False) + "\n")
           print(line)
           PY
           git config user.name "site-log"
           git config user.email "site-log@users.noreply.github.com"
-          git add log.jsonl
+          git add log.jsonl content
           git commit -m "log: $SOURCE"
           git push
 
