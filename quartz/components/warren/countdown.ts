@@ -8,19 +8,23 @@ document.addEventListener("nav", () => {
   if (cells.length === 0) return
   const pad = (x) => String(x).padStart(2, "0")
   const parse = (cron) => {
-    const m = cron.trim().match(/^(\\d{1,2})\\s+(\\d{1,2})\\s+\\*\\s+\\*\\s+(\\*|[0-6])$/)
-    return m ? { minute: +m[1], hour: +m[2], dow: m[3] === "*" ? null : +m[3] } : null
+    const m = cron.trim().match(/^(\\d{1,2})\\s+(\\d{1,2}(?:,\\d{1,2})*)\\s+\\*\\s+\\*\\s+(\\*|[0-6])$/)
+    return m ? { minute: +m[1], hours: m[2].split(",").map(Number), dow: m[3] === "*" ? null : +m[3] } : null
   }
   const next = (s, now) => {
-    const t = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), s.hour, s.minute, 0))
-    if (s.dow === null) {
-      if (t <= now) t.setUTCDate(t.getUTCDate() + 1)
-      return t
+    let best = null
+    for (const hour of s.hours) {
+      const t = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), hour, s.minute, 0))
+      if (s.dow === null) {
+        if (t <= now) t.setUTCDate(t.getUTCDate() + 1)
+      } else {
+        let delta = (s.dow - t.getUTCDay() + 7) % 7
+        if (delta === 0 && t <= now) delta = 7
+        t.setUTCDate(t.getUTCDate() + delta)
+      }
+      if (!best || t < best) best = t
     }
-    let delta = (s.dow - t.getUTCDay() + 7) % 7
-    if (delta === 0 && t <= now) delta = 7
-    t.setUTCDate(t.getUTCDate() + delta)
-    return t
+    return best
   }
   const tick = () => {
     const now = new Date()

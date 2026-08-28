@@ -153,31 +153,36 @@ export function latestRunFor(source: string): LogLine | undefined {
 }
 
 // Schedules. tools.json carries the routine's cron verbatim (UTC, as the cloud shows it). Only the two
-// shapes a routine actually uses are understood: "m h * * d" (weekly) and "m h * * *" (daily).
+// shapes a routine actually uses are understood: "m h * * d" (weekly) and "m h * * *" (daily); h may be a
+// comma list ("30 9,16,22 * * *"), in which case the countdown runs to the nearest one.
 export interface Schedule {
   minute: number
-  hour: number
+  hours: number[]
   dow: number | null // 0 = Sunday, null = every day
 }
 
 export function parseCron(cron: string | undefined): Schedule | null {
   if (!cron) return null
-  const m = cron.trim().match(/^(\d{1,2})\s+(\d{1,2})\s+\*\s+\*\s+(\*|[0-6])$/)
+  const m = cron.trim().match(/^(\d{1,2})\s+(\d{1,2}(?:,\d{1,2})*)\s+\*\s+\*\s+(\*|[0-6])$/)
   if (!m) return null
-  return { minute: +m[1], hour: +m[2], dow: m[3] === "*" ? null : +m[3] }
+  return { minute: +m[1], hours: m[2].split(",").map(Number), dow: m[3] === "*" ? null : +m[3] }
 }
 
 /** Next instant (UTC) the schedule fires, strictly after `now`. Same arithmetic as the client script. */
 export function nextDue(s: Schedule, now: Date): Date {
-  const t = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), s.hour, s.minute, 0))
-  if (s.dow === null) {
-    if (t <= now) t.setUTCDate(t.getUTCDate() + 1)
-    return t
+  let best: Date | null = null
+  for (const hour of s.hours) {
+    const t = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), hour, s.minute, 0))
+    if (s.dow === null) {
+      if (t <= now) t.setUTCDate(t.getUTCDate() + 1)
+    } else {
+      let delta = (s.dow - t.getUTCDay() + 7) % 7
+      if (delta === 0 && t <= now) delta = 7
+      t.setUTCDate(t.getUTCDate() + delta)
+    }
+    if (!best || t < best) best = t
   }
-  let delta = (s.dow - t.getUTCDay() + 7) % 7
-  if (delta === 0 && t <= now) delta = 7
-  t.setUTCDate(t.getUTCDate() + delta)
-  return t
+  return best!
 }
 
 /** "in 1d 06:43:12", the countdown text the client script keeps ticking. */

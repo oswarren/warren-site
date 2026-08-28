@@ -4,6 +4,28 @@
     "category": "local events",
     "what": "searches the web for real local events, verifies them, emails a weekly digest",
     "runs": "weekly, Thursday evening (6pm ET)",
-    "cron": "0 22 * * 4"
+    "cron": "0 22 * * 4",
+    "link": { "label": "run your own: the routine, on Gumroad", "href": "https://opensourcewarren.gumroad.com/l/local-events-radar" }
+  },
+  {
+    "name": "night-shift",
+    "category": "finishing things",
+    "what": "reads my project notes and my to-do list three times a day, records what I finished, and sets out the day's five next steps",
+    "runs": "three times a day (5:30am, 12:30pm, 6:30pm ET); the morning run is the full one",
+    "cron": "30 9,16,22 * * *"
+  },
+  {
+    "name": "small-notes",
+    "category": "writing",
+    "what": "a Substack where I write up one small system at a time and what it changed",
+    "runs": "when a note is ready",
+    "link": { "label": "read it on Substack", "href": "https://smallnotesbigchanges.substack.com" }
+  },
+  {
+    "name": "kits",
+    "category": "shared",
+    "what": "the systems I run, packaged so other people can run them too",
+    "runs": "a line here each time a kit ships",
+    "link": { "label": "the shop, on Gumroad", "href": "https://opensourcewarren.gumroad.com" }
   }
 ]
