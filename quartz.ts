@@ -16,7 +16,7 @@ import * as Warren from "./quartz/components/warren"
  * presets (not-index, has-tags, ...) cannot express.
  */
 
-const EMAIL = "hello@example.com"
+const EMAIL = "opensourcewarren@gmail.com"
 const SOURCE = "https://github.com/oswarren/warren-site"
 
 const isHome = (slug: string) => slug === "index" || slug === "systems/index"
