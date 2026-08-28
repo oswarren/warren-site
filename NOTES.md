@@ -18,6 +18,12 @@ Design origin: `design/` (Claude Design canvas; predates the portfolio framing).
 - Running log: the Night Shift routine's step 7b appends one line per full sweep from its warren-site
   checkout, `"<n> finished, <m> next steps set"`, source `night-shift`, counts only (public). Seeded Aug 27
   and Aug 28 by hand from the reports. Kits and Small Notes lines are added by hand when something ships.
+- Home now opens with two columns (`Now.tsx`, placed by `quartz.ts` on home only): "what Warren is doing" reads
+  `now.json` at the root ({when, doing: [public one-line versions of the day's five], finished_week}), which the
+  Night Shift routine writes every morning and on any midday or evening pass that changed the set (its step 7c,
+  public-only rules: no amounts, names, accounts; a step that cannot be said becomes "one private step");
+  "what the systems are doing" is the newest six `log.jsonl` lines across every system, each linking to its page.
+  Until the first `now.json` lands the left column says "nothing written yet".
 - `parseCron` and the client countdown now accept an hour list (`m h1,h2,h3 * * d`) and count down to the
   nearest; still nothing else (no ranges, no steps).
 - Left out on purpose: the property tracker (private finances), the residency radar (a client's), MirrorCoach.
