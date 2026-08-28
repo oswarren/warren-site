@@ -7,6 +7,22 @@ warren.systems: a portfolio of the automated systems Warren runs (decided 2026-0
 does, when it runs, and everything it has sent. The systems keep it current by posting a line per delivery.
 Design origin: `design/` (Claude Design canvas; predates the portfolio framing).
 
+## State, 2026-08-28 (three more systems, running log)
+
+- Warren: "add what I do to warren.systems, readable by curious people, a running log that shows how powerful
+  my systems are." Added three systems beside Porch Light, each a page under `content/systems/` in his voice
+  (drafts for him to edit) plus a `tools.json` entry: **Night Shift** (`night-shift`, the completion system,
+  cron `30 9,16,22 * * *`), **Small Notes, Big Changes** (`small-notes`, the Substack, no cron, link to it;
+  posts are pages under `content/sent/small-notes/` with a summary and the Substack link), **Kits**
+  (`kits`, the Gumroad products, link to the shop). Porch Light's entry got its "get it" link (the $9 routine).
+- Running log: the Night Shift routine's step 7b appends one line per full sweep from its warren-site
+  checkout, `"<n> finished, <m> next steps set"`, source `night-shift`, counts only (public). Seeded Aug 27
+  and Aug 28 by hand from the reports. Kits and Small Notes lines are added by hand when something ships.
+- `parseCron` and the client countdown now accept an hour list (`m h1,h2,h3 * * d`) and count down to the
+  nearest; still nothing else (no ranges, no steps).
+- Left out on purpose: the property tracker (private finances), the residency radar (a client's), MirrorCoach.
+- Still blank: `[your town]` and `hello@example.com` (queue Q12).
+
 ## State, 2026-08-25 (restructure)
 
 Answers Warren gave, which the site now follows:
