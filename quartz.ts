@@ -41,6 +41,8 @@ const shared: Partial<FullPageLayout> = {
   header: [Warren.Nav()],
   beforeBody: [when(Warren.SentMeta(), isSent), ...(yaml.defaults.beforeBody ?? [])],
   afterBody: [
+    // home: what Warren is doing (now.json, written by Night Shift) beside what the systems are doing (log.jsonl)
+    when(Warren.Now(), isHome),
     // the portfolio, on the home page and /systems
     when(Warren.Systems(), isHome),
     // a system's page: photos of what came of it, its facts, then everything it has sent
