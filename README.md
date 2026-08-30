@@ -109,4 +109,7 @@ GitHub Pages, from `.github/workflows/deploy.yaml`, on every push to `main`. One
 repo, push, then in the repo settings set Pages "Source" to "GitHub Actions". The workflow runs
 `node scripts/build.mjs`; `TZ` is set to `America/New_York` so dates on the site are local time.
 `baseUrl` in `quartz.config.yaml` must match where the site lives (`oswarren.github.io/warren-site` for a
-project page; the bare domain once there is a custom one).
+project page; the bare domain once there is a custom one). Since 2026-08-30 the site lives at
+`warrenstetler.com`: DNS is Vercel (ALIAS apex and CNAME www to `oswarren.github.io`, plus a CAA record
+for letsencrypt.org), the custom domain is set in the repo's Pages settings, and the old
+`oswarren.github.io/warren-site` URLs redirect.
