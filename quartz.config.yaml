@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=./quartz/plugins/quartz-plugins.schema.json
 #
-# warren.systems — Quartz 5 configuration.
+# warren.systems: Quartz 5 configuration.
 # Site-wide settings and the plugin list live here. The custom warren components
 # (Nav, Log, Home, ...) are core components in quartz/components/warren/ and are
 # placed into the layout by the TS override in quartz.ts, because their placement
@@ -12,7 +12,7 @@ configuration:
   enablePopovers: false
   analytics: null
   locale: en-US
-  baseUrl: oswarren.github.io/warren-site
+  baseUrl: warrenstetler.com
   ignorePatterns:
     - private
     - templates
