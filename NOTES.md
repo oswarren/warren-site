@@ -7,6 +7,28 @@ warren.systems: a portfolio of the automated systems Warren runs (decided 2026-0
 does, when it runs, and everything it has sent. The systems keep it current by posting a line per delivery.
 Design origin: `design/` (Claude Design canvas; predates the portfolio framing).
 
+## State, 2026-08-31 (Q43: matched display windows, fuller systems column)
+
+- Warren: his side of the home page should stay visible as long as the systems lines do, and the systems
+  side should show more than Night Shift's counts. Changes:
+  - `now.jsonl` at the root keeps one line per answered day ({when, doing, finished_week}); `now.json`
+    still holds the current answer. Seeded from git history (the three real answers; the Aug 28 11:50
+    task-list seed was skipped). Night Shift step 7c now appends to it on every answer.
+  - Left column (`Now.tsx`): current answer as before, then past days (lines joined with ";"), each kept
+    on the page for as long as the right column still reaches back to that day, capped at 6.
+  - Right column: every system's newest line gets a slot before any system's older lines fill the rest,
+    so Night Shift's daily line cannot crowd out the other three.
+  - `log.jsonl` by hand: Porch Light's Aug 20 line got its substance back ("11 events, Aug 20 to Aug 30";
+    it had been cut to the bare name when the old board had a separate what-it-is column), and the four
+    kits that shipped Aug 28 (Vault Night Shift, Claude Code Starter Kit, Gumroad Product Skill,
+    All-Access Pass) got their lines, which nobody had added.
+  - Night Shift step 7b now names what finished in its public line when something did
+    ("finished: <up to two short phrases>; M next steps set"); a day with nothing closed keeps the
+    counts line. Same public rules as 7c.
+- Still posting a bare line: the Porch Light cloud routine's step 7 sends `what=Local events finder`.
+  Next time that routine is edited (not before Q15's Sep 3 verification), make it send the delivery
+  itself, "N events, <range>", like the Aug 20 line.
+
 ## State, 2026-08-30 (custom domain)
 
 - Q29 done: the site lives at **https://warrenstetler.com** (old github.io URLs 301 there, so every existing
