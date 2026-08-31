@@ -7,6 +7,15 @@ warren.systems: a portfolio of the automated systems Warren runs (decided 2026-0
 does, when it runs, and everything it has sent. The systems keep it current by posting a line per delivery.
 Design origin: `design/` (Claude Design canvas; predates the portfolio framing).
 
+## State, 2026-08-30 (custom domain)
+
+- Q29 done: the site lives at **https://warrenstetler.com** (old github.io URLs 301 there, so every existing
+  link and the routine's dispatches keep working). DNS is in Warren's Vercel account (domain registered there):
+  ALIAS apex and CNAME www to `oswarren.github.io`, plus a CAA record for letsencrypt.org because Vercel's
+  locked CAA only allowed Google's CA. Domain detached from the old warren-stetler-studio Vercel project
+  (warrenstetler.studio still points at it). Pages: custom domain set, cert approved for apex and www,
+  HTTPS enforced. `baseUrl` is the bare domain; README's Deploy section has the full picture.
+
 ## State, 2026-08-28 (three more systems, running log)
 
 - Warren: "add what I do to warren.systems, readable by curious people, a running log that shows how powerful
