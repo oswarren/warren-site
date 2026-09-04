@@ -1,5 +1,9 @@
 # NOTES (resume point)
 
+## Resume line
+
+- 2026-09-04 (Q62 done): the Small Notes sent page (`content/sent/small-notes/2026-08-28.md`) linked a 404 slug; now links `/p/i-built-the-thing-a-month-before`. Committed and pushed (8ca2588) on top of the routines' own log commits.
+
 ## What this is
 
 warren.systems: a portfolio of the automated systems Warren runs (decided 2026-08-25, replacing the
