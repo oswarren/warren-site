@@ -97,6 +97,16 @@ export default (() => {
         </div>
       </div>
 
+      <div class="mine" id="mine" hidden>
+        <p class="mono" id="minecount"></p>
+        <div class="rows" id="minerows"></div>
+      </div>
+
+      <div class="again" id="nextwrap" hidden>
+        <div class="pool" id="nextpool"></div>
+        <button class="more" type="button" id="nextmore">Show me other ones</button>
+      </div>
+
       <div class="shelf">
         <h2>Built so far</h2>
         <p class="intro">
@@ -182,6 +192,13 @@ export default (() => {
 .makeone .fineprint { font-size: 13px; line-height: 1.6; color: var(--darkgray); margin: 0; max-width: 44ch; }
 .makeone .sent { display: none; }
 .makeone .sent.on { display: block; }
+
+.makeone .mine { display: flex; flex-direction: column; gap: 10px; border-top: 1px solid var(--dark); padding-top: 28px; }
+.makeone .mine .rows .row { grid-template-columns: 1fr 1.15fr; }
+.makeone .mine .row .name { color: var(--dark); }
+.makeone .mine .row:last-child { animation: makeone-arrive 620ms ease; }
+@keyframes makeone-arrive { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+.makeone .again { display: flex; flex-direction: column; gap: 14px; }
 
 .makeone .shelf { display: flex; flex-direction: column; gap: 16px; border-top: 1px solid var(--dark); padding-top: 28px; }
 .makeone .shelf h2 { margin: 0; font-size: 22px; font-weight: 500; color: var(--dark); }
