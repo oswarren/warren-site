@@ -33,7 +33,7 @@ Thursday, 6pm. Nothing from me. By 6:07 there is a list in my inbox and a copy o
 
 ## What changed
 
-I go to things. And the shape turned out to be useful to other people: a version tuned for a ceramics residency and its resident artists sends every Thursday to the program's coordinator, and the routine itself is packaged so it can run for your own town.
+I go to things. And the shape turned out to be useful to other people: a version tuned for a ceramics residency arrives every Thursday for its resident artists, and the routine itself is packaged so it can run for your own town.
 
 ## Experience it
 
