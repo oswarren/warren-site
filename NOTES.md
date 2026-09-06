@@ -45,6 +45,8 @@ Design origin: `design/` (Claude Design canvas; predates the portfolio framing).
   - Night Shift step 7b now names what finished in its public line when something did
     ("finished: <up to two short phrases>; M next steps set"); a day with nothing closed keeps the
     counts line. Same public rules as 7c.
+- 2026-09-06: photos held off, deliberately, not forgotten (queue Q75). Two systems still have no
+  photograph: The Wild Clay Hunt and Porch Light. Everything else about the site is done.
 - 2026-09-06: Warren read all five project pages against a list of which sentences were his material and
   which I had invented. He kept the invented voice on every page, including the most personal line on the
   site ("I can be a homebody", on Porch Light), so the drafts stand as written. One factual change: the
