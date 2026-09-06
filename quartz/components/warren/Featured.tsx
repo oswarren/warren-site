@@ -98,7 +98,9 @@ export default (() => {
 .feat .enter::after { content: "\\2192"; margin-left: 8px; color: var(--gray); }
 
 .feat img { width: 100%; height: auto; display: block; }
-.feat.image:first-child .feat-art img { max-height: 78vh; width: auto; max-width: 100%; margin: 0 auto; }
+/* align-self, not margin auto: .feat-art is a column flex container, so the image stretches to the
+   column width unless told not to, and max-height then squashes a tall photo instead of scaling it. */
+.feat.image:first-child .feat-art img { max-height: 78vh; width: auto; max-width: 100%; align-self: center; }
 .feat figcaption { font-size: 12px; color: var(--gray); }
 .feat .excerpt {
   margin: 0; padding: 0 0 0 22px; border-left: 1px solid var(--dark);

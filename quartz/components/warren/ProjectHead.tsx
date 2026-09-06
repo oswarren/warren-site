@@ -46,7 +46,9 @@ export default (() => {
 .project-head .open:hover { color: var(--secondary); border-color: var(--secondary); }
 .project-head .open::after { content: "\\2192"; margin-left: 8px; color: var(--gray); }
 .project-head .art { margin: 40px 0 8px; display: flex; flex-direction: column; gap: 10px; }
-.project-head .art img { max-width: 100%; width: auto; height: auto; display: block; max-height: 82vh; }
+/* align-self matters: .art is a column flex container, so without it the image stretches to the full
+   column width, and max-height then squashes a tall photo flat instead of scaling it down. */
+.project-head .art img { max-width: 100%; width: auto; height: auto; align-self: flex-start; display: block; max-height: 82vh; }
 .project-head figcaption { font-size: 12px; color: var(--gray); }
 .project-head .excerpt.mono { font-size: 13px; line-height: 1.7; color: var(--darkgray); border-left-color: var(--lightgray); }
 .project-head .excerpt { margin: 0; padding: 0 0 0 22px; border-left: 1px solid var(--dark); font-weight: 300; font-size: clamp(18px, 1.6vw, 22px); line-height: 1.5; color: var(--dark); white-space: pre-line; max-width: 64ch; }
