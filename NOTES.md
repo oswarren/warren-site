@@ -45,9 +45,8 @@ Design origin: `design/` (Claude Design canvas; predates the portfolio framing).
   - Night Shift step 7b now names what finished in its public line when something did
     ("finished: <up to two short phrases>; M next steps set"); a day with nothing closed keeps the
     counts line. Same public rules as 7c.
-- Still posting a bare line: the Porch Light cloud routine's step 7 sends `what=Local events finder`.
-  Next time that routine is edited (not before Q15's Sep 3 verification), make it send the delivery
-  itself, "N events, <range>", like the Aug 20 line.
+- 2026-09-06: Porch Light's routine (step 7) now derives its line from the digest, "N events, <range>",
+  like the Aug 20 line; the Sep 3 line ("Porch Light") is the last bare one. Nothing on the site changed.
 
 ## State, 2026-08-30 (custom domain)
 
