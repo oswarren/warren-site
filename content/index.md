@@ -1,4 +1,5 @@
 ---
-title: I build small systems that run without me.
-description: Automated systems I run, with why each exists and what it has sent.
+title: I build systems that help ideas travel farther.
+description: Warren Stetler, creative systems designer. Systems for finding, publishing, archiving, and selling the things I make.
+aliases: [balance]
 ---

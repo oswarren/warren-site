@@ -5,27 +5,77 @@
     "what": "searches the web for real local events, verifies them, emails a weekly digest",
     "runs": "weekly, Thursday evening (6pm ET)",
     "cron": "0 22 * * 4",
-    "link": { "label": "run your own: the routine, on Gumroad", "href": "https://opensourcewarren.gumroad.com/l/local-events-radar" }
+    "link": {
+      "label": "run your own: the routine, on Gumroad",
+      "href": "https://opensourcewarren.gumroad.com/l/local-events-radar"
+    }
   },
   {
     "name": "night-shift",
     "category": "finishing things",
     "what": "reads my project notes and my to-do list three times a day, records what I finished, and sets out the day's five next steps",
     "runs": "three times a day (5:30am, 12:30pm, 6:30pm ET); the morning run is the full one",
-    "cron": "30 9,16,22 * * *"
+    "paused": "2026-09-01"
   },
   {
     "name": "small-notes",
     "category": "writing",
     "what": "a Substack where I write up one small system at a time and what it changed",
     "runs": "when a note is ready",
-    "link": { "label": "read it on Substack", "href": "https://smallnotesbigchanges.substack.com" }
+    "link": {
+      "label": "read it on Substack",
+      "href": "https://smallnotesbigchanges.substack.com"
+    }
   },
   {
     "name": "kits",
     "category": "shared",
     "what": "the systems I run, packaged so other people can run them too",
     "runs": "a line here each time a kit ships",
-    "link": { "label": "the shop, on Gumroad", "href": "https://opensourcewarren.gumroad.com" }
+    "link": {
+      "label": "the shop, on Gumroad",
+      "href": "https://opensourcewarren.gumroad.com"
+    }
+  },
+  {
+    "name": "wild-clay-hunt",
+    "category": "writing",
+    "what": "drafts the next hunt log from field notes and old survey reports, checks it against the publication's written rules, and leaves it in Substack for me to read, edit, and schedule",
+    "runs": "weekly, Wednesday morning (9am ET), from my desk",
+    "cron": "0 13 * * 3",
+    "link": {
+      "label": "read it on Substack",
+      "href": "https://wildclayhunt.substack.com"
+    }
+  },
+  {
+    "name": "penny",
+    "category": "clay",
+    "what": "numbers, prices, and photographs every piece, and gives each one a page of its own",
+    "runs": "every time a batch is photographed",
+    "link": {
+      "label": "browse the pieces",
+      "href": "https://apennyforyourpottery.com"
+    }
+  },
+  {
+    "name": "wild-clay-archive",
+    "category": "clay",
+    "what": "shows the soil beneath any point in the United States and says in plain words whether it is worth digging",
+    "runs": "whenever someone taps the map",
+    "link": {
+      "label": "open the map",
+      "href": "https://www.wildclayarchive.com"
+    }
+  },
+  {
+    "name": "glazesnap",
+    "category": "clay",
+    "what": "matches photographs of a fired surface to commercial glazes worth testing",
+    "runs": "whenever someone uploads a surface",
+    "link": {
+      "label": "try it",
+      "href": "https://www.glazesnap.com"
+    }
   }
 ]

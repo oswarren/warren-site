@@ -3,17 +3,26 @@ import { PageTypes } from "./quartz/plugins"
 import { ConditionalRender } from "./quartz/components"
 import { QuartzComponentProps } from "./quartz/components/types"
 import { FullPageLayout } from "./quartz/cfg"
-import { TableOfContents } from "@quartz-community/table-of-contents/components"
 import * as Warren from "./quartz/components/warren"
 
 /**
- * warren.systems — Quartz 5 TS override.
+ * warrenstetler.com, Quartz 5 TS override.
  *
- * quartz.config.yaml holds the site configuration and the plugin list. This file
- * places the warren components (core components in quartz/components/warren/) into
- * the layout. They are placed here rather than in YAML because their presence depends
- * on the page slug (home vs a system's page vs a sent page), which the YAML `condition`
- * presets (not-index, has-tags, ...) cannot express.
+ * quartz.config.yaml holds the site configuration and the plugin list. This file places the
+ * warren components (core components in quartz/components/warren/) into the layout. They are
+ * placed here rather than in YAML because their presence depends on the page slug (home, the work
+ * index, a project page, something sent), which the YAML `condition` presets cannot express.
+ *
+ * The pages:
+ *   /              hero (the statement, one live clue), the selected systems, the evidence (what I'm
+ *                  doing, what the systems are doing, what runs without me), the two ways in
+ *   /systems       the work index, every project page
+ *   /systems/<x>   a project page: title, effect, artifact, the narrative, then the live facts and
+ *                  everything it has sent (for systems that log here)
+ *   /sent/<x>/<d>  something a system sent, as it went out
+ *   /work-with-me  Make one
+ *   /use           Use something I've built
+ *   /about
  */
 
 const EMAIL = "opensourcewarren@gmail.com"
@@ -21,13 +30,13 @@ const SOURCE = "https://github.com/oswarren/warren-site"
 
 const isSent = (slug: string) => /^sent\/[^/]+\/.+/.test(slug)
 const isFront = (slug: string) => slug === "index"
+const notFront = (slug: string) => slug !== "index"
 const isSystemsIndex = (slug: string) => slug === "systems/index"
-const isMakeOne = (slug: string) => slug === "make-one"
-const isFolderIndex = (slug: string) => slug === "index" || slug.endsWith("/index")
-// pages that are "documents" (about, a system's page, something sent): they get the rail blocks
-const isDoc = (slug: string) =>
-  !isFolderIndex(slug) && !["tags", "404"].includes(slug) && !slug.startsWith("tags/")
-// a system's own page: frontmatter `log: <name>` names its entry in tools.json
+const isWorkWithMe = (slug: string) => slug === "work-with-me"
+const isUse = (slug: string) => slug === "use"
+// a project page: frontmatter `effect` (the one sentence on what the system makes possible)
+const isProject = (p: QuartzComponentProps) => typeof p.fileData.frontmatter?.effect === "string"
+// a system that logs here: frontmatter `log: <name>` names its entry in tools.json
 const isSystem = (p: QuartzComponentProps) => typeof p.fileData.frontmatter?.log === "string"
 
 const when = (component: ReturnType<typeof Warren.Nav>, test: (slug: string) => boolean) =>
@@ -41,27 +50,33 @@ const yaml = await loadQuartzLayout()
 
 const shared: Partial<FullPageLayout> = {
   header: [Warren.Nav()],
-  beforeBody: [when(Warren.SentMeta(), isSent), ...(yaml.defaults.beforeBody ?? [])],
+  beforeBody: [
+    when(Warren.SentMeta(), isSent),
+    // the stock title everywhere but home, where the hero carries the statement itself
+    ...(yaml.defaults.beforeBody ?? []).map((c) => when(c, notFront)),
+    when(Warren.Hero(), isFront),
+    // a project page: the effect, the artifact, the way in, above the narrative
+    ConditionalRender({ component: Warren.ProjectHead(), condition: isProject }),
+  ],
   afterBody: [
-    // home, today: what Warren is doing (now.json) beside what the systems are doing (log.jsonl)
+    // home, in order: the selected systems, then the back of the watch, then the two ways in
+    when(Warren.Featured(), isFront),
+    when(Warren.EvidenceHead(), isFront),
     when(Warren.Now(), isFront),
-    // home, the standing arrangement: what runs without him, what still needs his hands, and the line moving
     when(Warren.Balance(), isFront),
-    // the portfolio lives on /systems only; the home page carries the balance instead
+    when(Warren.Ending(), isFront),
+    // the work index
     when(Warren.Systems(), isSystemsIndex),
-    // the commission page: a visitor says what they keep meaning to do, the page designs it
-    when(Warren.MakeOne(), isMakeOne),
-    // a system's page: photos of what came of it, its facts, then everything it has sent
+    // the two ways in
+    when(Warren.MakeOne(), isWorkWithMe),
+    when(Warren.Use(), isUse),
+    // a system's page: photos of what came of it, its live facts, then everything it has sent
     ConditionalRender({ component: Warren.Gallery(), condition: isSystem }),
     ConditionalRender({ component: Warren.SystemFacts(), condition: isSystem }),
     ConditionalRender({ component: Warren.History(), condition: isSystem }),
   ],
   left: [],
-  right: [
-    when(Warren.OnThisPage(TableOfContents()), isDoc),
-    when(Warren.Tagged, isDoc),
-    when(Warren.Reply({ email: EMAIL }), isDoc),
-  ],
+  right: [],
   footer: [Warren.WarrenFooter({ source: SOURCE, email: EMAIL })],
 }
 

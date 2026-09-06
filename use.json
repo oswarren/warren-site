@@ -1,0 +1,73 @@
+[
+  {
+    "label": "visit",
+    "items": [
+      {
+        "name": "Wild Clay Archive",
+        "does": "Tap any point in the United States and see the soil beneath it, and whether it is worth digging.",
+        "href": "https://www.wildclayarchive.com",
+        "action": "open the map",
+        "note": "free, no account to explore"
+      },
+      {
+        "name": "A Penny For Your Pottery",
+        "does": "Ten thousand handmade pieces, each priced one cent higher than the last, each with a page of its own.",
+        "href": "https://apennyforyourpottery.com",
+        "action": "browse the pieces",
+        "note": "or walk the archive, archive.apennyforyourpottery.com"
+      },
+      {
+        "name": "GlazeSnap",
+        "does": "Photograph a fired surface and get three to five commercial glazes worth testing.",
+        "href": "https://www.glazesnap.com",
+        "action": "try it",
+        "note": "the first analysis is free"
+      }
+    ]
+  },
+  {
+    "label": "read",
+    "items": [
+      {
+        "name": "The Wild Clay Hunt",
+        "does": "Treasure hunts through old survey reports. Wild clay, soil, and the ground under America. One hunt per letter.",
+        "href": "https://wildclayhunt.substack.com",
+        "action": "subscribe",
+        "note": "free"
+      },
+      {
+        "name": "Small Notes, Big Changes",
+        "does": "I build tiny tools for myself and write down what happens. Some of it turns into something bigger.",
+        "href": "https://smallnotesbigchanges.substack.com",
+        "action": "subscribe",
+        "note": "free"
+      }
+    ]
+  },
+  {
+    "label": "run it yourself",
+    "items": [
+      {
+        "name": "Local Events Radar",
+        "does": "The routine behind Porch Light, set up for your own town and your own interests. Every Thursday, a list worth leaving the house for.",
+        "href": "https://opensourcewarren.gumroad.com/l/local-events-radar",
+        "action": "get the routine",
+        "note": "on Gumroad"
+      },
+      {
+        "name": "Field Notes, a Quartz theme",
+        "does": "The free one of three looks for a Quartz site. This site runs on Quartz.",
+        "href": "https://opensourcewarren.gumroad.com/l/quartz5-field-notes",
+        "action": "get the theme",
+        "note": "free"
+      },
+      {
+        "name": "The kits",
+        "does": "The systems I run, packaged so other people can run them too: routines, skills, and guides, with nothing that needs me afterward.",
+        "href": "https://opensourcewarren.gumroad.com",
+        "action": "see the shop",
+        "note": "on Gumroad"
+      }
+    ]
+  }
+]

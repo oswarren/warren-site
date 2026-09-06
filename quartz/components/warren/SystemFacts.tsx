@@ -13,11 +13,18 @@ export default (() => {
     const t = name ? readTools().find((t) => t.name === name) : undefined
     if (!t) return null
     const now = readBuild().when
-    const schedule = t.retired ? null : parseCron(t.cron)
+    const schedule = t.retired || t.paused ? null : parseCron(t.cron)
     const rows: [string, any][] = [["what it does", t.what]]
     if (t.retired) {
       const d = parseWhen(t.retired + "-01")
       rows.push(["status", `retired ${MONTHS[d.getMonth()]} ${d.getFullYear()}`])
+    } else if (t.paused) {
+      const d = parseWhen(t.paused)
+      rows.push([
+        "status",
+        `paused since ${MONTHS[d.getMonth()]} ${d.getDate()}, ${d.getFullYear()}`,
+      ])
+      rows.push(["schedule", t.runs])
     } else {
       rows.push(["schedule", t.runs])
       if (schedule) {
@@ -29,7 +36,7 @@ export default (() => {
         ])
       }
     }
-    if (t.link) rows.push(["get it", <a href={t.link.href}>{t.link.label}</a>])
+    if (t.link) rows.push(["open", <a href={t.link.href}>{t.link.label}</a>])
     return (
       <div class={classNames(displayClass, "facts", "mono")}>
         {rows.map(([k, v]) => (
@@ -45,13 +52,14 @@ export default (() => {
   SystemFacts.css = `
 .facts {
   display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 8px 16px;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 10px 16px;
   font-size: 12px;
   color: var(--darkgray);
   padding-top: 20px;
-  margin-top: 28px;
+  margin-top: 56px;
   border-top: 1px solid var(--dark);
+  max-width: 64ch;
 }
 .facts .key { color: var(--dark); }
 .facts .value { line-height: 1.5; }

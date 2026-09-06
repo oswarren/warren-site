@@ -1,14 +1,14 @@
 ---
 title: About
-description: Who runs these systems, and why.
+description: Warren Stetler, creative systems designer.
 ---
 
-I am Warren. I live in Philadelphia, PA and build small systems that keep working when I am not at the keyboard.
+I notice something I keep doing by hand, and I get interested in building a system around it.
 
-Most of them started as a problem I kept running into. Porch Light exists because I had spent a year somewhere new and was still not meeting anyone. The pattern is the same each time: notice something I do by hand every week, write the smallest program that does it for me, and let it run on a schedule.
+That is most of it. A pot leaves the studio and I want it to carry its own record. A list of events near me arrives every Thursday because I could not be trusted to go looking. A hunt through a hundred-year-old survey report becomes a letter, because a letter travels farther than my notes do. The system is the part I like designing: what it reads, what it decides, what it sends, and the moment it starts producing something useful with nobody in the room.
 
-What draws me to this is less the time saved than the design of the thing itself: how the parts fit together, what triggers what, and the moment a system starts producing something useful on its own. Each entry on this site is one of those systems, with why I built it, what it does, and a record of what it has sent.
+The systems are made of whatever the idea needs. Software, writing, records, clay, commerce, other people. I do not think of those as separate fields. The same way of seeing runs through all of them: find the thing that repeats, give it a rule, and let the rule carry it.
 
-Some of them I share or sell so other people can run them too; where that is true, the system's page links to it.
+If a description is needed, creative systems designer is the simplest one.
 
-Write to [opensourcewarren@gmail.com](mailto:opensourcewarren@gmail.com) if you want to talk about any of them.
+I work with clay most days. Pennsylvania is home. Write to [opensourcewarren@gmail.com](mailto:opensourcewarren@gmail.com), or start with [Work with me](work-with-me).
