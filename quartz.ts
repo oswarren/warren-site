@@ -22,6 +22,7 @@ const SOURCE = "https://github.com/oswarren/warren-site"
 const isSent = (slug: string) => /^sent\/[^/]+\/.+/.test(slug)
 const isFront = (slug: string) => slug === "index"
 const isSystemsIndex = (slug: string) => slug === "systems/index"
+const isMakeOne = (slug: string) => slug === "make-one"
 const isFolderIndex = (slug: string) => slug === "index" || slug.endsWith("/index")
 // pages that are "documents" (about, a system's page, something sent): they get the rail blocks
 const isDoc = (slug: string) =>
@@ -48,6 +49,8 @@ const shared: Partial<FullPageLayout> = {
     when(Warren.Balance(), isFront),
     // the portfolio lives on /systems only; the home page carries the balance instead
     when(Warren.Systems(), isSystemsIndex),
+    // the commission page: a visitor says what they keep meaning to do, the page designs it
+    when(Warren.MakeOne(), isMakeOne),
     // a system's page: photos of what came of it, its facts, then everything it has sent
     ConditionalRender({ component: Warren.Gallery(), condition: isSystem }),
     ConditionalRender({ component: Warren.SystemFacts(), condition: isSystem }),
