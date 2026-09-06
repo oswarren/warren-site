@@ -19,9 +19,9 @@ import * as Warren from "./quartz/components/warren"
 const EMAIL = "opensourcewarren@gmail.com"
 const SOURCE = "https://github.com/oswarren/warren-site"
 
-const isHome = (slug: string) => slug === "index" || slug === "systems/index"
 const isSent = (slug: string) => /^sent\/[^/]+\/.+/.test(slug)
-const isBalance = (slug: string) => slug === "balance"
+const isFront = (slug: string) => slug === "index"
+const isSystemsIndex = (slug: string) => slug === "systems/index"
 const isFolderIndex = (slug: string) => slug === "index" || slug.endsWith("/index")
 // pages that are "documents" (about, a system's page, something sent): they get the rail blocks
 const isDoc = (slug: string) =>
@@ -42,12 +42,12 @@ const shared: Partial<FullPageLayout> = {
   header: [Warren.Nav()],
   beforeBody: [when(Warren.SentMeta(), isSent), ...(yaml.defaults.beforeBody ?? [])],
   afterBody: [
-    // home: what Warren is doing (now.json, written by Night Shift) beside what the systems are doing (log.jsonl)
-    when(Warren.Now(), isHome),
-    // the portfolio, on the home page and /systems
-    when(Warren.Systems(), isHome),
-    // /balance: what runs without him beside what still needs his hands, and the line moving
-    when(Warren.Balance(), isBalance),
+    // home, today: what Warren is doing (now.json) beside what the systems are doing (log.jsonl)
+    when(Warren.Now(), isFront),
+    // home, the standing arrangement: what runs without him, what still needs his hands, and the line moving
+    when(Warren.Balance(), isFront),
+    // the portfolio lives on /systems only; the home page carries the balance instead
+    when(Warren.Systems(), isSystemsIndex),
     // a system's page: photos of what came of it, its facts, then everything it has sent
     ConditionalRender({ component: Warren.Gallery(), condition: isSystem }),
     ConditionalRender({ component: Warren.SystemFacts(), condition: isSystem }),
