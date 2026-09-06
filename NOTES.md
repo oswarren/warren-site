@@ -45,6 +45,11 @@ Design origin: `design/` (Claude Design canvas; predates the portfolio framing).
   - Night Shift step 7b now names what finished in its public line when something did
     ("finished: <up to two short phrases>; M next steps set"); a day with nothing closed keeps the
     counts line. Same public rules as 7c.
+- 2026-09-06: Warren read all five project pages against a list of which sentences were his material and
+  which I had invented. He kept the invented voice on every page, including the most personal line on the
+  site ("I can be a homebody", on Porch Light), so the drafts stand as written. One factual change: the
+  residency version of Porch Light "arrives every Thursday for its resident artists" rather than sending to
+  the program's coordinator, because Warren forwards it himself. The pages are his now; edit them as his own.
 - 2026-09-06: artifact photos were being squashed. `.art` (ProjectHead) and `.feat-art` (Featured) are
   column flex containers, so the image stretched to the full column width, and the `max-height` on the
   hero artifact then flattened it instead of scaling it down: the portrait of piece 2253 rendered
