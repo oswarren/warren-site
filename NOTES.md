@@ -45,6 +45,10 @@ Design origin: `design/` (Claude Design canvas; predates the portfolio framing).
   - Night Shift step 7b now names what finished in its public line when something did
     ("finished: <up to two short phrases>; M next steps set"); a day with nothing closed keeps the
     counts line. Same public rules as 7c.
+- 2026-09-06: Make One is live. `/work-with-me` now shows a system designed for what the visitor typed,
+  not the canned four lines. Warren added the API key and turned off Vercel's Deployment Protection;
+  a zod version bug in the endpoint had to be fixed first (see `make-one-api/README.md`). The fallback
+  stays: if the key, the credit or the model ever goes, the page quietly reverts and shows nothing broken.
 - 2026-09-06: Porch Light's routine (step 7) now derives its line from the digest, "N events, <range>",
   like the Aug 20 line; the Sep 3 line ("Porch Light") is the last bare one. Nothing on the site changed.
 
