@@ -12,6 +12,10 @@ export default (() => {
     if (!automatic.length && !by_hand.length) return null
     return (
       <div class={classNames(displayClass, "balance")}>
+        <p class="intro">
+          Anything that can run on its own should, so what is left is the part only I can do: the clay,
+          the ground, the words, the people. The point of this is the right column getting shorter.
+        </p>
         <p class="tally mono">
           <span class="ok">{automatic.length} run without me</span>
           <span class="sep">·</span>
@@ -66,8 +70,9 @@ export default (() => {
   }
 
   Balance.css = `
-.balance { padding-top: 8px; }
-.balance .tally { font-size: 13px; color: var(--darkgray); padding-bottom: 18px; }
+.balance { padding-top: 34px; margin-top: 34px; border-top: 1px solid var(--dark); }
+.balance .intro { font-size: 15px; line-height: 1.5; color: var(--darkgray); margin: 0; max-width: 60ch; }
+.balance .tally { font-size: 13px; color: var(--darkgray); padding: 16px 0 18px; }
 .balance .tally .ok { color: var(--ok); }
 .balance .tally .sep { padding: 0 10px; color: var(--gray); }
 .balance .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; }
