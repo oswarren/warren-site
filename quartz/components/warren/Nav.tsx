@@ -15,6 +15,7 @@ interface Options {
 const defaultOptions: Options = {
   links: [
     { label: "systems", target: "index", prefixes: ["systems/", "sent/"] },
+    { label: "balance", target: "balance" },
     { label: "about", target: "about" },
   ],
 }

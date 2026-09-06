@@ -108,6 +108,56 @@ export function readTools(): Tool[] {
   return toolsCache!
 }
 
+export interface BalanceItem {
+  what: string // one line, plain words: what the thing is
+  when: string // when it happens, in words, e.g. "Thursday evening" or "Five days a week"
+  since?: string // automatic side only: the date it stopped needing him
+}
+
+export interface Balance {
+  automatic: BalanceItem[]
+  by_hand: BalanceItem[]
+}
+
+let balanceCache: Balance | null = null
+// balance.json: the two columns on /balance, kept true by /running in personal-system.
+export function readBalance(): Balance {
+  if (balanceCache) return balanceCache
+  try {
+    const j = JSON.parse(readIfExists("balance.json") ?? "{}")
+    balanceCache = { automatic: j.automatic ?? [], by_hand: j.by_hand ?? [] }
+  } catch {
+    balanceCache = { automatic: [], by_hand: [] }
+  }
+  return balanceCache!
+}
+
+export interface BalanceMove {
+  when: string
+  moved: string
+  note?: string
+}
+
+let balanceLogCache: BalanceMove[] | null = null
+// balance.jsonl: one line per change in the balance, newest first. Same shape as now.jsonl.
+export function readBalanceLog(): BalanceMove[] {
+  if (balanceLogCache) return balanceLogCache
+  const raw = readIfExists("balance.jsonl") ?? ""
+  const moves: BalanceMove[] = []
+  for (const line of raw.split("\n")) {
+    const t = line.trim()
+    if (!t) continue
+    try {
+      moves.push(JSON.parse(t))
+    } catch {
+      console.warn(`balance.jsonl: skipping unparsable line: ${t.slice(0, 60)}`)
+    }
+  }
+  moves.sort((a, b) => parseWhen(b.when).getTime() - parseWhen(a.when).getTime())
+  balanceLogCache = moves
+  return moves
+}
+
 let buildCache: BuildInfo | null = null
 export function readBuild(): BuildInfo {
   if (buildCache) return buildCache

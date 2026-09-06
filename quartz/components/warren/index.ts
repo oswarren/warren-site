@@ -2,6 +2,7 @@
 export { default as Nav } from "./Nav"
 export { default as Now } from "./Now"
 export { default as Systems } from "./Systems"
+export { default as Balance } from "./Balance"
 export { default as SystemFacts } from "./SystemFacts"
 export { default as History } from "./History"
 export { default as Gallery } from "./Gallery"

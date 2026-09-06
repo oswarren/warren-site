@@ -1,0 +1,32 @@
+{
+  "note": "The two columns on /balance. `automatic` is what runs whether or not Warren shows up; `by_hand` is what still needs him. Kept true by /running in personal-system. Every move between the columns appends a line to balance.jsonl.",
+  "automatic": [
+    { "what": "Searches the web and emails a weekly digest of real local events, near Appomattox and across Pennsylvania", "when": "Thursday evening", "since": "2026-08-20" },
+    { "what": "The same digest, tuned for a ceramics residency and its resident artists", "when": "Thursday evening", "since": "2026-08-27" },
+    { "what": "Reads the mail for anything the radar business needs answering, checks the digest actually went out, and prepares the replies", "when": "Monday and Friday", "since": "2026-08-28" },
+    { "what": "Posts one note to Substack for The Wild Clay Hunt, word for word from the written bank, never composing", "when": "Tuesday and Friday", "since": "2026-09-01" },
+    { "what": "Checks every publication's schedule and starts whatever is due", "when": "Every 30 minutes", "since": "2026-09-02" },
+    { "what": "Writes the Monday issue of Small Notes, Big Changes straight into Substack as a draft", "when": "Monday morning", "since": "2026-09-04" },
+    { "what": "Writes the weekly Wild Clay Hunt issue into Substack as a draft, never publishing", "when": "Wednesday morning", "since": "2026-09-02" },
+    { "what": "Reads the publication dashboards and records the numbers", "when": "Monday morning", "since": "2026-09-02" },
+    { "what": "Asks the month-one questions about the residency pilot: retention, quote, billing, one introduction", "when": "Once, September 24", "since": "2026-08-27" }
+  ],
+  "by_hand": [
+    { "what": "Working with clay", "when": "Five days a week" },
+    { "what": "Running", "when": "Three days a week" },
+    { "what": "Hunting wild clay and rocks", "when": "Saturday" },
+    { "what": "Hiking", "when": "Sunday" },
+    { "what": "Listing new pieces to the shop", "when": "Thursday" },
+    { "what": "Packing and shipping what sold", "when": "Monday" },
+    { "what": "Commenting on other people's Substacks", "when": "Tuesday and Friday" },
+    { "what": "Instagram, finding who to talk to and what to post", "when": "Thursday and Saturday" },
+    { "what": "Building something with Claude Code", "when": "Twice a week" },
+    { "what": "Working on the Wild Clay Archive", "when": "Friday" },
+    { "what": "Looking for something digital worth selling, out of work already happening", "when": "Wednesday" },
+    { "what": "Going to an event from the radar", "when": "Weekly, whenever it falls" },
+    { "what": "Seeing a friend", "when": "Sunday" },
+    { "what": "Cooking something interesting", "when": "Twice a week" },
+    { "what": "Preparing a month of writing for every publication", "when": "Twice a month" },
+    { "what": "Looking at what worked, what did not, and what to hand over next", "when": "Sunday" }
+  ]
+}
