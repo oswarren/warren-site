@@ -45,6 +45,13 @@ Design origin: `design/` (Claude Design canvas; predates the portfolio framing).
   - Night Shift step 7b now names what finished in its public line when something did
     ("finished: <up to two short phrases>; M next steps set"); a day with nothing closed keeps the
     counts line. Same public rules as 7c.
+- 2026-09-06: artifact photos were being squashed. `.art` (ProjectHead) and `.feat-art` (Featured) are
+  column flex containers, so the image stretched to the full column width, and the `max-height` on the
+  hero artifact then flattened it instead of scaling it down: the portrait of piece 2253 rendered
+  1152x480 against a true 1205x1600. Fixed with `align-self` on both rules (flex-start on a project
+  page, center on the home page). It bit any image tall enough to reach the max-height, so landscape
+  screenshots were squashed too on short windows. Verified: every image on `/`, penny, wild-clay-archive
+  and glazesnap now renders at its true ratio at 1440x900, 1440x600 and 390x844. Warren found it.
 - 2026-09-06: Make One is live. `/work-with-me` now shows a system designed for what the visitor typed,
   not the canned four lines. Warren added the API key and turned off Vercel's Deployment Protection;
   a zod version bug in the endpoint had to be fixed first (see `make-one-api/README.md`). The fallback
