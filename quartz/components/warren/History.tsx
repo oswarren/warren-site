@@ -12,11 +12,12 @@ export default (() => {
     if (!source) return null
     const now = readBuild().when
     const lines = readLog().filter((l) => l.source === source && l.status !== "scheduled")
+    if (lines.length === 0) return null
     return (
       <div class={classNames(displayClass, "history")}>
         <div class="history-head mono">
           <span>sent</span>
-          <span>what</span>
+          <span>what it sent</span>
         </div>
         {lines.length === 0 && <div class="history-row mono empty">nothing sent yet</div>}
         {lines.map((l) => {

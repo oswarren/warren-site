@@ -1,39 +1,55 @@
-# warren.systems
+# warrenstetler.com
 
-A portfolio of the automated systems Warren runs, built on [Quartz 5](https://quartz.jzhao.xyz). One entry
-per system: why it exists (written by hand), what it does, when it runs, and everything it has sent.
-The systems themselves keep the site current: each delivery becomes a line in `log.jsonl` and, when the
-payload carries the email, a page under `content/sent/`.
+Warren Stetler's site, built on [Quartz 5](https://quartz.jzhao.xyz). A portfolio for a creative systems designer, opening
+on one statement, "I build systems that help ideas travel farther", then the selected systems, then the evidence that they
+are running, then the two ways in. The systems themselves keep the evidence current: each delivery becomes a line in
+`log.jsonl` and, when the payload carries the email, a page under `content/sent/`.
 
 ## The pages
 
-- `/` (and `/systems`): the list. Title and link from the system's page, one sentence on what it does,
-  then category · last sent · next run (a live countdown to the system's cron).
-- `/systems/<name>`: the system's own page. Markdown written by hand (why it exists), then the facts from
-  `tools.json` (what it does, schedule, next run, where to get it), then its run history, each line opening
-  what it sent.
+- `/`: the hero (the statement and one live clue, a countdown to the next system that will run without him), the selected
+  systems (every project page with `featured` in its frontmatter, in that order, each with its one sentence and one real
+  artifact), then the evidence: what he is doing (`now.json`), what the systems are doing (`log.jsonl`), what runs
+  without him and what still needs his hands (`balance.json`) and how that line has moved (`balance.jsonl`), then the
+  close: back to the idea, "Work with me", "Use something I've built", and the countdown still running.
+- `/systems` ("Work" in the nav): every project page, featured ones first, each with its sentence and what is true about
+  it right now (last sent, next run, paused, or where it lives).
+- `/systems/<name>`: a project page. The title, the one sentence (`effect`), the artifact, the way into the real thing,
+  then the narrative in the page's own markdown (the curiosity, what it does, the system, cause and effect, what
+  changed, experience it), then, for systems that log here, the facts from `tools.json`, photos of what came of it, and
+  everything it has sent.
 - `/sent/<name>/<date>`: something a system sent, exactly as it went out, with a "sent by" line linking back.
-- A system's page can carry photos of what came of it: drop image files into `content/photos/<name>/` and
-  they appear in a grid under the text ("what came of it"), newest first, each opening the full image. The
-  caption is the file name: `2026-08-22-wolfswood-faire.jpg` shows "wolfswood faire" and "Aug 22, 2026"; a
-  file without a leading date is captioned by its name alone. Keep photos web-sized (about 1600px on the
-  long side, under 500 KB); the repo carries them forever.
+- `/work-with-me`: Make one. Say what you keep meaning to do and see the system he would build around it (the design
+  call goes to a small endpoint that holds the API key; without it the page falls back to its own canned lines).
+- `/use`: what already exists and can be visited, read, or run, from `use.json`.
 - `/about`.
 
 ## How a system gets on the site
 
-1. Add an entry to `tools.json`:
+1. Write `content/systems/<name>.md`. The frontmatter is the contract:
+   - `title`, `description`
+   - `effect`: the one sentence on what the system makes possible. This is what makes it a project page.
+   - `featured: 1`: its place on the home page; leave it out to list it on `/systems` only.
+   - one artifact: `artifact: artifacts/<file>.jpg` plus `alt`, or `excerpt: |` (a real piece of its output as text,
+     add `mono: true` for a list or an email), with `source` as the one-line caption.
+   - `tone: "#f1e8dc"`: the colour the paper tints toward while the project is in view (optional).
+   - `url` and `open`: the real thing and the label for the link (optional).
+   - `log: <name>`: its entry in `tools.json`, for the facts and the run history (optional).
+   Then the body, as headings: The curiosity, What it does, The system, Cause and effect, What changed, Experience it.
+2. If it runs on a schedule or sends things, add an entry to `tools.json`:
    `{"name": "events-radar", "category": "local events", "what": "one sentence", "runs": "weekly, Thursday evening (6pm ET)", "cron": "0 22 * * 4"}`.
-   `name` is the `source` its log lines carry and its page name. `cron` is the routine's schedule in UTC,
-   copied verbatim; only weekly `m h * * d` and daily `m h * * *` are understood, and without it the entry
-   shows no countdown. Optional: `link: {"label": "...", "href": "..."}` for where its output or product
-   lives (Gumroad, a feed), `retired: "2026-07"`, `href` to override the page slug.
-2. Write `content/systems/<name>.md` with frontmatter `title` (the plain name people see), `description`, and
-   `log: <name>` so the page picks up the facts and run history.
-3. Have the system post one line per delivery (below). Nothing else is needed; the list, the facts, and the
-   history are all derived.
+   `name` is the `source` its log lines carry and its page name. `cron` is the routine's schedule in UTC, copied
+   verbatim; only weekly `m h * * d` and daily `m h * * *` are understood, and without it the entry shows no countdown.
+   Optional: `link: {"label": "...", "href": "..."}` for where its output or product lives, `paused: "2026-09-01"`
+   (off on purpose, may come back; no countdown), `retired: "2026-07"`, `href` to override the page slug.
+3. Have the system post one line per delivery (below). The list, the facts, the history and the home page's live clue
+   are all derived.
+4. Photos of what came of it: drop image files into `content/photos/<name>/`; they appear under the narrative, newest
+   first. The caption is the file name (`2026-08-22-wolfswood-faire.jpg` shows "wolfswood faire" and "Aug 22, 2026").
+   Keep images web-sized (about 1600px on the long side, under 400 KB); the repo carries them forever. Artifacts for
+   project pages live in `content/artifacts/`, same rule.
 
-A system earns an entry when it is finished and actively sending things out. Rebuilds, health checks and
+A system earns a `tools.json` entry when it is finished and actively sending things out. Rebuilds, health checks and
 empty runs do not get lines; the log is for deliveries.
 
 ## Writing to the site
@@ -70,30 +86,34 @@ the name; the description lives on the page. Lines with `"status": "scheduled"` 
 
 ## Where things live
 
-- `log.jsonl`: one line per delivery. `tools.json`: the systems. `build.json`: written by `scripts/build.mjs`,
-  used as "now" when rendering.
-- `content/`: `index.md` (the tagline; the list renders under it), `systems/`, `sent/`, `photos/<name>/`,
-  `about.md`.
+- `log.jsonl`: one line per delivery. `tools.json`: the systems. `now.json` and `now.jsonl`: what Warren is doing, in his
+  words. `balance.json` and `balance.jsonl`: what runs without him, what still needs his hands, and how that has moved.
+  `use.json`: the "Use something I've built" rows. `build.json`: written by `scripts/build.mjs`, used as "now".
+- `content/`: `index.md` (the statement; everything on the home page renders around it), `systems/` (project pages),
+  `sent/`, `photos/<name>/`, `artifacts/`, `about.md`, `work-with-me.md`, `use.md`.
   Sent pages live under `sent/`, not `systems/<name>/`: a subfolder named after a system would make Quartz
   emit a bare folder listing at `/systems/<name>/` that shadows the system's page.
-- `quartz.config.yaml`: Quartz 5 configuration: site settings, palette, fonts, and the plugin list
-  (community plugins are npm packages, `@quartz-community/*`; the ones this site does not want, graph,
-  explorer, search, breadcrumbs, dark-mode toggle, stock footer, are `enabled: false`).
-- `quartz.ts`: the TS override. Quartz 5 places components from YAML `layout:` blocks, but this site's
-  pieces depend on the page slug (home vs a system's page vs a sent page), so `quartz.ts` builds the layout
-  with `ConditionalRender` and installs it in the `PageTypeDispatcher`.
-- `quartz/components/warren/`: the components, written as Quartz 5 core components: `Nav` (live clock),
-  `Systems` (the list), `SystemFacts`, `History`, `Gallery`, `SentMeta`, `WarrenFooter`, `Rail` (on this page / tagged /
-  reply), `data.ts` (readers, dates, cron) and `countdown.ts` (the client-side countdown shared by the list
-  and the facts). Each carries its own CSS and `afterDOMLoaded` script, as in any Quartz component.
+- `quartz.config.yaml`: Quartz 5 configuration: site settings, the palette (warm paper, ink, one clay accent), the
+  fonts (Fraunces for statements, IBM Plex Sans for reading, IBM Plex Mono for what the systems write), and the plugin
+  list (community plugins are npm packages, `@quartz-community/*`; the ones this site does not want, graph, explorer,
+  search, breadcrumbs, dark-mode toggle, stock footer, are `enabled: false`).
+- `quartz.ts`: the TS override. Quartz 5 places components from YAML `layout:` blocks, but this site's pieces depend on
+  the page slug (home, the work index, a project page, a sent page), so `quartz.ts` builds the layout with
+  `ConditionalRender` and installs it in the `PageTypeDispatcher`.
+- `quartz/components/warren/`: the components, written as Quartz 5 core components. Home: `Hero`, `Featured`,
+  `EvidenceHead`, `Now`, `Balance`, `Ending`. Project pages: `ProjectHead`, `Gallery`, `SystemFacts`, `History`.
+  Elsewhere: `Systems` (the work index), `MakeOne` (with `make-one-script.ts`), `Use`, `SentMeta`, `Nav`,
+  `WarrenFooter`. Shared: `data.ts` (readers, dates, cron, project pages), `countdown.ts` (the per-element countdown),
+  `motion.ts` (the site's movement: reveals, drift, the tone shift, the live "runs again in" line; all off under
+  prefers-reduced-motion except the text countdown). Each carries its own CSS and scripts, as in any Quartz component.
 - `quartz/components/frames/WarrenFrame.tsx`: a custom page frame (a v5 concept: the HTML shell inside
   `#quartz-body`). Registered in `frames/index.ts` and selected per page type through
-  `layout.byPageType.<type>.template: warren` in the YAML.
+  `layout.byPageType.<type>.template: warren` in the YAML. The rail block is unused.
 - `design/`: the Claude Design artboards the first version was built from (reference only; the build
   ignores them, and they predate the portfolio framing).
-- `quartz/styles/custom.scss`: the grid, type scale and hairlines. Quartz 5 wraps `base.scss` and all
-  component CSS in `@layer quartz-base`; this file joins the same layer so that component colours and
-  generic skin rules cascade by specificity, as they did in v4.
+- `quartz/styles/custom.scss`: the frame, the type scale, the prose, the motion utilities. Quartz 5 wraps `base.scss`
+  and all component CSS in `@layer quartz-base`; this file joins the same layer so that component colours and generic
+  skin rules cascade by specificity.
 
 ## Commands
 

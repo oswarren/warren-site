@@ -19,6 +19,7 @@ export interface Tool {
   category?: string // small label on the entry; grouping later, once there are enough systems
   link?: { label: string; href: string } // where its output lives, or where to get it
   retired?: string // "2026-07"
+  paused?: string // "2026-09-01": switched off on purpose, may come back; no countdown, no "next"
   href?: string // page slug override; default systems/<name>
 }
 
@@ -158,6 +159,73 @@ export function readBalanceLog(): BalanceMove[] {
   return moves
 }
 
+// A project page: any page under systems/ whose frontmatter carries `effect`, the one sentence
+// on what the system makes possible. The rest of the frontmatter is optional and drives the home page:
+//   featured  order on the home page (1 first); absent means not featured
+//   artifact  image under content/, e.g. artifacts/penny-2253.jpg; or omit and give an excerpt
+//   alt       what the image shows, for people who cannot see it
+//   excerpt   a real piece of the system's output, shown as text
+//   source    where the excerpt is from (one line, mono)
+//   tone      a colour the page's paper tints toward while the project is in view
+//   url       the real thing, if it is public
+//   open      the label for that link ("Browse the pieces")
+//   log       the tools.json entry that carries its schedule and history
+export interface Project {
+  slug: string
+  title: string
+  effect: string
+  featured?: number
+  artifact?: string
+  alt?: string
+  excerpt?: string
+  source?: string
+  mono?: boolean // render the excerpt in mono (a list, an email) rather than serif (prose)
+  tone?: string
+  url?: string
+  open?: string
+  log?: string
+}
+
+export function readProjects(
+  allFiles: { slug?: string; frontmatter?: Record<string, any> }[],
+): Project[] {
+  const out: Project[] = []
+  for (const f of allFiles) {
+    const fm = f.frontmatter ?? {}
+    if (!f.slug || !f.slug.startsWith("systems/") || f.slug === "systems/index") continue
+    if (typeof fm.effect !== "string") continue
+    out.push({
+      slug: f.slug,
+      title: String(fm.title ?? f.slug),
+      effect: fm.effect,
+      featured: typeof fm.featured === "number" ? fm.featured : undefined,
+      artifact: fm.artifact,
+      alt: fm.alt,
+      excerpt: fm.excerpt,
+      source: fm.source,
+      mono: fm.mono === true,
+      tone: fm.tone,
+      url: fm.url,
+      open: fm.open,
+      log: typeof fm.log === "string" ? fm.log : undefined,
+    })
+  }
+  out.sort((a, b) => (a.featured ?? 99) - (b.featured ?? 99) || a.title.localeCompare(b.title))
+  return out
+}
+
+// "label=cron;;label=cron" for every scheduled, live tool: the data the countdown script reads.
+export function runsAttr(allFiles: { slug?: string; frontmatter?: Record<string, any> }[]): string {
+  const parts: string[] = []
+  for (const t of readTools()) {
+    if (!t.cron || t.retired || t.paused) continue
+    const page = allFiles.find((f) => f.slug === slugFor(t))
+    const label = (page?.frontmatter?.title as string | undefined) ?? t.name
+    parts.push(`${label}=${t.cron}`)
+  }
+  return parts.join(";;")
+}
+
 let buildCache: BuildInfo | null = null
 export function readBuild(): BuildInfo {
   if (buildCache) return buildCache
@@ -178,7 +246,9 @@ const pad = (n: number) => String(n).padStart(2, "0")
 
 export function sameDay(a: Date, b: Date): boolean {
   return (
-    a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth() && a.getDate() === b.getDate()
+    a.getFullYear() === b.getFullYear() &&
+    a.getMonth() === b.getMonth() &&
+    a.getDate() === b.getDate()
   )
 }
 
@@ -249,7 +319,9 @@ export function parseCron(cron: string | undefined): Schedule | null {
 export function nextDue(s: Schedule, now: Date): Date {
   let best: Date | null = null
   for (const hour of s.hours) {
-    const t = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), hour, s.minute, 0))
+    const t = new Date(
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), hour, s.minute, 0),
+    )
     if (s.dow === null) {
       if (t <= now) t.setUTCDate(t.getUTCDate() + 1)
     } else {

@@ -6,7 +6,11 @@ import { readLog, readTools, slugFor, parseWhen, longDate } from "./data"
 // The line above something a system sent (a page under sent/<source>/):
 // "sent by Porch Light · Aug 20, 2026", the name linking back to the system.
 export default (() => {
-  const SentMeta: QuartzComponent = ({ fileData, allFiles, displayClass }: QuartzComponentProps) => {
+  const SentMeta: QuartzComponent = ({
+    fileData,
+    allFiles,
+    displayClass,
+  }: QuartzComponentProps) => {
     const slug = fileData.slug!
     const m = slug.match(/^sent\/([^/]+)\/(.+)$/)
     if (!m) return null
@@ -19,9 +23,7 @@ export default (() => {
     const name = (page?.frontmatter?.title as string | undefined) ?? source
     return (
       <div class={classNames(displayClass, "sent-meta", "mono")}>
-        <span>
-          sent by {page ? <a href={resolveRelative(slug, target!)}>{name}</a> : name}
-        </span>
+        <span>sent by {page ? <a href={resolveRelative(slug, target!)}>{name}</a> : name}</span>
         <span>{longDate(when)}</span>
       </div>
     )

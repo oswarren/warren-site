@@ -1,4 +1,4 @@
 ---
-title: Systems
-description: Automated systems I run, with why each exists and what it has sent.
+title: Work
+description: Every system, with what it makes possible and what it is doing right now.
 ---

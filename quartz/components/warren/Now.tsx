@@ -90,7 +90,9 @@ export default (() => {
     const current = entries[0]
     // a Warren line stays up for as long as the systems column still reaches its day
     const oldest = lines.length ? parseWhen(lines[lines.length - 1].when) : null
-    const cutoff = oldest ? new Date(oldest.getFullYear(), oldest.getMonth(), oldest.getDate()) : null
+    const cutoff = oldest
+      ? new Date(oldest.getFullYear(), oldest.getMonth(), oldest.getDate())
+      : null
     const past = cutoff
       ? entries
           .slice(1)
@@ -101,7 +103,7 @@ export default (() => {
       <div class={classNames(displayClass, "now")}>
         <div class="now-col">
           <div class="now-head mono">
-            <span>what Warren is doing</span>
+            <span>what I'm doing</span>
             {current && <span class="when">as of {formatWhen(current.when, now)}</span>}
           </div>
           {!current && <div class="now-row mono empty">nothing written yet</div>}
@@ -115,7 +117,9 @@ export default (() => {
             </div>
           ))}
           {typeof current?.finished_week === "number" && (
-            <div class="now-foot mono">finished in the last seven days: {current.finished_week}</div>
+            <div class="now-foot mono">
+              finished in the last seven days: {current.finished_week}
+            </div>
           )}
         </div>
         <div class="now-col">
@@ -147,14 +151,14 @@ export default (() => {
   }
 
   Now.css = `
-.now { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; margin: 8px 0 36px; }
+.now { display: grid; grid-template-columns: 1fr 1fr; gap: 0 48px; margin: 8px 0 8px; }
 .now-col { display: flex; flex-direction: column; }
 .now-head {
   display: flex; justify-content: space-between; align-items: baseline;
   font-size: 12px; color: var(--darkgray); padding: 10px 0; border-bottom: 1px solid var(--dark);
 }
 .now-head .when { color: var(--gray); }
-.now-row { padding: 10px 0; border-bottom: 1px solid var(--lightgray); font-size: 15px; line-height: 1.5; color: var(--dark); }
+.now-row { padding: 12px 0; border-bottom: 1px solid var(--lightgray); font-size: 16px; line-height: 1.5; color: var(--dark); }
 .now-row .sys { font-weight: 500; color: var(--dark); }
 .now-row a.sys:hover { color: var(--secondary); }
 .now-row .what { color: var(--darkgray); }

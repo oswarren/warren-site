@@ -13,8 +13,9 @@ export default (() => {
     return (
       <div class={classNames(displayClass, "balance")}>
         <p class="intro">
-          Anything that can run on its own should, so what is left is the part only I can do: the clay,
-          the ground, the words, the people. The point of this is the right column getting shorter.
+          Anything that can run on its own should, so what is left is the part only I can do: the
+          clay, the ground, the words, the people. The point of this is the right column getting
+          shorter.
         </p>
         <p class="tally mono">
           <span class="ok">{automatic.length} run without me</span>
@@ -70,7 +71,7 @@ export default (() => {
   }
 
   Balance.css = `
-.balance { padding-top: 34px; margin-top: 34px; border-top: 1px solid var(--dark); }
+.balance { padding-top: 40px; margin-top: 48px; border-top: 1px solid var(--lightgray); }
 .balance .intro { font-size: 15px; line-height: 1.5; color: var(--darkgray); margin: 0; max-width: 60ch; }
 .balance .tally { font-size: 13px; color: var(--darkgray); padding: 16px 0 18px; }
 .balance .tally .ok { color: var(--ok); }
@@ -80,7 +81,7 @@ export default (() => {
   color: var(--darkgray); margin: 0; padding-bottom: 6px; border-bottom: 1px solid var(--dark); }
 .balance .column ul, .balance .moves ul { list-style: none; margin: 0; padding: 0; }
 .balance .column li { display: flex; flex-direction: column; gap: 4px; padding: 16px 0; border-bottom: 1px solid var(--lightgray); }
-.balance .what { font-size: 15px; line-height: 1.45; color: var(--dark); }
+.balance .what { font-size: 16px; line-height: 1.45; color: var(--dark); }
 .balance .when { font-size: 12px; color: var(--darkgray); }
 .balance .moves { padding-top: 34px; }
 .balance .moves h2 { font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase;

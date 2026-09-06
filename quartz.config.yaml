@@ -6,7 +6,7 @@
 # placed into the layout by the TS override in quartz.ts, because their placement
 # depends on the page slug (something the YAML `condition` presets cannot express).
 configuration:
-  pageTitle: warren.systems
+  pageTitle: Warren Stetler
   pageTitleSuffix: ""
   enableSPA: true
   enablePopovers: false
@@ -20,31 +20,41 @@ configuration:
   theme:
     fontOrigin: googleFonts
     cdnCaching: true
+    # Editorial pairing: Fraunces (a soft, slightly wonky serif with optical sizing) carries the
+    # statements and titles; IBM Plex Sans does the functional text; IBM Plex Mono keeps the
+    # metadata the systems write. Warm paper, ink, one clay accent used only for what is alive.
     typography:
-      header: Space Grotesk
-      body: Space Grotesk
-      code: IBM Plex Mono
+      header:
+        name: Fraunces
+        weights: [300, 400]
+      body:
+        name: IBM Plex Sans
+        weights: [400, 500]
+        includeItalic: true
+      code:
+        name: IBM Plex Mono
+        weights: [400, 500]
     colors:
       lightMode:
-        light: "#f4f4f1"
-        lightgray: "#dcdcd7"
-        gray: "#8a8a85"
-        darkgray: "#4a4a46"
-        dark: "#141414"
-        secondary: "#1d5bd6"
-        tertiary: "#1d5bd6"
-        highlight: rgba(29, 91, 214, 0.08)
-        textHighlight: rgba(29, 91, 214, 0.25)
+        light: "#fbfaf6"
+        lightgray: "#e4e1d8"
+        gray: "#8d8b82"
+        darkgray: "#55544d"
+        dark: "#16181a"
+        secondary: "#a8482a"
+        tertiary: "#a8482a"
+        highlight: rgba(168, 72, 42, 0.07)
+        textHighlight: rgba(168, 72, 42, 0.22)
       darkMode:
-        light: "#111311"
-        lightgray: "#2a2d29"
-        gray: "#6f746c"
-        darkgray: "#a9aea5"
-        dark: "#d6dbd2"
-        secondary: "#9be37a"
-        tertiary: "#9be37a"
-        highlight: rgba(155, 227, 122, 0.1)
-        textHighlight: rgba(155, 227, 122, 0.3)
+        light: "#0f100e"
+        lightgray: "#2c2e29"
+        gray: "#8b897f"
+        darkgray: "#b5b3aa"
+        dark: "#f2f0e9"
+        secondary: "#db7a4f"
+        tertiary: "#db7a4f"
+        highlight: rgba(219, 122, 79, 0.1)
+        textHighlight: rgba(219, 122, 79, 0.28)
 
 plugins:
   # ---- transformers ---------------------------------------------------------

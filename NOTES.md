@@ -2,6 +2,22 @@
 
 ## Resume line
 
+- 2026-09-06: redesigned into a portfolio for a creative systems designer, on the same Quartz build and the same
+  data. The statement is now "I build systems that help ideas travel farther." Home: hero with one live clue (the
+  countdown to the next system that runs without him), five selected systems (A Penny For Your Pottery, Wild Clay
+  Archive, The Wild Clay Hunt, Porch Light, GlazeSnap), then the evidence (what I'm doing, what the systems are doing,
+  the balance and how it moved), then the two ways in. Project pages follow one narrative shape (curiosity, what it
+  does, the system, cause and effect, what changed, experience it) and are data for the home page through their
+  frontmatter (README, "How a system gets on the site"). Direction, the ledger: warm paper and ink, Fraunces for
+  statements, Plex Sans for reading, Plex Mono for what the systems write, hairlines, room; motion is scroll-first
+  (reveals, a few pixels of drift, a faint tint toward the project in view), all off under reduced-motion. Real
+  artifacts throughout: the photograph of piece 2253, a real Archive lookup at Mount Holly Springs, the first hunt
+  log's opening, a real digest. Kept and re-placed rather than removed: Now, Balance, the log, Make one (now
+  `/work-with-me`, alias `make-one`), the countdown, the two write paths. Night Shift is marked paused in tools.json
+  (it is); The Wild Clay Hunt, A Penny For Your Pottery, Wild Clay Archive and GlazeSnap have entries now. Next:
+  Warren reads every project page in his own voice and edits what is not his; the Make one endpoint still needs its
+  key (personal-system `make-one-api/README.md`); a second photo or two per system would carry the pages further.
+
 - 2026-09-04 (Q62 done): the Small Notes sent page (`content/sent/small-notes/2026-08-28.md`) linked a 404 slug; now links `/p/i-built-the-thing-a-month-before`. Committed and pushed (8ca2588) on top of the routines' own log commits.
 
 ## What this is

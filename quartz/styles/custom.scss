@@ -5,376 +5,335 @@
 // must NOT beat the warren components' own colours, so the whole file joins the same layer:
 // inside one layer ordinary specificity and source order apply, and custom.scss comes last.
 @layer quartz-base {
+  // warrenstetler.com, the ledger.
+  //
+  // One direction, carried everywhere: warm paper and ink, Fraunces for the statements, IBM Plex Sans
+  // for reading, IBM Plex Mono for what the systems write, hairline rules, and a lot of room.
+  // Colour comes from the artifacts (clay, soil, pots), not from a brand. Motion is scroll-first and
+  // quiet: things rise into place once, artifacts drift a few pixels, and the page's atmosphere tints
+  // faintly toward whichever project is in view. Everything here respects reduced-motion.
+  //
+  // Component-specific rules live next to each component in quartz/components/warren/.
+  // This file owns the page frame (quartz/components/frames/WarrenFrame.tsx), the type scale,
+  // the prose, the motion utilities, and the quietened stock bits.
 
-// warren.systems — status-board skin over Quartz 5.
-// The mockups are 1200px wide with 48px side padding, hairline rules (#141414 and #dcdcd7),
-// mono for every piece of metadata, no rounded cards, no underlines.
-// Component-specific rules live next to each component in quartz/components/warren/;
-// this file owns the page frame (quartz/components/frames/WarrenFrame.tsx), the type scale
-// and the quietened stock bits (folder/tag listings, toc).
-
-:root {
-  --ok: #2bb673;
-  --mono: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
-}
-:root[saved-theme="dark"] {
-  --ok: #9be37a;
-}
-
-.mono,
-.mono a {
-  font-family: var(--mono);
-}
-
-body {
-  color: var(--dark);
-}
-
-a {
-  color: var(--dark);
-  font-weight: inherit;
-  text-decoration: none;
-  transition: color 0.1s ease;
-  &:hover {
-    color: var(--secondary);
+  :root {
+    --ok: #2f7a4a;
+    --serif: "Fraunces", "Iowan Old Style", Georgia, serif;
+    --sans: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    --mono: "IBM Plex Mono", "SFMono-Regular", Menlo, monospace;
+    --rule: var(--lightgray);
+    --measure: 64ch;
+    --gutter: clamp(20px, 5vw, 64px);
   }
-}
+  :root[saved-theme="dark"] {
+    --ok: #7fc48f;
+  }
 
-// ---- page frame -------------------------------------------------------------
-// WarrenFrame renders six blocks straight into #quartz-body:
-//   .warren-nav-area .warren-head .warren-body .warren-after .warren-rail .warren-footer-area
-// and this grid places them. Rail-less pages collapse to full width below.
+  .mono,
+  .mono a {
+    font-family: var(--mono);
+  }
+  .serif {
+    font-family: var(--serif);
+    font-optical-sizing: auto;
+  }
 
-.page[data-frame="warren"] {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 48px;
-  box-sizing: border-box;
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    color: var(--dark);
+    font-family: var(--sans);
+    background-color: var(--tone, var(--light));
+    transition: background-color 1400ms ease;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    body {
+      transition: none;
+    }
+  }
+  :root[saved-theme="dark"] body {
+    background-color: var(--light);
+  }
 
-  & > #quartz-body {
-    display: grid;
-    min-height: 100vh;
-    grid-template-columns: repeat(12, minmax(0, 1fr));
-    grid-template-rows: auto auto auto 1fr auto; // spare height goes above the footer
-    grid-template-areas:
-      "nav nav nav nav nav nav nav nav nav nav nav nav"
-      "head head head head head head head head . right right right"
-      "body body body body body body body body . right right right"
-      "pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot . right right right"
-      "footer footer footer footer footer footer footer footer footer footer footer footer";
-    column-gap: 24px;
-    row-gap: 0;
-    padding: 0;
-    margin: 0;
+  a {
+    color: var(--dark);
+    font-weight: inherit;
+    text-decoration: none;
+    transition: color 0.15s ease;
+    &:hover {
+      color: var(--secondary);
+    }
+    &:focus-visible {
+      outline: 2px solid var(--secondary);
+      outline-offset: 3px;
+    }
+  }
+  button:focus-visible,
+  input:focus-visible {
+    outline: 2px solid var(--secondary);
+    outline-offset: 3px;
+  }
 
-    & > .warren-nav-area {
-      grid-area: nav;
-    }
-    & > .warren-head {
-      grid-area: head;
-      padding-top: 56px;
-    }
-    & > .warren-body {
-      grid-area: body;
-      margin-top: 28px;
-      & > article,
-      & > .popover-hint {
-        margin: 0;
-        padding: 0;
-      }
-      &:empty {
-        display: none;
-      }
-    }
-    & > .warren-after {
-      grid-area: pfoot;
-      padding-bottom: 64px;
-    }
-    & > .warren-rail {
-      grid-area: right;
-      padding-top: 62px;
+  // ---- page frame -------------------------------------------------------------
+  // WarrenFrame renders six blocks straight into #quartz-body:
+  //   .warren-nav-area .warren-head .warren-body .warren-after .warren-rail .warren-footer-area
+  // The ledger is one column. The rail is unused (kept in the frame for the day it is wanted again).
+
+  .page[data-frame="warren"] {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    box-sizing: border-box;
+
+    & > #quartz-body {
       display: flex;
       flex-direction: column;
-      gap: 28px;
-      &:empty {
+      min-height: 100vh;
+      padding: 0;
+      margin: 0;
+
+      & > .warren-nav-area {
+        flex: none;
+      }
+      & > .warren-head {
+        padding-top: 72px;
+      }
+      & > .warren-body {
+        margin-top: 32px;
+        & > article,
+        & > .popover-hint {
+          margin: 0;
+          padding: 0;
+        }
+        &:empty {
+          display: none;
+        }
+      }
+      & > .warren-after {
+        padding-bottom: 72px;
+        &:empty {
+          display: none;
+        }
+      }
+      & > .warren-rail {
+        display: none;
+      }
+      & > .warren-footer-area {
+        margin-top: auto;
+        & > footer {
+          max-width: 100%;
+          min-width: 100%;
+          margin: 0;
+        }
+      }
+    }
+  }
+
+  // the home page: the hero owns the head, everything else is in .warren-after
+  body[data-slug="index"] {
+    .warren-head {
+      padding-top: 0 !important;
+    }
+    .warren-body {
+      display: none;
+    }
+    .warren-after {
+      padding-bottom: 0 !important;
+    }
+  }
+
+  // ---- type scale -------------------------------------------------------------
+  h1.article-title {
+    margin: 0;
+    font-family: var(--serif);
+    font-optical-sizing: auto;
+    font-weight: 300;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    color: var(--dark);
+    max-width: 22ch;
+  }
+
+  // ---- prose --------------------------------------------------------------------
+  // scoped to the page body: components use <article> too and must not inherit the measure
+  .warren-body article {
+    font-size: 18px;
+    line-height: 1.65;
+    max-width: var(--measure);
+    color: var(--dark);
+
+    p,
+    li {
+      color: var(--dark);
+      margin: 0 0 22px 0;
+    }
+    & > :last-child {
+      margin-bottom: 0;
+    }
+
+    a,
+    a.internal {
+      color: var(--dark);
+      background: transparent;
+      padding: 0;
+      border-radius: 0;
+      line-height: inherit;
+      border-bottom: 1px solid var(--gray);
+      &:hover {
+        color: var(--secondary);
+        border-color: var(--secondary);
+      }
+      &.external .external-icon {
         display: none;
       }
     }
-    & > .warren-footer-area {
-      grid-area: footer;
-      & > footer {
-        max-width: 100%;
-        min-width: 100%;
+
+    h2 {
+      font-family: var(--serif);
+      font-optical-sizing: auto;
+      font-weight: 400;
+      font-size: 28px;
+      line-height: 1.2;
+      letter-spacing: -0.01em;
+      color: var(--dark);
+      margin: 56px 0 16px 0;
+      &:first-child {
+        margin-top: 0;
+      }
+    }
+    h3,
+    h4 {
+      font-family: var(--sans);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--dark);
+      margin: 32px 0 12px 0;
+      line-height: 1.4;
+    }
+    h2,
+    h3,
+    h4 {
+      & > a[role="anchor"],
+      &[id] > a[href^="#"] {
+        display: none;
+      }
+    }
+
+    strong {
+      font-weight: 500;
+    }
+    pre {
+      margin: 0 0 22px 0;
+      padding: 16px 18px;
+      background: transparent;
+      border: 1px solid var(--rule);
+      border-radius: 0;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-x: auto;
+      & > code {
+        padding: 0;
+        font-size: 13px;
+        line-height: 1.6;
+        background: transparent;
+      }
+    }
+    code {
+      font-family: var(--mono);
+      font-size: 0.85em;
+      background: var(--highlight);
+      border-radius: 0;
+    }
+    blockquote {
+      border-left: 1px solid var(--dark);
+      margin: 0 0 22px 0;
+      padding-left: 20px;
+      color: var(--darkgray);
+      font-family: var(--serif);
+      font-optical-sizing: auto;
+      font-weight: 300;
+      font-size: 20px;
+      line-height: 1.5;
+    }
+    hr {
+      border: 0;
+      border-top: 1px solid var(--rule);
+      margin: 40px 0;
+    }
+    img {
+      max-width: 100%;
+      border-radius: 0;
+      display: block;
+    }
+    ul,
+    ol {
+      padding-left: 1.2em;
+    }
+  }
+
+  // the emails and posts a system sent: they were written in bold-and-list form, keep that readable
+  body[data-slug^="sent/"] .warren-body article {
+    font-size: 16px;
+    max-width: 72ch;
+    strong {
+      display: inline-block;
+      margin-top: 6px;
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--darkgray);
+    }
+    ul {
+      padding-left: 0;
+      list-style: none;
+      margin: 0 0 18px 0;
+      li {
+        padding: 10px 0;
+        border-bottom: 1px solid var(--rule);
         margin: 0;
       }
     }
   }
-}
 
-// pages without a rail (home, tools, log, folder listings) use the full width
-body[data-slug="index"],
-body[data-slug="tools/index"],
-body[data-slug="log"],
-body[data-slug="notes/index"],
-body[data-slug="letter/index"],
-body[data-slug="404"],
-body[data-slug^="tags/"],
-body[data-slug="tags"] {
-  .page[data-frame="warren"] > #quartz-body {
-    grid-template-areas:
-      "nav nav nav nav nav nav nav nav nav nav nav nav"
-      "head head head head head head head head head head head head"
-      "body body body body body body body body body body body body"
-      "pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot"
-      "footer footer footer footer footer footer footer footer footer footer footer footer";
+  // ---- motion -------------------------------------------------------------------
+  // .reveal rises into place once, when it enters the viewport (motion.ts adds .in).
+  // [data-drift] moves a few pixels with the scroll, against the page, so artifacts feel placed rather
+  // than pasted. Both are off entirely under prefers-reduced-motion.
+  .reveal {
+    opacity: 1;
+    transform: none;
   }
-}
-// tools: title + intro on the left, stats block on the right (cols 9-12)
-body[data-slug="tools/index"] .page[data-frame="warren"] > #quartz-body {
-  grid-template-areas:
-    "nav nav nav nav nav nav nav nav nav nav nav nav"
-    "head head head head head head head . right right right right"
-    "body body body body body body body . right right right right"
-    "pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot pfoot"
-    "footer footer footer footer footer footer footer footer footer footer footer footer";
-  & > .warren-rail {
-    padding-top: 64px;
-  }
-}
-
-@media all and ($mobile) {
-  .page[data-frame="warren"] {
-    padding: 0 20px;
-  }
-  .page[data-frame="warren"] > #quartz-body,
-  body[data-slug] .page[data-frame="warren"] > #quartz-body {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto auto auto 1fr auto;
-    grid-template-areas: "nav" "head" "body" "right" "pfoot" "footer";
-    & > .warren-rail {
-      padding-top: 32px;
+  @media (prefers-reduced-motion: no-preference) {
+    html.js .reveal {
+      opacity: 0;
+      transform: translateY(12px);
+      transition:
+        opacity 800ms cubic-bezier(0.2, 0.6, 0.2, 1),
+        transform 800ms cubic-bezier(0.2, 0.6, 0.2, 1);
+      &.in {
+        opacity: 1;
+        transform: none;
+      }
+    }
+    [data-drift] {
+      transform: translate3d(0, var(--drift, 0px), 0);
+      will-change: transform;
     }
   }
-}
 
-// ---- type scale -------------------------------------------------------------
-h1.article-title {
-  margin: 0;
-  font-size: 40px;
-  line-height: 1.1;
-  font-weight: 500;
-  letter-spacing: -0.02em;
-  text-wrap: pretty;
-  color: var(--dark);
-}
-body[data-slug="index"] {
-  .warren-head {
-    padding: 64px 0 48px 0 !important;
-    max-width: 780px;
-  }
-  h1.article-title {
-    font-size: 48px;
-    line-height: 1.05;
-  }
-  .warren-body {
-    margin-top: 0 !important;
-  }
-  article.popover-hint:empty {
-    display: none;
-  }
-}
-body[data-slug="tools/index"] {
-  h1.article-title {
-    margin-bottom: 16px;
-  }
-  .warren-body {
-    margin-top: 0 !important;
-  }
-  article p {
-    font-size: 17px;
-    line-height: 1.55;
-    color: var(--darkgray);
-    max-width: 540px;
-    margin: 0;
-  }
+  // ---- folder / tag listings --------------------------------------------------
   .page-listing {
     display: none;
   }
-  .warren-after {
-    padding-top: 24px;
-  }
-}
 
-// the prose of a note
-article {
-  font-size: 18px;
-  line-height: 1.6;
-  max-width: 620px;
-  color: var(--dark);
-
-  p,
-  li {
-    color: var(--dark);
-    margin: 0 0 20px 0;
+  // ---- misc Quartz bits we keep but quieten ----------------------------------
+  body[data-slug="404"] .warren-body article {
+    margin-top: 56px;
   }
-  & > :last-child {
-    margin-bottom: 0;
-  }
-
-  a,
-  a.internal {
-    color: var(--dark);
-    background: transparent;
-    padding: 0;
-    border-radius: 0;
-    line-height: inherit;
-    border-bottom: 1px solid var(--dark);
-    &:hover {
-      color: var(--secondary);
-      border-color: var(--secondary);
-    }
-    &.external .external-icon {
-      display: none;
-    }
-  }
-
-  h2,
-  h3,
-  h4 {
-    font-family: var(--mono);
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--darkgray);
-    margin: 8px 0 20px 0;
-    line-height: 1.4;
-    &::before {
-      content: "## ";
-    }
-    & > a[role="anchor"],
-    &[id] > a[href^="#"] {
-      display: none;
-    }
-  }
-  h3::before {
-    content: "### ";
-  }
-
-  pre {
-    margin: 0 0 20px 0;
-    padding: 16px 18px;
-    background: #fbfbf9;
-    border: 1px solid var(--dark);
-    border-radius: 0;
-    font-size: 13px;
-    line-height: 1.6;
-    overflow-x: auto;
-    & > code {
-      padding: 0;
-      font-size: 13px;
-      line-height: 1.6;
-      background: transparent;
-    }
-  }
-  code {
-    font-family: var(--mono);
-    font-size: 0.85em;
-    background: var(--highlight);
-    border-radius: 0;
-  }
-  blockquote {
-    border-left: 1px solid var(--dark);
-    margin: 0 0 20px 0;
-    padding-left: 18px;
-    color: var(--darkgray);
-  }
-  hr {
-    border: 0;
-    border-top: 1px solid var(--lightgray);
-  }
-  img {
-    max-width: 100%;
-    border-radius: 0;
-  }
-}
-:root[saved-theme="dark"] article pre {
-  background: #171a17;
-}
-
-// ---- folder / tag listings --------------------------------------------------
-.page-listing {
-  margin-top: 28px;
-  & > p {
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--darkgray);
-  }
-  ul.section-ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    border-top: 1px solid var(--dark);
-  }
-  li.section-li {
-    margin: 0;
-    border-bottom: 1px solid var(--lightgray);
-    & > .section {
-      display: grid;
-      grid-template-columns: 120px 1fr auto;
-      gap: 16px;
-      padding: 14px 0;
-      align-items: baseline;
-    }
-    .meta {
-      font-family: var(--mono);
-      font-size: 12px;
-      color: var(--darkgray);
-      opacity: 1;
-      margin: 0;
-    }
-    .desc h3 {
-      font-family: inherit;
-      font-size: 15px;
-      font-weight: 400;
-      margin: 0;
-      &::before {
-        content: none;
-      }
-      a {
-        color: var(--dark);
-        border: 0;
-        background: transparent;
-        &:hover {
-          color: var(--secondary);
-        }
-      }
-    }
-    .tags {
-      margin: 0;
-      padding: 0;
-      display: flex;
-      gap: 12px;
-      list-style: none;
-      a.internal.tag-link {
-        font-family: var(--mono);
-        font-size: 12px;
-        color: var(--darkgray);
-        background: transparent;
-        border: 0;
-        padding: 0;
-        border-radius: 0;
-        &::before {
-          content: "#";
-        }
-      }
-    }
-  }
-}
-
-// ---- misc Quartz bits we keep but quieten ----------------------------------
-.toc-content a {
-  border: 0;
-}
-body[data-slug="404"] article {
-  margin-top: 56px;
-}
 }

@@ -29,12 +29,15 @@ function readPhotos(source: string): Photo[] {
   const files = names.filter((n) => EXT.has(path.extname(n).toLowerCase()) && !n.startsWith("."))
   const stemOf = (n: string) => n.slice(0, -path.extname(n).length)
   // dated files newest first, then the undated ones by name
-  const dated = files.filter((n) => DATED.test(stemOf(n))).sort().reverse()
+  const dated = files
+    .filter((n) => DATED.test(stemOf(n)))
+    .sort()
+    .reverse()
   const undated = files.filter((n) => !DATED.test(stemOf(n))).sort()
   return [...dated, ...undated].map((n) => {
     const stem = stemOf(n)
     const m = stem.match(DATED)
-    const words = (m ? m[2] ?? "" : stem).replace(/[-_]+/g, " ").trim()
+    const words = (m ? (m[2] ?? "") : stem).replace(/[-_]+/g, " ").trim()
     return {
       file: `photos/${source}/${n}`,
       caption: words,

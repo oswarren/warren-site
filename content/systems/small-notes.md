@@ -1,6 +1,7 @@
 ---
 title: Small Notes, Big Changes
-description: A Substack where I write up one small system at a time.
+description: A letter about one small system at a time, and what it changed.
+effect: A letter about one small system at a time, and what it changed.
 log: small-notes
 ---
 
