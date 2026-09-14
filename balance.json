@@ -1,5 +1,5 @@
 {
-  "note": "The two columns on /balance. `automatic` is what runs whether or not Warren shows up; `by_hand` is what still needs him. Kept true by /running in personal-system. Every move between the columns appends a line to balance.jsonl.",
+  "note": "The two columns on /balance. `automatic` is what runs whether or not Warren shows up; `by_hand` is what still needs him. Kept true by /running in personal-system.",
   "automatic": [
     { "what": "Searches the web and emails a weekly digest of real local events, near Appomattox and across Pennsylvania", "when": "Thursday evening", "since": "2026-08-20" },
     { "what": "The same digest, tuned for a ceramics residency and its resident artists", "when": "Thursday evening", "since": "2026-08-27" },
