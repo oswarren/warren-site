@@ -2,6 +2,18 @@
 
 ## Resume line
 
+- 2026-09-14: the Balance columns follow the Todoist project "Balance". Warren's answers: a row shows the last day
+  he did it, rows can change columns, new rows can appear; he ticks a task to say so; public rows show a date only;
+  the page updates once a night. The project has one undated task per row, in two sections; "Runs without me" is the
+  automatic column, anything else (including no section) is by hand. `tools/balance.py` turns a Todoist snapshot into
+  `balance.json`, keeping the two things Todoist does not: `since` (first day in "Runs without me") and `last`
+  (newest tick, Eastern). It refuses an empty snapshot so a failed read cannot empty the page. The cloud routine
+  `warren-site: balance columns from Todoist` (`trig_01RU4a6NebP2WWLNvkQWqW8E`, daily 07:00 UTC) takes the
+  snapshot, reopens ticked tasks so they come back, runs the script, and pushes when it changed. Prompt and
+  settings: `tools/balance-routine.md`. By-hand rows no longer show the rhythm from the deleted schedule; they show
+  "last <date>" once ticked. Balance's intro paragraph is gone too. Watch: the Cowork routine
+  `warrenstetler.com: weekly staleness check` (Mondays) still reads `now.json`, which was deleted today.
+
 - 2026-09-14: "How the line has moved" is gone from Balance, at Warren's request. Removed the section, its CSS,
   `readBalanceLog`, and `balance.jsonl` (four lines, written once by hand on Sep 6; nothing appended to it).
   Balance is now the intro, the tally, and the two columns.

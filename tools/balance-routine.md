@@ -1,8 +1,10 @@
-# Routine: warren-site: balance from Todoist
+# Routine: warren-site: balance columns from Todoist
 
 The prompt of the nightly cloud routine that keeps the two columns on the home page true. This file is the
-readable copy; the live one is on https://claude.ai/code/routines. To change it: edit here, then
-`RemoteTrigger update` with the text below as `job_config.ccr.events[0].data.message.content`.
+readable copy; the live one is `trig_01RU4a6NebP2WWLNvkQWqW8E`, at
+https://claude.ai/code/routines/trig_01RU4a6NebP2WWLNvkQWqW8E (created 2026-09-14). To change it: edit here, then
+`RemoteTrigger update` with the text below as `job_config.ccr.events[0].data.message.content`. Debug with
+`RemoteTrigger list_runs` and `get_run_log`.
 
 - Schedule: `0 7 * * *` UTC, 3am EDT (2am EST).
 - Sources: `oswarren/warren-site`. Connector: Todoist.
