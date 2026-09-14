@@ -9,8 +9,8 @@ are running, then the two ways in. The systems themselves keep the evidence curr
 
 - `/`: the hero (the statement and one live clue, a countdown to the next system that will run without him), the selected
   systems (every project page with `featured` in its frontmatter, in that order, each with its one sentence and one real
-  artifact), then the evidence: what he is doing (`now.json`), what the systems are doing (`log.jsonl`), what runs
-  without him and what still needs his hands (`balance.json`) and how that line has moved (`balance.jsonl`), then the
+  artifact), then the evidence: what runs without him and what still needs his hands (`balance.json`) and how that
+  line has moved (`balance.jsonl`), then the
   close: back to the idea, "Work with me", "Use something I've built", and the countdown still running.
 - `/systems` ("Work" in the nav): every project page, featured ones first, each with its sentence and what is true about
   it right now (last sent, next run, paused, or where it lives).
@@ -86,8 +86,7 @@ the name; the description lives on the page. Lines with `"status": "scheduled"` 
 
 ## Where things live
 
-- `log.jsonl`: one line per delivery. `tools.json`: the systems. `now.json` and `now.jsonl`: what Warren is doing, in his
-  words. `balance.json` and `balance.jsonl`: what runs without him, what still needs his hands, and how that has moved.
+- `log.jsonl`: one line per delivery. `tools.json`: the systems. `balance.json` and `balance.jsonl`: what runs without him, what still needs his hands, and how that has moved.
   `use.json`: the "Use something I've built" rows. `build.json`: written by `scripts/build.mjs`, used as "now".
 - `content/`: `index.md` (the statement; everything on the home page renders around it), `systems/` (project pages),
   `sent/`, `photos/<name>/`, `artifacts/`, `about.md`, `work-with-me.md`, `use.md`.
@@ -101,7 +100,7 @@ the name; the description lives on the page. Lines with `"status": "scheduled"` 
   the page slug (home, the work index, a project page, a sent page), so `quartz.ts` builds the layout with
   `ConditionalRender` and installs it in the `PageTypeDispatcher`.
 - `quartz/components/warren/`: the components, written as Quartz 5 core components. Home: `Hero`, `Featured`,
-  `EvidenceHead`, `Now`, `Balance`, `Ending`. Project pages: `ProjectHead`, `Gallery`, `SystemFacts`, `History`.
+  `EvidenceHead`, `Balance`, `Ending`. Project pages: `ProjectHead`, `Gallery`, `SystemFacts`, `History`.
   Elsewhere: `Systems` (the work index), `MakeOne` (with `make-one-script.ts`), `Use`, `SentMeta`, `Nav`,
   `WarrenFooter`. Shared: `data.ts` (readers, dates, cron, project pages), `countdown.ts` (the per-element countdown),
   `motion.ts` (the site's movement: reveals, drift, the tone shift, the live "runs again in" line; all off under

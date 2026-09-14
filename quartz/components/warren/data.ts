@@ -71,33 +71,6 @@ export function readLog(): LogLine[] {
   return lines
 }
 
-export interface NowEntry {
-  when: string // same shapes as LogLine.when
-  doing: string[] // Warren's own words, one entry per line or sentence
-  finished_week?: number
-}
-
-let nowLogCache: NowEntry[] | null = null
-// now.jsonl: one line per day Warren answered "what are you doing today?", appended by the
-// Night Shift routine (now.json keeps only the current answer). Newest first.
-export function readNowLog(): NowEntry[] {
-  if (nowLogCache) return nowLogCache
-  const raw = readIfExists("now.jsonl") ?? ""
-  const entries: NowEntry[] = []
-  for (const line of raw.split("\n")) {
-    const t = line.trim()
-    if (!t) continue
-    try {
-      entries.push(JSON.parse(t))
-    } catch {
-      console.warn(`now.jsonl: skipping unparsable line: ${t.slice(0, 60)}`)
-    }
-  }
-  entries.sort((a, b) => parseWhen(b.when).getTime() - parseWhen(a.when).getTime())
-  nowLogCache = entries
-  return entries
-}
-
 let toolsCache: Tool[] | null = null
 export function readTools(): Tool[] {
   if (toolsCache) return toolsCache
@@ -140,7 +113,7 @@ export interface BalanceMove {
 }
 
 let balanceLogCache: BalanceMove[] | null = null
-// balance.jsonl: one line per change in the balance, newest first. Same shape as now.jsonl.
+// balance.jsonl: one line per change in the balance, newest first.
 export function readBalanceLog(): BalanceMove[] {
   if (balanceLogCache) return balanceLogCache
   const raw = readIfExists("balance.jsonl") ?? ""
@@ -254,10 +227,6 @@ export function sameDay(a: Date, b: Date): boolean {
 
 export function hhmm(d: Date): string {
   return `${pad(d.getHours())}:${pad(d.getMinutes())}`
-}
-
-export function ymd(d: Date): string {
-  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
 }
 
 export function monthDay(d: Date): string {

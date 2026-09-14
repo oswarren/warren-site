@@ -62,7 +62,6 @@ const shared: Partial<FullPageLayout> = {
     // home, in order: the selected systems, then the back of the watch, then the two ways in
     when(Warren.Featured(), isFront),
     when(Warren.EvidenceHead(), isFront),
-    when(Warren.Now(), isFront),
     when(Warren.Balance(), isFront),
     when(Warren.Ending(), isFront),
     // the work index

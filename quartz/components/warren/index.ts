@@ -1,6 +1,5 @@
 // warren.systems components. Core (project-local) components, placed by quartz.ts.
 export { default as Nav } from "./Nav"
-export { default as Now } from "./Now"
 export { default as Systems } from "./Systems"
 export { default as Balance } from "./Balance"
 export { default as Hero } from "./Hero"
