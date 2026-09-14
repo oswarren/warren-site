@@ -24,8 +24,9 @@ export default (() => {
                 <li>
                   <span class="what">{i.what}</span>
                   <span class="when mono">
-                    {i.when}
-                    {i.since ? ` · since ${monthDay(parseWhen(i.since))}` : ""}
+                    {[i.when, i.since ? `since ${monthDay(parseWhen(i.since))}` : ""]
+                      .filter(Boolean)
+                      .join(" · ")}
                   </span>
                 </li>
               ))}
@@ -38,7 +39,9 @@ export default (() => {
               {by_hand.map((i) => (
                 <li>
                   <span class="what">{i.what}</span>
-                  <span class="when mono">{i.when}</span>
+                  {i.last ? (
+                    <span class="when mono">last {monthDay(parseWhen(i.last))}</span>
+                  ) : null}
                 </li>
               ))}
             </ul>

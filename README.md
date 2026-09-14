@@ -85,7 +85,9 @@ the name; the description lives on the page. Lines with `"status": "scheduled"` 
 
 ## Where things live
 
-- `log.jsonl`: one line per delivery. `tools.json`: the systems. `balance.json`: what runs without him and what still needs his hands.
+- `log.jsonl`: one line per delivery. `tools.json`: the systems. `balance.json`: what runs without him and what still needs his hands, rewritten every night
+  from the Todoist project "Balance" by `tools/balance.py` (the routine's prompt is `tools/balance-routine.md`; edit the
+  project, not the file).
   `use.json`: the "Use something I've built" rows. `build.json`: written by `scripts/build.mjs`, used as "now".
 - `content/`: `index.md` (the statement; everything on the home page renders around it), `systems/` (project pages),
   `sent/`, `photos/<name>/`, `artifacts/`, `about.md`, `work-with-me.md`, `use.md`.
