@@ -2,6 +2,10 @@
 
 ## Resume line
 
+- 2026-09-14: "How the line has moved" is gone from Balance, at Warren's request. Removed the section, its CSS,
+  `readBalanceLog`, and `balance.jsonl` (four lines, written once by hand on Sep 6; nothing appended to it).
+  Balance is now the intro, the tally, and the two columns.
+
 - 2026-09-14: the home page's Now section is gone. Warren found Balance redundant with it and chose to keep
   Balance. Now's "what I'm doing" column had been frozen at Aug 31: Night Shift wrote `now.json` and was
   retired 2026-09-07, so nothing would ever refresh it. The live delivery lines it showed are still on each

@@ -9,8 +9,7 @@ are running, then the two ways in. The systems themselves keep the evidence curr
 
 - `/`: the hero (the statement and one live clue, a countdown to the next system that will run without him), the selected
   systems (every project page with `featured` in its frontmatter, in that order, each with its one sentence and one real
-  artifact), then the evidence: what runs without him and what still needs his hands (`balance.json`) and how that
-  line has moved (`balance.jsonl`), then the
+  artifact), then the evidence: what runs without him and what still needs his hands (`balance.json`), then the
   close: back to the idea, "Work with me", "Use something I've built", and the countdown still running.
 - `/systems` ("Work" in the nav): every project page, featured ones first, each with its sentence and what is true about
   it right now (last sent, next run, paused, or where it lives).
@@ -86,7 +85,7 @@ the name; the description lives on the page. Lines with `"status": "scheduled"` 
 
 ## Where things live
 
-- `log.jsonl`: one line per delivery. `tools.json`: the systems. `balance.json` and `balance.jsonl`: what runs without him, what still needs his hands, and how that has moved.
+- `log.jsonl`: one line per delivery. `tools.json`: the systems. `balance.json`: what runs without him and what still needs his hands.
   `use.json`: the "Use something I've built" rows. `build.json`: written by `scripts/build.mjs`, used as "now".
 - `content/`: `index.md` (the statement; everything on the home page renders around it), `systems/` (project pages),
   `sent/`, `photos/<name>/`, `artifacts/`, `about.md`, `work-with-me.md`, `use.md`.

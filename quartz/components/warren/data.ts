@@ -106,32 +106,6 @@ export function readBalance(): Balance {
   return balanceCache!
 }
 
-export interface BalanceMove {
-  when: string
-  moved: string
-  note?: string
-}
-
-let balanceLogCache: BalanceMove[] | null = null
-// balance.jsonl: one line per change in the balance, newest first.
-export function readBalanceLog(): BalanceMove[] {
-  if (balanceLogCache) return balanceLogCache
-  const raw = readIfExists("balance.jsonl") ?? ""
-  const moves: BalanceMove[] = []
-  for (const line of raw.split("\n")) {
-    const t = line.trim()
-    if (!t) continue
-    try {
-      moves.push(JSON.parse(t))
-    } catch {
-      console.warn(`balance.jsonl: skipping unparsable line: ${t.slice(0, 60)}`)
-    }
-  }
-  moves.sort((a, b) => parseWhen(b.when).getTime() - parseWhen(a.when).getTime())
-  balanceLogCache = moves
-  return moves
-}
-
 // A project page: any page under systems/ whose frontmatter carries `effect`, the one sentence
 // on what the system makes possible. The rest of the frontmatter is optional and drives the home page:
 //   featured  order on the home page (1 first); absent means not featured
