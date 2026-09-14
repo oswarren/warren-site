@@ -83,9 +83,11 @@ export function readTools(): Tool[] {
 }
 
 export interface BalanceItem {
-  what: string // one line, plain words: what the thing is
-  when: string // when it happens, in words, e.g. "Thursday evening" or "Five days a week"
+  id?: string // the Todoist task in the project Balance this row mirrors
+  what: string // one line, as Warren typed it
+  when?: string // automatic side only: when it runs, in words, e.g. "Thursday evening"
   since?: string // automatic side only: the date it stopped needing him
+  last?: string // by-hand side only: the newest day he ticked it
 }
 
 export interface Balance {
