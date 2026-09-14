@@ -42,7 +42,6 @@
     "category": "writing",
     "what": "drafts the next hunt log from field notes and old survey reports, checks it against the publication's written rules, and leaves it in Substack for me to read, edit, and schedule",
     "runs": "weekly, Wednesday morning (9am ET), from my desk",
-    "cron": "0 13 * * 3",
     "link": {
       "label": "read it on Substack",
       "href": "https://wildclayhunt.substack.com"
