@@ -2,6 +2,13 @@
 
 ## Resume line
 
+- 2026-09-14: the home page's Now section is gone. Warren found Balance redundant with it and chose to keep
+  Balance. Now's "what I'm doing" column had been frozen at Aug 31: Night Shift wrote `now.json` and was
+  retired 2026-09-07, so nothing would ever refresh it. The live delivery lines it showed are still on each
+  system's page. Removed `Now.tsx`, `readNowLog`, `now.json`, `now.jsonl`, and the header's "kept current by
+  the systems themselves" line (Balance is kept by hand, so it was no longer true). The evidence section is
+  now EvidenceHead, then Balance.
+
 - 2026-09-06: redesigned into a portfolio for a creative systems designer, on the same Quartz build and the same
   data. The statement is now "I build systems that help ideas travel farther." Home: hero with one live clue (the
   countdown to the next system that runs without him), five selected systems (A Penny For Your Pottery, Wild Clay
