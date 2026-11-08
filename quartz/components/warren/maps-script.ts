@@ -1,5 +1,5 @@
-// Client script for the opening map on the home page. The map starts as one dot. Tapping it grows
-// the branches out of it; tapping a branch grows its pieces; tapping anything shows what it is below.
+// Client script for the opening map on the home page. The map starts as one dot. As it scrolls into
+// view it grows the branches out of it, then their pieces, and stays open. Tapping a dot shows what it is below.
 // The data is a plain file beside the map's own page (maps/<name>.json). Dot states are a snapshot.
 export const mapsScript = `
 document.addEventListener("nav", () => {
@@ -8,7 +8,6 @@ document.addEventListener("nav", () => {
   const svg = root.querySelector("svg")
   const panel = root.querySelector(".omap-panel")
   const hint = root.querySelector(".omap-hint")
-  const resetBtn = root.querySelector(".omap-reset")
   const stage = root.querySelector(".omap-stage")
   // on a narrow screen the map scrolls sideways: keep what was just opened in view
   const focusX = (x, smooth) => {
@@ -84,7 +83,6 @@ document.addEventListener("nav", () => {
       if (d.edge) { d.edge.style.transitionDelay = t + "ms"; d.edge.classList.add("on") }
       d.g.style.transitionDelay = (reduce ? 0 : t + 260) + "ms"; d.g.classList.add("on")
     }
-    function hide(d) { d.shown = false; d.g.classList.remove("on", "sel", "open"); if (d.edge) d.edge.classList.remove("on") }
     // one tap on the centre opens everything: the branches first, then each branch's pieces
     function openHub(h, base) { h.g.classList.add("open"); h.kids.forEach((k, i) => show(k, base + i * 70)) }
     function openCentre() {
@@ -112,10 +110,17 @@ document.addEventListener("nav", () => {
       if (d.hub !== 1) { const s = el("div", "state"); const g = sv("svg", { viewBox: "-8 -8 16 16" }); g.append(dot(d.state, 6, C[d.kind])); s.append(g, document.createTextNode(LABEL[d.state])); r.append(s) }
       panel.append(h, r)
     }
-    resetBtn.addEventListener("click", () => { focusX(centre.x, true); N.forEach((d) => { if (d !== centre) hide(d) }); centre.g.classList.remove("open", "sel"); panel.innerHTML = ""; hint.textContent = "Tap the dot to open it." })
     centre.g.classList.add("on")
     focusX(centre.x, false)
-    hint.textContent = "Tap the dot to open it."
+    // the map opens by itself, whole, as it scrolls into view, and stays open
+    if (reduce || !("IntersectionObserver" in window)) openCentre()
+    else {
+      const io = new IntersectionObserver((entries) => {
+        if (entries.some((en) => en.isIntersecting)) { io.disconnect(); openCentre() }
+      }, { rootMargin: "0px 0px -20% 0px", threshold: 0 })
+      io.observe(stage)
+      window.addCleanup(() => io.disconnect())
+    }
   }).catch(() => { if (hint) hint.textContent = "" })
 })
 `

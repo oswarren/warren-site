@@ -2,8 +2,8 @@ import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } fro
 import { classNames } from "../../util/lang"
 import { mapsScript } from "./maps-script"
 
-// Right under the statement on the home page: a map of a system I'm running, that opens as you tap
-// it (maps-script.ts). Its data is maps/clay.json, copied into public/ by scripts/build.mjs beside
+// Right under the statement on the home page: a map of a system I'm running, that opens as it scrolls
+// into view (maps-script.ts). Its data is maps/clay.json, copied into public/ by scripts/build.mjs beside
 // the map's own page. Every dot shows how far along that piece is.
 export default (() => {
   const Maps: QuartzComponent = ({ displayClass }: QuartzComponentProps) => (
@@ -19,11 +19,6 @@ export default (() => {
       <div class="omap" data-src="./maps/clay.json">
         <div class="omap-bar">
           <span class="omap-hint mono" aria-live="polite"></span>
-          <span class="omap-keys">
-            <button type="button" class="omap-reset">
-              Start again
-            </button>
-          </span>
         </div>
         <div class="omap-stage">
           <svg
@@ -60,9 +55,6 @@ export default (() => {
 
 .omap-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; min-height: 32px; }
 .omap-hint { font-size: 13px; color: var(--secondary); }
-.omap-keys { display: flex; gap: 8px; }
-.omap-keys button { font: inherit; font-size: 14px; color: var(--dark); background: none; border: 1px solid var(--lightgray); border-radius: 999px; padding: 4px 14px; cursor: pointer; }
-.omap-keys button:hover { border-color: var(--dark); }
 .omap-stage { overflow-x: auto; overscroll-behavior-x: contain; margin-top: 8px; }
 .omap-stage svg { display: block; width: 100%; min-width: 760px; height: auto; }
 
