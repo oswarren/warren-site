@@ -127,7 +127,13 @@ function initMap() {
       const x = el("button", "omap-x", "×"); x.type = "button"; x.setAttribute("aria-label", "Close")
       x.addEventListener("click", close)
       const h = el("div", "omap-name"); h.append(el("b", null, d.n)); if (d.s && d.hub !== 1) h.append(el("span", null, d.s))
-      const r = el("div", "omap-body"); r.append(el("p", null, d.t))
+      const r = el("div", "omap-body"), para = el("p")
+      // a word in the text can be a link (d.tl = [word, address])
+      const at = d.tl ? d.t.indexOf(d.tl[0]) : -1
+      if (at < 0) para.textContent = d.t
+      else { const a = el("a", "omap-inline", d.tl[0]); a.href = d.tl[1]; a.target = "_blank"; a.rel = "noopener"
+        para.append(document.createTextNode(d.t.slice(0, at)), a, document.createTextNode(d.t.slice(at + d.tl[0].length))) }
+      r.append(para)
       if (d.link) { const a = el("a", "omap-link", d.link[0] + " →"); a.href = d.link[1]; a.target = "_blank"; a.rel = "noopener"; r.append(a) }
       if (d.opts) { r.append(el("div", "lbl", "Other ideas I weighed")); const ol = el("ul", "opts")
         d.opts.forEach((x) => { const li = el("li"); li.append(el("b", null, x[0]), document.createTextNode(": " + x[1])); ol.append(li) }); r.append(ol) }
