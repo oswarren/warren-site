@@ -41,9 +41,9 @@ export default (() => {
         <div class="omap-stage">
           <div class="omap-canvas">
             <svg
-              viewBox="-50 50 1450 870"
+              viewBox="-50 190 1450 680"
               role="group"
-              aria-label="Diagram of the Wild Clay Archive system: the app in the centre, with where people find it, the portfolio, numbers and launch around it."
+              aria-label="Diagram of the Wild Clay Archive system: the app in the centre, with where people find it, numbers and launch around it."
             ></svg>
             {/* the app itself sits at the centre of the diagram, on a phone you can scroll */}
             <div
@@ -84,11 +84,11 @@ export default (() => {
 .maps { padding: clamp(48px, 9vh, 96px) 0; border-top: 1px solid var(--rule); }
 .maps-head { margin-bottom: 20px; }
 .maps-text { display: flex; flex-direction: column; gap: 10px; }
-/* the phone takes the app's place in the diagram: the app sits at 700,520 in the viewBox (-50 50 1450 870),
+/* the phone takes the app's place in the diagram: the app sits at 700,520 in the viewBox (-50 190 1450 680),
    and the phone is 290 units tall, so it spans x 618 to 782 and y 375 to 665 */
 .omap-canvas { position: relative; min-width: 760px; }
 .omap-phone {
-  position: absolute; z-index: 1; left: 46.103%; top: 37.356%; width: 11.25%; height: 33.333%; box-sizing: border-box;
+  position: absolute; z-index: 1; left: 46.103%; top: 27.206%; width: 11.25%; height: 42.647%; box-sizing: border-box;
   border: 4px solid var(--dark); border-radius: 16px; background: var(--lightgray);
   overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none;
   box-shadow: 0 10px 30px rgba(22, 24, 26, 0.10);
