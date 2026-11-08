@@ -82,21 +82,20 @@ export default (() => {
       <div class="maps-meanwhile">
         <span class="mono">While the system runs</span>
         <p class="serif">
-          I’m building{" "}
-          {/* a small photo in the sentence, changing with the words (maps-script.ts) */}
+          I’m {/* a small photo in the sentence, changing with the words (maps-script.ts) */}
           <span class="mw-w">
             <img
               class="mw-pic"
-              src="./maps/meanwhile/b-shop.jpg"
-              data-srcs="b-shop|b-reels|b-pages|b-client"
+              src="./maps/meanwhile/dig.jpg"
+              data-srcs="dig|test|film|pots|hunt"
               alt=""
               decoding="async"
             />{" "}
             <span
               class="ing"
-              data-words="a pottery shop|a reel maker|new ways to see a page|a client’s website"
+              data-words="digging clay|testing what I dug|filming the next dig|making pots|hunting new spots"
             >
-              a pottery shop
+              digging clay
             </span>
           </span>
           .
