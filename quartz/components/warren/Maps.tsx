@@ -34,9 +34,6 @@ export default (() => {
           class="omap-data"
           dangerouslySetInnerHTML={{ __html: readMap("clay") }}
         />
-        <div class="omap-bar">
-          <span class="omap-hint mono" aria-live="polite"></span>
-        </div>
         <div class="omap-stage">
           <svg
             viewBox="-50 50 1450 870"
@@ -71,8 +68,6 @@ export default (() => {
 .maps-head h2 { margin: 0; font-weight: 300; font-size: clamp(30px, 3.8vw, 54px); line-height: 1.05; letter-spacing: -0.02em; color: var(--dark); }
 .maps-head p { margin: 0; font-size: 19px; line-height: 1.5; color: var(--darkgray); max-width: 52ch; }
 
-.omap-bar { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; min-height: 32px; }
-.omap-hint { font-size: 13px; color: var(--secondary); }
 .omap-stage { overflow-x: auto; overscroll-behavior-x: contain; margin-top: 8px; }
 .omap-stage svg { display: block; width: 100%; min-width: 760px; height: auto; }
 

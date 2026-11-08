@@ -11,7 +11,6 @@ function initMap() {
   root.dataset.ready = "1"
   const svg = root.querySelector("svg")
   const pop = root.querySelector(".omap-pop")
-  const hint = root.querySelector(".omap-hint")
   const stage = root.querySelector(".omap-stage")
   // on a narrow screen the map scrolls sideways: keep what was just opened in view
   const focusX = (x, smooth) => {
@@ -94,7 +93,6 @@ function initMap() {
     function openCentre() {
       centre.g.classList.add("open")
       hubs.forEach((h, i) => { show(h, i * 110); openHub(h, 650 + i * 160) })
-      hint.textContent = "Tap any dot to read about it."
     }
     function tap(d) {
       if (d === centre && !centre.g.classList.contains("open")) openCentre()
