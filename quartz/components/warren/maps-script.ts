@@ -145,7 +145,7 @@ function initMap() {
           const tx = el("span"); tx.append(el("b", null, x[1]), el("small", null, x[2])); row.append(s, tx); stl.append(row) }); r.append(stl) }
       if (d.shape) { r.append(el("div", "lbl", "Posting it")); const sh = el("div", "shape")
         d.shape.forEach((x) => { const c = el("div"); c.append(el("b", null, x[0]), document.createTextNode(" " + x[1])); sh.append(c) }); r.append(sh) }
-      if (d.auto) { const s = el("div", "state"); const g = sv("svg", { viewBox: "-8 -8 16 16" }); g.append(sv("path", { d: "M-7 0 H7", class: "flow" })); s.append(g, document.createTextNode("Runs on its own")); r.append(s) }
+      if (d.auto) { const s = el("div", "state"); const g = sv("svg", { viewBox: "-8 -8 16 16" }); g.append(sv("path", { d: "M7 0 H-7", class: "flow" })); s.append(g, document.createTextNode("Runs on its own")); r.append(s) }
       if (d.hub !== 1) { const s = el("div", "state"); const g = sv("svg", { viewBox: "-8 -8 16 16" }); g.append(dot(d.state, 6, C[d.kind])); s.append(g, document.createTextNode(LABEL[d.state])); r.append(s) }
       pop.append(x, h, r)
       pop.hidden = false

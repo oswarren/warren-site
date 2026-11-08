@@ -76,7 +76,7 @@ export default (() => {
           </span>
           <span>
             <svg class="k-auto" viewBox="-12 -4 24 8" aria-hidden="true">
-              <path class="flow" d="M-12 0 H12" />
+              <path class="flow" d="M12 0 H-12" />
             </svg>
             Runs on its own
           </span>
