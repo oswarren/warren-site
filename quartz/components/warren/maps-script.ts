@@ -206,6 +206,23 @@ function initMap() {
     }
   })()
 }
+// "While the system runs, I'm …": the last word keeps changing, a few seconds each
+function initMeanwhile() {
+  const w = document.querySelector(".maps-meanwhile .ing")
+  if (!w || w.dataset.ready) return
+  w.dataset.ready = "1"
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+  const words = w.dataset.words.split("|")
+  let i = 0
+  const t = setInterval(() => {
+    w.classList.add("out")
+    setTimeout(() => { i = (i + 1) % words.length; w.textContent = words[i]; w.classList.remove("out") }, 350)
+  }, 2600)
+  if (window.addCleanup) window.addCleanup(() => clearInterval(t))
+}
+document.addEventListener("nav", initMeanwhile)
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initMeanwhile)
+else initMeanwhile()
 document.addEventListener("nav", initMap)
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initMap)
 else initMap()

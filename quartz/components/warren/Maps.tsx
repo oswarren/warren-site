@@ -82,6 +82,20 @@ export default (() => {
           </span>
         </div>
       </div>
+      {/* what I get to do while the system runs: the word keeps changing (maps-script.ts) */}
+      <div class="maps-meanwhile">
+        <span class="mono">While the system runs</span>
+        <p class="serif">
+          I’m{" "}
+          <span
+            class="ing"
+            data-words="digging clay|testing what I dug|filming the next dig|making pots|hunting new spots"
+          >
+            digging clay
+          </span>
+          .
+        </p>
+      </div>
       <script dangerouslySetInnerHTML={{ __html: mapsScript }} />
     </section>
   )
@@ -167,6 +181,11 @@ export default (() => {
 .omap .state { display: inline-flex; align-items: center; gap: 7px; margin: 10px 18px 0 0; font-size: 14px; color: var(--gray); }
 .omap .state svg { margin-top: 0; width: 14px; height: 14px; }
 
+.maps-meanwhile { margin-top: clamp(40px, 7vh, 72px); display: flex; flex-direction: column; gap: 8px; }
+.maps-meanwhile .mono { font-size: 12px; color: var(--gray); }
+.maps-meanwhile p { margin: 0; font-weight: 300; font-size: clamp(30px, 3.8vw, 54px); line-height: 1.1; letter-spacing: -0.02em; color: var(--dark); }
+.maps-meanwhile .ing { display: inline-block; font-style: italic; transition: opacity .35s ease, transform .35s ease; }
+.maps-meanwhile .ing.out { opacity: 0; transform: translateY(8px); }
 .omap-key { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 20px; font-size: 12px; color: var(--gray); }
 .omap-key span { display: inline-flex; align-items: center; gap: 7px; }
 .omap-key .k { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid var(--dark); display: inline-block; box-sizing: border-box; }
