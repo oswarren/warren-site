@@ -21,13 +21,31 @@ export default (() => {
   const Maps: QuartzComponent = ({ displayClass }: QuartzComponentProps) => (
     <section class={classNames(displayClass, "maps")}>
       <div class="maps-head">
-        <span class="mono">Systems I’m running</span>
-        <h2 class="serif">The Wild Clay Archive system</h2>
-        <p>
-          Wild Clay Archive is an app I made that shows where to dig clay anywhere in the US.
-          <br />
-          This is the system that helps it grow.
-        </p>
+        <div class="maps-text">
+          <span class="mono">Systems I’m running</span>
+          <h2 class="serif">The Wild Clay Archive system</h2>
+          <p>
+            Wild Clay Archive is an app I made that shows where to dig clay anywhere in the US.
+            <br />
+            This is the system that helps it grow.
+          </p>
+        </div>
+        {/* the app itself on a phone, beside the intro with its top lined up: scroll it to read the page */}
+        <figure class="maps-phone">
+          <div
+            class="omap-phone"
+            tabindex={0}
+            aria-label="Wild Clay Archive on a phone. Scroll to read the whole page."
+          >
+            <img
+              src="./maps/wca-phone.jpg"
+              alt="The Wild Clay Archive map on a phone, showing soil around Seagrove, North Carolina, with Georgeville soil marked as a strong lead."
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+          <figcaption class="mono">Scroll the phone</figcaption>
+        </figure>
       </div>
       <div class="omap">
         <script
@@ -64,7 +82,19 @@ export default (() => {
 
   Maps.css = `
 .maps { padding: clamp(48px, 9vh, 96px) 0; border-top: 1px solid var(--rule); }
-.maps-head { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.maps-head { display: flex; align-items: flex-start; gap: clamp(28px, 4vw, 56px); margin-bottom: 20px; }
+.maps-text { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.maps-phone { flex: none; width: 190px; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.maps-phone figcaption { font-size: 12px; color: var(--gray); text-align: center; }
+.omap-phone {
+  width: 100%; aspect-ratio: 9 / 16;
+  border: 5px solid var(--dark); border-radius: 20px; background: var(--lightgray);
+  overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none;
+  box-shadow: 0 10px 30px rgba(22, 24, 26, 0.10);
+}
+.omap-phone::-webkit-scrollbar { display: none; }
+.omap-phone img { display: block; width: 100%; height: auto; }
+.omap-phone:focus-visible { outline: 3px solid var(--secondary); outline-offset: 3px; }
 .maps-head .mono { font-size: 12px; color: var(--gray); }
 .maps-head h2 { margin: 0; font-weight: 300; font-size: clamp(30px, 3.8vw, 54px); line-height: 1.05; letter-spacing: -0.02em; color: var(--dark); }
 .maps-head p { margin: 0; font-size: 19px; line-height: 1.5; color: var(--darkgray); max-width: 52ch; }
@@ -133,6 +163,8 @@ export default (() => {
 .omap-key .k.done { background: var(--dark); }
 
 @media all and (max-width: 720px) {
+  .maps-head { flex-direction: column; }
+  .maps-phone { width: min(220px, 60vw); align-self: center; }
   .omap-stage svg { min-width: 1000px; }
   .omap-pop { position: fixed; left: 0; right: 0; bottom: 0; top: auto; width: auto; max-height: 62vh; border-radius: 14px 14px 0 0; border-width: 1px 0 0; padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
   .omap .gate, .omap .shape { grid-template-columns: 1fr; }
