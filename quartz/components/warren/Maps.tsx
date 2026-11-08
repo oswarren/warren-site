@@ -85,7 +85,7 @@ export default (() => {
 .maps { padding: clamp(48px, 9vh, 96px) 0; border-top: 1px solid var(--rule); }
 .maps-head { display: flex; align-items: flex-start; justify-content: space-between; gap: clamp(28px, 4vw, 56px); margin-bottom: 20px; }
 .maps-text { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
-.maps-phone { flex: none; width: 190px; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.maps-phone { flex: none; width: 190px; margin: 0 12% 0 0; display: flex; flex-direction: column; gap: 8px; }
 .maps-phone figcaption { font-size: 12px; color: var(--gray); text-align: center; }
 .omap-phone {
   width: 100%; aspect-ratio: 9 / 16;
@@ -166,7 +166,7 @@ export default (() => {
 
 @media all and (max-width: 720px) {
   .maps-head { flex-direction: column; }
-  .maps-phone { width: min(220px, 60vw); align-self: center; }
+  .maps-phone { width: min(220px, 60vw); align-self: center; margin-right: 0; }
   .omap-stage svg { min-width: 1000px; }
   .omap-pop { position: fixed; left: 0; right: 0; bottom: 0; top: auto; width: auto; max-height: 62vh; border-radius: 14px 14px 0 0; border-width: 1px 0 0; padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
   .omap .gate, .omap .shape { grid-template-columns: 1fr; }
