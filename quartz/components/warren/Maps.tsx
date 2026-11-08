@@ -21,11 +21,11 @@ export default (() => {
   const Maps: QuartzComponent = ({ displayClass }: QuartzComponentProps) => (
     <section class={classNames(displayClass, "maps")}>
       <div class="maps-head">
-        <span class="mono">Maps of what I’m running</span>
-        <h2 class="serif">Around the clay map</h2>
+        <span class="mono">Systems I’m running</span>
+        <h2 class="serif">The Wild Clay Archive system</h2>
         <p>
-          A map of where to dig clay anywhere in the US, and the system that helps people find it.
-          Each dot is one piece, filled in as it comes along.
+          Wild Clay Archive shows where to dig clay anywhere in the US. This is everything around it
+          that helps people find it. Each dot is one piece, filled in as it comes along.
         </p>
       </div>
       <div class="omap">
@@ -38,7 +38,7 @@ export default (() => {
           <svg
             viewBox="-50 50 1450 870"
             role="group"
-            aria-label="Map of the Wild Clay Archive: the app in the centre, with where people find it, the portfolio, numbers and launch around it."
+            aria-label="Diagram of the Wild Clay Archive system: the app in the centre, with where people find it, the portfolio, numbers and launch around it."
           ></svg>
         </div>
         <div class="omap-pop" role="dialog" aria-live="polite" hidden></div>
