@@ -142,7 +142,8 @@ export default (() => {
 .omap-name b { display: block; font-weight: 500; font-size: 18px; color: var(--dark); }
 .omap-name span { display: block; font-size: 14px; color: var(--gray); }
 .omap-body p { margin: 0; max-width: 68ch; color: var(--darkgray); }
-.omap-link { display: block; width: fit-content; margin-top: 10px; font-size: 15px; color: var(--secondary); }
+.omap-link { display: block; width: fit-content; margin-top: 14px; padding: 8px 14px; border: 1.5px solid var(--dark); border-radius: 999px; font-size: 15px; font-weight: 500; color: var(--dark); text-decoration: none; transition: background .15s, color .15s; }
+.omap-link:hover, .omap-link:focus-visible { background: var(--dark); color: var(--light); }
 .omap .lbl { margin-top: 18px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--gray); }
 .omap .opts, .omap .gate { margin: 8px 0 0; padding: 0; list-style: none; font-size: 14.5px; max-width: 820px; }
 .omap .opts li { padding: 7px 0; border-bottom: 1px solid var(--rule); }
