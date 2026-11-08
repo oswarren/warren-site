@@ -35,28 +35,11 @@ export default (() => {
           dangerouslySetInnerHTML={{ __html: readMap("clay") }}
         />
         <div class="omap-stage">
-          <div class="omap-canvas">
-            <svg
-              viewBox="-50 -150 1450 1070"
-              role="group"
-              aria-label="Diagram of the Wild Clay Archive system: the app in the centre, with where people find it, the portfolio, numbers and launch around it."
-            >
-              <path class="phone-link" d="M730 334 L700 494" />
-            </svg>
-            {/* the app itself, on a phone, in the open space above its dot: scroll it to read the page */}
-            <div
-              class="omap-phone"
-              tabindex={0}
-              aria-label="Wild Clay Archive on a phone. Scroll to read the whole page."
-            >
-              <img
-                src="./maps/wca-phone.jpg"
-                alt="The Wild Clay Archive map on a phone, showing soil around Seagrove, North Carolina, with Georgeville soil marked as a strong lead."
-                loading="lazy"
-                decoding="async"
-              />
-            </div>
-          </div>
+          <svg
+            viewBox="-50 50 1450 870"
+            role="group"
+            aria-label="Diagram of the Wild Clay Archive system: the app in the centre, with where people find it, the portfolio, numbers and launch around it."
+          ></svg>
         </div>
         <div class="omap-pop" role="dialog" aria-live="polite" hidden></div>
         <div class="omap-key mono">
@@ -86,19 +69,7 @@ export default (() => {
 .maps-head p { margin: 0; font-size: 19px; line-height: 1.5; color: var(--darkgray); max-width: 52ch; }
 
 .omap-stage { overflow-x: auto; overscroll-behavior-x: contain; margin-top: 8px; }
-.omap-canvas { position: relative; width: 100%; min-width: 760px; }
-.omap-stage svg { display: block; width: 100%; height: auto; }
-/* viewBox -50 -150 1450 1070: the phone spans x 600 to 860 and y -130 to about 332 */
-.omap-phone {
-  position: absolute; left: 44.828%; top: 1.869%; width: 17.931%; aspect-ratio: 9 / 16;
-  border: 5px solid var(--dark); border-radius: 20px; background: var(--lightgray);
-  overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none;
-  box-shadow: 0 10px 30px rgba(22, 24, 26, 0.10);
-}
-.omap-phone::-webkit-scrollbar { display: none; }
-.omap-phone img { display: block; width: 100%; height: auto; }
-.omap-phone:focus-visible { outline: 3px solid var(--secondary); outline-offset: 3px; }
-.omap .phone-link { stroke: var(--lightgray); stroke-width: 1.5; stroke-dasharray: 3 4; fill: none; }
+.omap-stage svg { display: block; width: 100%; min-width: 760px; height: auto; }
 
 .omap text { font-family: var(--bodyFont); fill: var(--dark); paint-order: stroke; stroke: var(--light); stroke-width: 5px; stroke-linejoin: round; }
 .omap .t-hub { font-size: 26px; font-weight: 500; }
@@ -161,7 +132,7 @@ export default (() => {
 .omap-key .k.done { background: var(--dark); }
 
 @media all and (max-width: 720px) {
-  .omap-canvas { min-width: 1000px; }
+  .omap-stage svg { min-width: 1000px; }
   .omap-pop { position: fixed; left: 0; right: 0; bottom: 0; top: auto; width: auto; max-height: 62vh; border-radius: 14px 14px 0 0; border-width: 1px 0 0; padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
   .omap .gate, .omap .shape { grid-template-columns: 1fr; }
 }
