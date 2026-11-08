@@ -24,7 +24,7 @@ export default (() => {
         <span class="mono">Systems I’m running</span>
         <h2 class="serif">The Wild Clay Archive system</h2>
         <p>
-          Wild Clay Archive shows where to dig clay anywhere in the US. This is everything around it
+          Wild Clay Archive is an app I made that shows where to dig clay anywhere in the US. This is everything around it
           that helps people find it. Each dot is one piece, filled in as it comes along.
         </p>
       </div>

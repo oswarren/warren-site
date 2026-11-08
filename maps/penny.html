@@ -153,9 +153,9 @@ text.leaf{font-size:19px}
     var p=document.getElementById('panel');p.innerHTML='';
     var h=el('div');h.append(el('b',null,d.n));
     var r=el('div');r.append(el('p',null,d.t));
-    if(d.opts){r.append(el('div','lbl','The five earlier ideas'));var ol=el('ul','opts');
+    if(d.opts){r.append(el('div','lbl','Other ideas I weighed'));var ol=el('ul','opts');
       d.opts.forEach(function(x){var li=el('li');li.append(el('b',null,x[0]),document.createTextNode(': '+x[1]));ol.append(li)});r.append(ol)}
-    if(d.gate){r.append(el('div','lbl','How each reel is made'));var gl=el('ul','gate');d.gate.forEach(function(x){gl.append(el('li',null,x))});r.append(gl)}
+    if(d.gate){r.append(el('div','lbl','How each video is made'));var gl=el('ul','gate');d.gate.forEach(function(x){gl.append(el('li',null,x))});r.append(gl)}
     if(d.steps){r.append(el('div','lbl',d.id==='dig'?'What’s happened so far':'The pieces'));var stl=el('div','steps');
       d.steps.forEach(function(x){var row=el('div');var sg=sv('svg',{viewBox:'-8 -8 16 16'});sg.append(dot(x[3],6.5,C[d.kind]));
         var tx=el('span');tx.append(el('b',null,x[1]),el('small',null,x[2]));row.append(sg,tx);stl.append(row)});r.append(stl)}
