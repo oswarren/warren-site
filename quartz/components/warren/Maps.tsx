@@ -181,7 +181,7 @@ export default (() => {
 .omap .state .flow { stroke-width: 2.5; stroke-dasharray: 0 7; animation-duration: .9s; }
 .omap-key .k-auto .flow { stroke: var(--dark); stroke-width: 2.5; stroke-dasharray: 0 7; animation-duration: .9s; }
 .omap .state svg:has(.flow) { width: 22px; }
-@keyframes omap-flow { to { stroke-dashoffset: 14; } }
+@keyframes omap-flow { to { stroke-dashoffset: -14; } }
 
 @media all and (max-width: 720px) {
   /* phones get the top-to-bottom version (maps-script.ts), so nothing scrolls sideways */
