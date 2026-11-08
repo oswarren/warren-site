@@ -80,7 +80,7 @@ function initMap() {
         d.edge.style.setProperty("--len", len)
         gE.append(d.edge)
         // a piece that runs on its own keeps sending small dots along its line into its branch
-        if (d.auto) gE.append(sv("path", { d: path, class: "flow", stroke: C[d.kind] }))
+        if (d.auto) { d.edge.classList.add("auto"); gE.append(sv("path", { d: path, class: "flow" })) }
       }
       const g = sv("g", { class: "n" + (d.hub ? " opens" : ""), tabindex: "0", role: "button", transform: "translate(" + d.x + "," + d.y + ")" })
       const inner = sv("g", { class: "in" })
@@ -145,7 +145,7 @@ function initMap() {
           const tx = el("span"); tx.append(el("b", null, x[1]), el("small", null, x[2])); row.append(s, tx); stl.append(row) }); r.append(stl) }
       if (d.shape) { r.append(el("div", "lbl", "Posting it")); const sh = el("div", "shape")
         d.shape.forEach((x) => { const c = el("div"); c.append(el("b", null, x[0]), document.createTextNode(" " + x[1])); sh.append(c) }); r.append(sh) }
-      if (d.auto) { const s = el("div", "state"); const g = sv("svg", { viewBox: "-8 -8 16 16" }); g.append(sv("path", { d: "M-7 0 H7", class: "flow", stroke: C[d.kind] })); s.append(g, document.createTextNode("Runs on its own")); r.append(s) }
+      if (d.auto) { const s = el("div", "state"); const g = sv("svg", { viewBox: "-8 -8 16 16" }); g.append(sv("path", { d: "M-7 0 H7", class: "flow" })); s.append(g, document.createTextNode("Runs on its own")); r.append(s) }
       if (d.hub !== 1) { const s = el("div", "state"); const g = sv("svg", { viewBox: "-8 -8 16 16" }); g.append(dot(d.state, 6, C[d.kind])); s.append(g, document.createTextNode(LABEL[d.state])); r.append(s) }
       pop.append(x, h, r)
       pop.hidden = false

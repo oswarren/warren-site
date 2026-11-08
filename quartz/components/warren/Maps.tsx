@@ -173,7 +173,9 @@ export default (() => {
 .omap-key .k.plan { border-style: dashed; border-color: var(--gray); }
 .omap-key .k.now { background: linear-gradient(90deg, var(--dark) 50%, transparent 50%); }
 .omap-key .k.done { background: var(--dark); }
-.omap .flow { fill: none; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 0 14; opacity: 0; transition: opacity .4s .5s; animation: omap-flow 1.4s linear infinite; }
+/* a piece that runs on its own: its line is a row of black dots moving toward the branch, like the key */
+.omap .e.auto { stroke: transparent; }
+.omap .flow { fill: none; stroke: var(--dark); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 0 7; opacity: 0; transition: opacity .4s .5s; animation: omap-flow .9s linear infinite; }
 .omap .e.on + .flow, .omap .state .flow, .omap-key .flow { opacity: 1; }
 .omap-key .k-auto { width: 24px; height: 8px; overflow: visible; }
 .omap .state .flow { stroke-width: 2.5; stroke-dasharray: 0 7; animation-duration: .9s; }
