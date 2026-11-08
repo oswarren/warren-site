@@ -41,6 +41,8 @@ function initMap(root) {
     if (!alive) return
     const N = D.nodes, by = {}
     const phone = root.querySelector(".omap-phone")
+    // Penny's centre is a square of 10,000 tiny cells, one per pot, the ones made filled in
+    const grid = D.grid, pots = D.pots
     N.forEach((d) => { by[d.id] = d; d.kids = [] })
     N.forEach((d) => { if (d.p) { by[d.p].kids.push(d); if (!d.kind) d.kind = by[d.p].kind } })
     const centre = N.find((d) => d.hub === 2)
@@ -54,8 +56,8 @@ function initMap(root) {
       const order = (D.order || ["find", "port", "numbers", "launch"]).map((k) => by[k]).filter(Boolean)
       N.forEach((h) => { if (h.hub === 1 && !order.includes(h)) order.push(h) })
       const SX = 70, PX = 112
-      centre.x = SX; centre.y = 0
-      let y = 110, prev = centre
+      centre.x = SX; centre.y = grid || pots ? 50 : 0
+      let y = grid || pots ? 190 : 110, prev = centre
       order.forEach((h) => {
         h.x = SX; h.y = y; h.from = prev; prev = h
         h.kids.forEach((k, i) => { k.x = PX; k.y = y + 62 + i * 54 })
@@ -69,6 +71,35 @@ function initMap(root) {
     N.forEach((d) => { d.state = d.hub === 1 ? hubState(d) : d.st })
 
     const gE = sv("g"), gN = sv("g"); svg.append(gE, gN)
+    // S units square, 100 by 100 cells; the first grid.made cells (in number order, row by row) filled
+    // or a real pot, its number and price under it; each tap shows the next one
+    let potAt = 0, potImg = null
+    const price = (n) => "#" + n.toLocaleString("en-US") + " · $" + (n / 100).toFixed(2)
+    function potPhoto(W) {
+      const H = W * 4 / 3, id = "pc" + Math.random().toString(36).slice(2, 7)
+      const clip = sv("clipPath", { id }); clip.append(sv("rect", { x: -W / 2, y: -H / 2, width: W, height: H, rx: 10 }))
+      const defs = sv("defs"); defs.append(clip)
+      potImg = sv("image", { href: "./maps/penny-pots/" + pots[0] + ".jpg", x: -W / 2, y: -H / 2, width: W, height: H, "clip-path": "url(#" + id + ")", preserveAspectRatio: "xMidYMid slice" })
+      pots.forEach((n) => { const im = new Image(); im.src = "./maps/penny-pots/" + n + ".jpg" })
+      return [defs, sv("rect", { class: "hit", x: -W / 2 - 6, y: -H / 2 - 6, width: W + 12, height: H + 12 }),
+        sv("rect", { class: "ring", x: -W / 2 - 7, y: -H / 2 - 7, width: W + 14, height: H + 14, rx: 14 }),
+        potImg, sv("rect", { x: -W / 2, y: -H / 2, width: W, height: H, rx: 10, fill: "none", stroke: "var(--dark)", "stroke-width": 3 })]
+    }
+    function gridSquare(S, col) {
+      const c = S / 100, x0 = -S / 2, y0 = -S / 2, id = "pg" + Math.random().toString(36).slice(2, 7)
+      const defs = sv("defs")
+      const mk = (pid, fill) => { const pt = sv("pattern", { id: pid, width: c, height: c, patternUnits: "userSpaceOnUse", x: x0, y: y0 })
+        pt.append(sv("rect", { width: c * 0.72, height: c * 0.72, fill })); return pt }
+      defs.append(mk(id + "e", "var(--lightgray)"), mk(id + "f", col))
+      const m = Math.min(grid.made, 10000), r = Math.floor(m / 100), rem = m % 100
+      return [defs,
+        sv("rect", { class: "hit", x: x0 - 6, y: y0 - 6, width: S + 12, height: S + 12 }),
+        sv("rect", { class: "ring", x: x0 - 8, y: y0 - 8, width: S + 16, height: S + 16, rx: 4 }),
+        sv("rect", { x: x0, y: y0, width: S, height: S, fill: "var(--light)" }),
+        sv("rect", { x: x0, y: y0, width: S, height: S, fill: "url(#" + id + "e)" }),
+        sv("rect", { x: x0, y: y0, width: S, height: r * c, fill: "url(#" + id + "f)" }),
+        sv("rect", { x: x0, y: y0 + r * c, width: rem * c, height: c, fill: "url(#" + id + "f)" })]
+    }
     N.forEach((d) => {
       if (d !== centre) {
         const p = d.from || (d.p ? by[d.p] : centre)
@@ -86,21 +117,24 @@ function initMap(root) {
       const inner = sv("g", { class: "in" })
       // the centre is the phone itself (Maps.tsx), so it has no dot of its own, only its name under the phone
       if (d === centre && phone) inner.append(sv("circle", { class: "hit", r: 26 }))
+      else if (d === centre && grid) inner.append(...gridSquare(vert ? 120 : 170, C[d.kind]))
+      else if (d === centre && pots) inner.append(...potPhoto(vert ? 96 : 132))
       else inner.append(sv("circle", { class: "hit", r: 26 }), sv("circle", { class: "ring", r: d.r + 7 }), dot(d.state, d.r, C[d.kind]))
       let a, x0, ys
-      if (vert) { a = "start"; if (d === centre) { x0 = phone ? 24 : 34; ys = phone ? [34, 56] : [-2, 20] } else if (d.hub === 1) { x0 = 26; ys = [9, 31] } else { x0 = 17; ys = [-2, 18] } }
+      if (vert) { a = "start"; if (d === centre) { x0 = phone ? 24 : grid ? 74 : pots ? 62 : 34; ys = phone ? [34, 56] : grid || pots ? [-8, 14] : [-2, 20] } else if (d.hub === 1) { x0 = 26; ys = [9, 31] } else { x0 = 17; ys = [-2, 18] } }
       else if (d.lab === "right-high") { a = "start"; x0 = 24; ys = [-40, -18] }
       else if (d.lab === "right") { a = "start"; x0 = 24; ys = [-6, 16] }
-      else if (d.hub === 2) { a = "middle"; x0 = 0; ys = phone ? [178, 200] : [56, 78] }
+      else if (d.hub === 2) { a = "middle"; x0 = 0; ys = phone ? [178, 200] : grid ? [118, 140] : pots ? [122, 144] : [56, 78] }
       else if (d.hub === 1) { a = "middle"; x0 = 0; ys = d.below ? [44, 66] : [-44, -24] }
       else { a = d.side === "l" ? "end" : "start"; x0 = d.side === "l" ? -17 : 17; ys = [-2, 18] }
       let sub = d.s || ""
+      if (d === centre && pots) sub = price(pots[0])
       if (d.hub === 1) { const c = {}; d.kids.forEach((k) => { c[k.st] = (c[k.st] || 0) + 1 }); const parts = []
         if (c.done) parts.push(c.done + " done"); if (c.now) parts.push(c.now + " refining"); if (c.built) parts.push(c.built + " built"); if (c.plan) parts.push(c.plan + " planned"); sub = parts.join(" · ") }
       inner.append(sv("text", { class: d.hub ? "t-hub" : "t-leaf", x: x0, y: ys[0], "text-anchor": a }, d.n), sv("text", { class: "t-sub", x: x0, y: ys[1], "text-anchor": a }, sub))
       g.append(inner)
       g.setAttribute("aria-label", d.n + (d.hub === 1 ? "" : ", " + LABEL[d.state]) + (d.auto ? ", runs on its own" : "") + (sub ? ", " + sub : ""))
-      g.addEventListener("click", () => tap(d))
+      g.addEventListener("click", () => { if (d === centre && pots) { potAt = (potAt + 1) % pots.length; potImg.setAttribute("href", "./maps/penny-pots/" + pots[potAt] + ".jpg"); g.querySelector(".t-sub").textContent = price(pots[potAt]) } tap(d) })
       g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tap(d) } })
       d.g = g; gN.append(g)
     })
