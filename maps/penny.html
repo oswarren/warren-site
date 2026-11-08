@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Around the Penny map · Warren Stetler</title>
+<meta name="description" content="10,000 numbered pots, each priced at its number in pennies, and the system that gets each one photographed, listed and found. Each dot shows how far along that piece is. Tap one to read it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#FBF9F5;--fg:#151515;--mute:#77726A;--line:#E2DDD3;--soft:#F2EEE7;
+  --pro:#2a78d6;--cer:#eb6834;--ana:#1baf7a;--wri:#eda100;--web:#e87ba4;--biz:#008300;
+  --font:'Space Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.5}
+.page{max-width:1440px;margin:0 auto;padding:24px 16px 40px}
+a{color:inherit;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--pro);outline-offset:2px}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px}
+.crumb{font-size:14px;color:var(--mute)}
+h1{margin:0;font-size:28px;font-weight:500;letter-spacing:-0.02em}
+.intro{margin:8px 0 0;max-width:62ch;color:var(--mute)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--mute);align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend svg{width:14px;height:14px;flex:none;overflow:visible}
+.legend b{color:var(--fg);font-weight:500;font-variant-numeric:tabular-nums}
+.stage{margin-top:12px;overflow-x:auto;overscroll-behavior-x:contain}
+#map{display:block;width:100%;min-width:980px;height:auto}
+.hint{display:none;font-size:13px;color:var(--mute);margin-top:6px}
+@media (max-width:1000px){.hint{display:block}}
+text{font-family:var(--font);fill:var(--fg);paint-order:stroke;stroke:var(--bg);stroke-width:5px;stroke-linejoin:round}
+text.sub{font-size:15px;fill:var(--mute)}
+text.hubt{font-size:26px;font-weight:600}
+text.leaf{font-size:19px}
+.edge{stroke:var(--line);stroke-width:1.5;fill:none}
+.edge.plan{stroke-dasharray:4 4}
+.edge.now{stroke:var(--fg);stroke-width:2.5}
+.n{cursor:pointer}
+.n .hit{fill:transparent}
+.n .ring{fill:none;stroke:var(--fg);stroke-width:1.5;opacity:0;transition:opacity .2s}
+.n.sel .ring{opacity:1}
+.n:focus{outline:none}
+.n:focus-visible .ring{opacity:1;stroke:var(--pro);stroke-width:3}
+.panel{margin-top:14px;border-top:1px solid var(--line);padding-top:14px;display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:10px 24px;max-width:1000px}
+.panel>div{min-width:0}
+.panel b{font-weight:500;font-size:18px;display:block}
+.panel p{margin:0;max-width:70ch}
+.state{display:inline-flex;align-items:center;gap:7px;margin-top:10px;font-size:14px;color:var(--mute)}
+.state svg{width:14px;height:14px;overflow:visible}
+.lbl{margin-top:20px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.shape{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:8px;max-width:820px}
+.shape div{border-top:2px solid var(--fg);padding-top:6px;font-size:14.5px;min-width:0}
+.shape b{font-size:15.5px}
+.gate{margin:8px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 24px;max-width:820px;font-size:14.5px}
+.gate li{display:grid;grid-template-columns:16px minmax(0,1fr);gap:8px}
+.gate li::before{content:'';width:10px;height:10px;border:1.5px solid var(--fg);border-radius:2px;margin-top:6px}
+.opts{margin:8px 0 0;padding:0;list-style:none;max-width:820px;font-size:14.5px}
+.opts li{padding:7px 0;border-bottom:1px solid var(--line)}
+.opts b{font-size:15.5px;display:inline}
+.steps{display:flex;flex-direction:column;margin-top:6px;max-width:820px}
+.steps div{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;align-items:start;padding:9px 0;border-bottom:1px solid var(--line)}
+.steps svg{width:16px;height:16px;margin-top:4px;overflow:visible}
+.steps b{font-size:16px}
+.steps small{display:block;color:var(--mute);font-size:14px}
+.note{font-size:13px;color:var(--mute);margin-top:8px}
+.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:14px;font-size:14px;color:var(--mute);display:flex;flex-wrap:wrap;gap:8px 24px}
+@media (max-width:640px){.shape,.gate{grid-template-columns:minmax(0,1fr)}.panel{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){.n .ring{transition:none}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="head">
+    <div>
+      <div class="crumb"><a href="/">← warrenstetler.com</a> · maps of what I’m running<span id="built"></span></div>
+      <h1>Around the Penny map</h1>
+      <p class="intro">10,000 numbered pots, each priced at its number in pennies, and the system that gets each one photographed, listed and found. Each dot shows how far along that piece is. Tap one to read it.</p>
+    </div>
+    <div class="legend" id="legend"></div>
+  </div>
+  <div class="stage"><svg id="map" viewBox="-60 40 1520 1010" role="group" aria-label="Diagram of A Penny For Your Pottery: the 10,000 pots in the centre, with the pots, the stores, where people find it, and behind the scenes around it."></svg></div>
+  <div class="hint">Scroll sideways to see the whole map.</div>
+  <div class="panel" id="panel" aria-live="polite"></div>
+  <div class="foot"><a href="/">← warrenstetler.com</a><span>The other maps: <a href="clay.html">Around the clay map</a> · <a href="framework.html">Around the Framework map</a></span></div>
+</div>
+<script>
+(function(){
+  var D={"built": "Nov 6, 2026", "counts": {"made": 2594, "sold": 1741, "soldMoney": 16330.250000000004, "resv": 41, "resvMoney": 2027.6, "avail": 853, "photographed": 855, "noPhoto": 258}, "openOrders": 74, "notes": [], "nodes": [{"id": "pots", "n": "10,000 pots", "s": "made through #2,594", "st": "built", "kind": "cer", "hub": 2, "r": 22, "t": "Started March 2023. Every pot takes the next number, and the number is its price in pennies. #1 was a cent. #10,000 will be $100."}, {"id": "made", "n": "The pots", "kind": "cer", "hub": 1, "side": "l", "t": "What has come out of the studio so far, and where it stands."}, {"id": "sold", "p": "made", "n": "Made and sold", "s": "1,741 sold, $16,330", "st": "built", "t": "Made in order through #2,594. 1,741 sold for $16,330 in all. 853 are made and still for sale."}, {"id": "resv", "p": "made", "n": "Reserved ahead", "s": "41 numbers, $2,028", "st": "built", "t": "People can pay for a number before the pot exists. 41 numbers above #2,594 are paid for, $2,028 in all."}, {"id": "pics", "p": "made", "n": "Photos", "s": "258 for sale with no photo", "st": "now", "t": "855 pots have a lead photo. Oct 28 · All the shop photos copied into one folder, named by number. Nov 6 · The grid now reads the live store: 16 pots photographed since Oct 22 went up. 258 of the 853 pots still for sale have no photo. Shooting #2400 to 2594 first: two thirds of the gap, and the newest pots.", "steps": [["new", "#2400 to 2594", "165 pots, nearly every one since #2400. Shoot first.", "plan"], ["mid", "#2270 to 2369", "35 pots, in a few runs.", "plan"], ["old", "#623 to 699", "54 pots from early on.", "plan"], ["stray", "Strays", "#1821, #1866 and #2087.", "plan"]]}, {"id": "black", "p": "made", "n": "Black clay run", "s": "#1727 to 1769", "st": "built", "t": "Black clay, electric firing. Confirmed as a series Oct 21."}, {"id": "haiku", "p": "made", "n": "Haiku Black Slabs", "s": "#2338 to 2386", "st": "built", "t": "Sio-2 PRNF black sculpture clay, cone 6 electric. Confirmed as a series Oct 21. Has its own Are.na channel."}, {"id": "shops", "n": "Stores", "kind": "biz", "hub": 1, "side": "l", "t": "Where a pot can be bought or looked up."}, {"id": "shopify", "p": "shops", "n": "Shopify store", "s": "apennyforyourpottery.com", "st": "built", "t": "The live shop. Every pot has a listing, and there is a “notes from the studio” email signup. Stays live until the new store takes over."}, {"id": "arch", "p": "shops", "n": "The archive", "s": "ledger, ranges, techniques", "st": "built", "t": "archive.apennyforyourpottery.com. Every photographed pot by number, plus ranges, techniques and photo dates. Each piece links to its Shopify listing."}, {"id": "grid", "p": "shops", "n": "New store", "s": "the 10,000 grid", "st": "built", "t": "penny-one-eta.vercel.app. All 10,000 numbers on one grid. Tap a hundred to zoom in, find your number, buy or reserve. Not live yet.", "steps": [["look", "Phone and desktop layout", "Oct 2026 · Approved boards for both. The site matches the desktop board.", "built"], ["pay", "Checkout", "Oct 28 · Buy and Reserve open Stripe checkout on the store’s own account, in test mode. A number can’t sell twice.", "built"], ["ph", "Photos moved over", "Oct 28 · 839 lead photos served from the store’s own photo store, off Shopify. Nov 6 · 855, pulled straight from the live store.", "built"]]}, {"id": "find", "n": "Where people find it", "kind": "web", "hub": 1, "side": "r", "t": "The places someone might first run into the pots."}, {"id": "ig", "p": "find", "n": "Instagram", "s": "@apennyforyourpottery", "st": "built", "t": "The pots as they’re made. The Shopify home page points here for #1 to #1699."}, {"id": "sub", "p": "find", "n": "Substack", "s": "linked from the archive", "st": "built", "t": "Linked from the archive."}, {"id": "gs", "p": "find", "n": "GlazeSnap", "s": "linked from the archive", "st": "built", "t": "Linked from the archive."}, {"id": "arena", "p": "find", "n": "Are.na", "s": "Haiku Black Slab channel", "st": "built", "t": "The Haiku Black Slab series has its own channel."}, {"id": "reel", "p": "find", "n": "Reels", "s": "from reel-machine", "st": "built", "t": "Sep 30 · The Haiku black slabs reel, made with reel-machine."}, {"id": "back", "n": "Behind the scenes", "kind": "ana", "hub": 1, "side": "r", "t": "How a photo gets from my phone onto a pot’s listing, in order."}, {"id": "shoot", "p": "back", "n": "Shoot on the Pixel", "s": "backs up on its own", "st": "built", "t": "Photograph each pot in a run, one pot after another. The Pixel backs every photo up to Google Photos. The uploader sorts by the time each photo was taken, so shoot in order."}, {"id": "gphotos", "p": "back", "n": "Google Photos", "s": "photos.google.com on the PC", "st": "built", "t": "Every photo from a session lands in Google Photos, in the order it was taken."}, {"id": "zip", "p": "back", "n": "Download and unzip", "s": "one folder per batch", "st": "built", "t": "Select the whole run in Google Photos, download it and unzip it into one folder per batch, keeping the original files."}, {"id": "ptool", "p": "back", "n": "Pottery uploader", "s": "my own tool on the PC", "st": "now", "t": "A small tool I built that starts with the computer. Load the folder, click the last photo of each pot and type its number."}, {"id": "shopup", "p": "back", "n": "Onto Shopify", "s": "check, dry run, live", "st": "built", "t": "Check that each number finds exactly one listing, a dry run, then the live upload. Photos are added to the listing, never replacing what is there. Posting to Instagram is optional, per pot."}, {"id": "gridup", "p": "back", "n": "Onto the grid", "s": "penny-one-eta.vercel.app", "st": "built", "t": "The same photos go to the new 10,000 grid, read straight from the live store, so both stores show the same pots."}]};
+  var CENTRE='pots',FIRST='pics';
+  var C={pro:'var(--pro)',cer:'var(--cer)',biz:'var(--biz)',web:'var(--web)',ana:'var(--ana)',wri:'var(--wri)'};
+  var STATES=['plan','built','now','done'];
+  var LABEL={plan:'Planned',built:'Built, needs work',now:'Refining now',done:'Done'};
+  var N=D.nodes;document.getElementById('built').textContent=D.built?' · updated '+D.built:'';
+  var by={};N.forEach(function(d){by[d.id]=d;d.kids=[]});
+  N.forEach(function(d){if(d.p){by[d.p].kids.push(d);if(!d.kind)d.kind=by[d.p].kind}});
+  var svg=document.getElementById('map'),NS='http://www.w3.org/2000/svg';
+  if(by[CENTRE].x!=null){
+    /* fixed layout: each hub has its own spot, its pieces fan out beside it */
+    N.forEach(function(h){if(h.hub!==1)return;var k=h.kids.length,G=k>4?66:72,lx=h.side==='l'?230:1170;
+      h.kids.forEach(function(d,i){d.x=lx;d.y=h.y+(i-(k-1)/2)*G;d.side=h.side;d.r=7})});
+  }else{
+    /* stacked layout: each side's pieces top to bottom, each hub level with the middle of its own */
+    var G=52,GAP=46,TOP=110,CX=700;
+    var sideH=function(side){var hs=N.filter(function(h){return h.hub===1&&h.side===side});return hs.reduce(function(a,h){return a+h.kids.length*G},0)+(hs.length-1)*GAP-G};
+    var M=Math.max(sideH('l'),sideH('r'));
+    ['l','r'].forEach(function(side){var y=TOP+(M-sideH(side))/2;
+      N.filter(function(h){return h.hub===1&&h.side===side}).forEach(function(h){var y0=y;
+        h.kids.forEach(function(d){d.x=side==='l'?250:1150;d.y=y;d.side=side;d.r=7;y+=G});
+        h.x=side==='l'?470:930;h.y=(y0+y-G)/2;h.r=13;y+=GAP})});
+    by[CENTRE].x=CX;by[CENTRE].y=TOP+M/2;by[CENTRE].r=by[CENTRE].r||22;
+    svg.setAttribute('viewBox','-60 40 1520 '+(M+170));
+  }
+  var tracked=N.filter(function(d){return d.hub!==1});
+  function sv(t,a,txt){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e}
+  function el(t,c,txt){var e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e}
+  /* A progress dot: dashed ring, ring, half filled, filled. */
+  function dot(st,r,c){var g=sv('g');
+    if(st==='plan'){g.append(sv('circle',{r:r,fill:'var(--bg)',stroke:'var(--mute)','stroke-width':1.5,'stroke-dasharray':'2.5 2'}));return g}
+    g.append(sv('circle',{r:r,fill:'var(--bg)',stroke:c,'stroke-width':2}));
+    if(st==='now')g.append(sv('path',{d:'M0 '+(-r)+' A'+r+' '+r+' 0 0 0 0 '+r+' Z',fill:c}));
+    if(st==='done')g.append(sv('circle',{r:r,fill:c}));
+    return g}
+  function hubState(h){var s=h.kids.map(function(k){return k.st});
+    if(s.every(function(x){return x==='done'}))return 'done';
+    if(s.some(function(x){return x==='now'}))return 'now';
+    if(s.every(function(x){return x==='plan'}))return 'plan';return 'built'}
+  var gE=sv('g'),gN=sv('g');svg.append(gE,gN);
+  N.forEach(function(d){if(d.id===CENTRE)return;var p=d.p?by[d.p]:by[CENTRE];
+    var st=d.hub===1?hubState(d):d.st;
+    gE.append(sv('path',{d:'M'+p.x+' '+p.y+' L'+d.x+' '+d.y,'class':'edge'+(st==='now'?' now':st==='plan'?' plan':'')}))});
+  N.forEach(function(d){
+    var st=d.hub===1?hubState(d):d.st;
+    var g=sv('g',{'class':'n',tabindex:'0',role:'button',transform:'translate('+d.x+','+d.y+')'});
+    g.append(sv('circle',{'class':'hit',r:26}),sv('circle',{'class':'ring',r:d.r+7}),dot(st,d.r,C[d.kind]));
+    var a,x0,ys;
+    if(d.lab==='right-high'){a='start';x0=24;ys=[-40,-18]}
+    else if(d.lab==='right'){a='start';x0=24;ys=[-6,16]}
+    else if(d.hub===2){a='middle';x0=0;ys=[60,82]}
+    else if(d.hub===1){a='middle';x0=0;ys=d.below?[44,66]:[-46,-24]}
+    else{a=d.side==='l'?'end':'start';x0=d.side==='l'?-17:17;ys=[-2,18]}
+    var sub=d.s||'';
+    if(d.hub===1){var c={};d.kids.forEach(function(k){c[k.st]=(c[k.st]||0)+1});var parts=[];
+      if(c.done)parts.push(c.done+' done');if(c.now)parts.push(c.now+' refining');if(c.built)parts.push(c.built+' built');if(c.plan)parts.push(c.plan+' planned');sub=parts.join(' · ')}
+    g.append(sv('text',{'class':d.hub?'hubt':'leaf',x:x0,y:ys[0],'text-anchor':a},d.n),sv('text',{'class':'sub',x:x0,y:ys[1],'text-anchor':a},sub));
+    g.setAttribute('aria-label',d.n+', '+(d.hub===1?'':LABEL[st]+', ')+sub);
+    g.addEventListener('click',function(){pick(d)});
+    g.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick(d)}});
+    d.g=g;gN.append(g)});
+  var lg=document.getElementById('legend'),cnt={};tracked.forEach(function(d){cnt[d.st]=(cnt[d.st]||0)+1});
+  STATES.forEach(function(st){var sp=el('span');var s=sv('svg',{viewBox:'-8 -8 16 16'});s.append(dot(st,6,'var(--fg)'));
+    sp.append(s,document.createTextNode(LABEL[st]+' '),el('b',null,cnt[st]||0));lg.append(sp)});
+  function pick(d){N.forEach(function(x){x.g.classList.toggle('sel',x===d)});
+    var p=document.getElementById('panel');p.innerHTML='';
+    var h=el('div');h.append(el('b',null,d.n));
+    var r=el('div');r.append(el('p',null,d.t));
+    if(d.opts){r.append(el('div','lbl','The five earlier ideas'));var ol=el('ul','opts');
+      d.opts.forEach(function(x){var li=el('li');li.append(el('b',null,x[0]),document.createTextNode(': '+x[1]));ol.append(li)});r.append(ol)}
+    if(d.gate){r.append(el('div','lbl','How each reel is made'));var gl=el('ul','gate');d.gate.forEach(function(x){gl.append(el('li',null,x))});r.append(gl)}
+    if(d.steps){r.append(el('div','lbl',d.id==='dig'?'What’s happened so far':'The pieces'));var stl=el('div','steps');
+      d.steps.forEach(function(x){var row=el('div');var sg=sv('svg',{viewBox:'-8 -8 16 16'});sg.append(dot(x[3],6.5,C[d.kind]));
+        var tx=el('span');tx.append(el('b',null,x[1]),el('small',null,x[2]));row.append(sg,tx);stl.append(row)});r.append(stl)}
+    if(d.shape){r.append(el('div','lbl','Posting it'));var sh=el('div','shape');
+      d.shape.forEach(function(x){var c=el('div');c.append(el('b',null,x[0]),document.createTextNode(' '+x[1]));sh.append(c)});r.append(sh)}
+    if(d.hub!==1){var s=el('div','state');var sg=sv('svg',{viewBox:'-8 -8 16 16'});sg.append(dot(d.st,6,C[d.kind]));s.append(sg,document.createTextNode(LABEL[d.st]));r.append(s)}
+    else r.append(el('div','note','This dot fills from the pieces around it.'));
+    p.append(h,r)}
+  pick(by[FIRST]);
+})();
+</script>
+</body>
+</html>

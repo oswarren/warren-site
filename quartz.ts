@@ -59,7 +59,8 @@ const shared: Partial<FullPageLayout> = {
     ConditionalRender({ component: Warren.ProjectHead(), condition: isProject }),
   ],
   afterBody: [
-    // home, in order: the selected systems, then the back of the watch, then the two ways in
+    // home, in order: the maps of what I'm running, the selected systems, then the back of the watch, then the two ways in
+    when(Warren.Maps(), isFront),
     when(Warren.Featured(), isFront),
     when(Warren.EvidenceHead(), isFront),
     when(Warren.Balance(), isFront),

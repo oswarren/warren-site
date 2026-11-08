@@ -7,7 +7,7 @@
 // show the duration of the previous build. build.json is written twice: once at
 // start (this build's time, last build's seconds) and once at the end (real seconds).
 import { spawnSync } from "node:child_process"
-import { readFileSync, writeFileSync, existsSync } from "node:fs"
+import { readFileSync, writeFileSync, existsSync, cpSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"
 
@@ -42,3 +42,9 @@ if (result.status !== 0) {
   process.exit(result.status ?? 1)
 }
 console.log(`built in ${seconds}s → build.json`)
+
+// The maps (maps/*.html and their pictures) are plain pages made outside Quartz. Copy them as they
+// are, so /maps/clay.html keeps its .html and is served as a page.
+cpSync(join(root, "maps"), join(root, "public", "maps"), { recursive: true })
+console.log("copied maps/ to public/maps/")
+

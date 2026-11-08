@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Around the clay map · Warren Stetler</title>
+<meta name="description" content="A clay map of the whole US, and the system around it: where people find it, how I count what happens, and getting it onto phones. Each dot shows how far along that piece is. Tap one to read it.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&display=swap">
+<style>
+:root{--bg:#FBF9F5;--fg:#151515;--mute:#77726A;--line:#E2DDD3;--soft:#F2EEE7;
+  --pro:#2a78d6;--cer:#eb6834;--ana:#1baf7a;--wri:#eda100;--web:#e87ba4;--biz:#008300;
+  --font:'Space Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;color-scheme:light}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.5}
+.page{max-width:1440px;margin:0 auto;padding:24px 16px 40px}
+a{color:inherit;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+:focus-visible{outline:3px solid var(--pro);outline-offset:2px}
+.head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px}
+.crumb{font-size:14px;color:var(--mute)}
+h1{margin:0;font-size:28px;font-weight:500;letter-spacing:-0.02em}
+.intro{margin:8px 0 0;max-width:62ch;color:var(--mute)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:14px;color:var(--mute);align-items:center}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend svg{width:14px;height:14px;flex:none;overflow:visible}
+.legend b{color:var(--fg);font-weight:500;font-variant-numeric:tabular-nums}
+.stage{margin-top:12px;overflow-x:auto;overscroll-behavior-x:contain}
+#map{display:block;width:100%;min-width:980px;height:auto}
+.hint{display:none;font-size:13px;color:var(--mute);margin-top:6px}
+@media (max-width:1000px){.hint{display:block}}
+text{font-family:var(--font);fill:var(--fg);paint-order:stroke;stroke:var(--bg);stroke-width:5px;stroke-linejoin:round}
+text.sub{font-size:15px;fill:var(--mute)}
+text.hubt{font-size:26px;font-weight:600}
+text.leaf{font-size:19px}
+.edge{stroke:var(--line);stroke-width:1.5;fill:none}
+.edge.plan{stroke-dasharray:4 4}
+.edge.now{stroke:var(--fg);stroke-width:2.5}
+.n{cursor:pointer}
+.n .hit{fill:transparent}
+.n .ring{fill:none;stroke:var(--fg);stroke-width:1.5;opacity:0;transition:opacity .2s}
+.n.sel .ring{opacity:1}
+.n:focus{outline:none}
+.n:focus-visible .ring{opacity:1;stroke:var(--pro);stroke-width:3}
+.panel{margin-top:14px;border-top:1px solid var(--line);padding-top:14px;display:grid;grid-template-columns:minmax(0,240px) minmax(0,1fr);gap:10px 24px;max-width:1000px}
+.panel>div{min-width:0}
+.panel b{font-weight:500;font-size:18px;display:block}
+.panel p{margin:0;max-width:70ch}
+.state{display:inline-flex;align-items:center;gap:7px;margin-top:10px;font-size:14px;color:var(--mute)}
+.state svg{width:14px;height:14px;overflow:visible}
+.lbl{margin-top:20px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+.shape{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:8px;max-width:820px}
+.shape div{border-top:2px solid var(--fg);padding-top:6px;font-size:14.5px;min-width:0}
+.shape b{font-size:15.5px}
+.gate{margin:8px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 24px;max-width:820px;font-size:14.5px}
+.gate li{display:grid;grid-template-columns:16px minmax(0,1fr);gap:8px}
+.gate li::before{content:'';width:10px;height:10px;border:1.5px solid var(--fg);border-radius:2px;margin-top:6px}
+.opts{margin:8px 0 0;padding:0;list-style:none;max-width:820px;font-size:14.5px}
+.opts li{padding:7px 0;border-bottom:1px solid var(--line)}
+.opts b{font-size:15.5px;display:inline}
+.steps{display:flex;flex-direction:column;margin-top:6px;max-width:820px}
+.steps div{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;align-items:start;padding:9px 0;border-bottom:1px solid var(--line)}
+.steps svg{width:16px;height:16px;margin-top:4px;overflow:visible}
+.steps b{font-size:16px}
+.steps small{display:block;color:var(--mute);font-size:14px}
+.note{font-size:13px;color:var(--mute);margin-top:8px}
+.foot{margin-top:40px;border-top:1px solid var(--line);padding-top:14px;font-size:14px;color:var(--mute);display:flex;flex-wrap:wrap;gap:8px 24px}
+@media (max-width:640px){.shape,.gate{grid-template-columns:minmax(0,1fr)}.panel{grid-template-columns:minmax(0,1fr)}}
+@media (prefers-reduced-motion:reduce){.n .ring{transition:none}}
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="head">
+    <div>
+      <div class="crumb"><a href="/">← warrenstetler.com</a> · maps of what I’m running<span id="built"></span></div>
+      <h1>Around the clay map</h1>
+      <p class="intro">A clay map of the whole US, and the system around it: where people find it, how I count what happens, and getting it onto phones. Each dot shows how far along that piece is. Tap one to read it.</p>
+    </div>
+    <div class="legend" id="legend"></div>
+  </div>
+  <div class="stage"><svg id="map" viewBox="-50 50 1450 870" role="group" aria-label="Diagram of the Wild Clay Archive: the app in the centre, with where people find it, the portfolio, numbers and launch around it."></svg></div>
+  <div class="hint">Scroll sideways to see the whole map.</div>
+  <div class="panel" id="panel" aria-live="polite"></div>
+  <div class="foot"><a href="/">← warrenstetler.com</a><span>The other maps: <a href="framework.html">Around the Framework map</a> · <a href="penny.html">Around the Penny map</a></span></div>
+</div>
+<script>
+(function(){
+  var D={"built": "Nov 6, 2026", "numbersFrom": "2026-10-26", "nodes": [{"id": "app", "n": "The app", "s": "wildclayarchive.com", "x": 700, "y": 520, "r": 22, "kind": "pro", "st": "now", "hub": 2, "t": "The clay map itself. Tap any point in the US to see the soil, how deep the clay sits, its raw colour and a clay potential level with reasons. Everything around it is how people find it, how I count what happens, and getting it onto phones."}, {"id": "find", "n": "Where people find it", "s": "", "x": 420, "y": 520, "r": 13, "kind": "cer", "hub": 1, "side": "l", "t": "Each place I post has two parts: the post that makes someone curious, and the link in it that brings them to the map and counts where they came from.", "lab": "right-high"}, {"id": "rec", "p": "find", "n": "The record", "s": "what every post is made from", "st": "built", "kind": "cer", "t": "One file per clay, every fact traced to a source. Georgeville at Seagrove is the first. Every reel, pin and page below is made from it."}, {"id": "dig", "p": "find", "n": "Instagram", "s": "dig reels + bio link", "st": "now", "kind": "cer", "t": "Reels on wildclayhunt made from my own clips of a real dig, town read or test, at most one a week and none in a week when nothing real happened. Each reel follows the same written method and the same voice. Link since Nov 4: wildclayarchive.com/app/instagram.", "steps": [["s1", "Studied what works", "Nov 5 · What makes a foraging account (rocks, minerals, clay) work on Instagram, pooled across many accounts.", "done"], ["m1", "Moved off town reels", "Nov 6 · One real thing from my own clips per reel, made the same way each time.", "done"], ["r1", "First reel", "Nov 6 · Two clays in one bank, Charlotte County, Virginia (the dig of January 8, 2025).", "now"]], "gate": ["Find the real thing in the clips by eye, with date and county from their metadata. County at most; the spot goes in no file and on no frame.", "One claim with the place in it, about something the viewer could find or has seen. The app is not in it.", "The site’s own lookup for that ground, a phone-size capture of its panel, every number and caveat in its wording, with URL and date.", "The cut, about 30 seconds: ground with the claim, bank close, tool and hand with no words, the lumps, the site’s panel, the find last with www.wildclayarchive.com.", "Only the clips’ own sound, each under its shot, a faint woods tone under the stills. No other track.", "Check the file: 1080x1920, 30 fps, frames at the cuts, levels, no dashes anywhere.", "A draft with caption, shot list, facts and sources, checks and the one decision left to me. I post from the phone."], "shape": [["The file", "Posted as it is, no Add audio. The location tag is the county on the first frame."], ["The caption", "The claim first, the site’s wording for the level and its caveat, the permission line, one question, the plain address last. No hashtags."], ["The bio link", "www.wildclayarchive.com/app/instagram, the door the site counts, and the story sticker uses it too. Caption and screen say “the map is at www.wildclayarchive.com”, never “link in bio”."]]}, {"id": "pins", "p": "find", "n": "Pinterest", "s": "pins + link", "st": "now", "kind": "cer", "t": "Three Georgeville pins so far, each linking to that spot on the map. Link since Nov 4: wildclayarchive.com/app/pinterest."}, {"id": "arena", "p": "find", "n": "Are.na", "s": "clay channel + link", "st": "built", "kind": "cer", "t": "The Georgeville record laid out as a channel, with the map link in the Wild Clay Archive channel. Link since Nov 4: wildclayarchive.com/app/arena."}, {"id": "dsub", "p": "find", "n": "Substack", "s": "8 issues, 3 on the list", "st": "built", "kind": "cer", "t": "The Wild Clay Hunt, my weekly newsletter, with its own map link. Link since Nov 4: wildclayarchive.com/app/substack."}, {"id": "seo", "p": "find", "n": "Google", "s": "search pages, 1,239 soils", "st": "built", "kind": "cer", "t": "A page for every soil series the map rates, 25 state pages and a guide to finding wild clay, so someone searching for clay near them lands on the map."}, {"id": "port", "n": "Portfolio", "s": "", "x": 420, "y": 205, "r": 13, "kind": "wri", "hub": 1, "side": "l", "t": "How the app shows up in my portfolio: one page that tells what it is, where it came from and that it works, for potters, app reviewers and clients alike.", "lab": "right"}, {"id": "pdir", "p": "port", "n": "The direction", "s": "the map is the page", "st": "done", "kind": "wri", "t": "Picked Nov 5: each project gets its own page on the site, and that page is its project map, like this one. The five ideas below can still live inside a map as pieces.", "opts": [["Case study", "One page built around a short screen recording, then origin, how it works, proof and what’s next."], ["Field notebook", "One real dig start to finish: old map, lead, hole, bucket, fired tile. The app is the tool in the story."], ["System card", "SYSTEM, INPUT, RULES, OUTPUT as the whole page: data in, rules that score a site, clay out."], ["Tile wall", "A grid of fired tiles from clay found with the app, each linked to its spot on the map."], ["Are.na channel", "The build log as a public channel, embedded on the site."]]}, {"id": "prec", "p": "port", "n": "Screen recording", "s": "20 seconds of finding clay", "st": "plan", "kind": "wri", "t": "Picking a spot and seeing likely clay. Shows what the app does faster than words."}, {"id": "pdug", "p": "port", "n": "Dug clay proof", "s": "photo from a real lead", "st": "plan", "kind": "wri", "t": "Clay actually dug from a spot the map pointed to, and the fired tile from it. The piece most app portfolios can’t show."}, {"id": "phome", "p": "port", "n": "Public map page", "s": "one per project", "st": "plan", "kind": "wri", "t": "A public copy of this map on the portfolio site: same diagram, read-only, linked from the project list. The same shape repeats for each project."}, {"id": "numbers", "n": "Numbers", "s": "read Oct 26, next Nov 2", "x": 960, "y": 300, "r": 13, "kind": "ana", "st": "built", "hub": 1, "side": "r", "t": "What happened, read once a week and kept as rows in one table. It helps pick the next clay."}, {"id": "weekly", "p": "numbers", "n": "Weekly read", "s": "163 visitors, 34 lookups, 3 Pro", "st": "built", "kind": "ana", "t": "Visitors, lookups, Pro unlocks, where people came from. Latest reading, 30 days to Oct 26: 163 visitors, 34 looked something up, 3 unlocked Pro."}, {"id": "taps", "p": "numbers", "n": "Taps by link", "s": "since Nov 4", "st": "built", "kind": "ana", "t": "Each link’s taps, leaving out bots, link previews and me."}, {"id": "inst", "p": "numbers", "n": "Installs by link", "s": "after launch", "st": "plan", "kind": "ana", "t": "A campaign per link in each store console, so installs can be counted by place too."}, {"id": "launch", "n": "Launch", "s": "onto phones", "x": 960, "y": 740, "r": 13, "kind": "biz", "st": "plan", "hub": 1, "side": "r", "t": "Where the map becomes an app on phones: listings, screenshots, tester invites and the release-day steps.", "below": true}, {"id": "ios", "p": "launch", "n": "App Store", "s": "live", "st": "done", "kind": "biz", "t": "Live on the App Store since Nov 6, 2026, with the Pro purchase."}, {"id": "play", "p": "launch", "n": "Google Play", "s": "testers joining", "st": "plan", "kind": "biz", "t": "The Android build is in closed testing with invited potters."}, {"id": "rel", "p": "launch", "n": "Release day", "s": "flip the store switches", "st": "plan", "kind": "biz", "t": "The steps in order: Apple’s email, switch the App Store link on, post the launch reel, then Google Play when it clears."}]};
+  var CENTRE='app',FIRST='dig';
+  var C={pro:'var(--pro)',cer:'var(--cer)',biz:'var(--biz)',web:'var(--web)',ana:'var(--ana)',wri:'var(--wri)'};
+  var STATES=['plan','built','now','done'];
+  var LABEL={plan:'Planned',built:'Built, needs work',now:'Refining now',done:'Done'};
+  var N=D.nodes;document.getElementById('built').textContent=D.built?' · updated '+D.built:'';
+  var by={};N.forEach(function(d){by[d.id]=d;d.kids=[]});
+  N.forEach(function(d){if(d.p){by[d.p].kids.push(d);if(!d.kind)d.kind=by[d.p].kind}});
+  var svg=document.getElementById('map'),NS='http://www.w3.org/2000/svg';
+  if(by[CENTRE].x!=null){
+    /* fixed layout: each hub has its own spot, its pieces fan out beside it */
+    N.forEach(function(h){if(h.hub!==1)return;var k=h.kids.length,G=k>4?66:72,lx=h.side==='l'?230:1170;
+      h.kids.forEach(function(d,i){d.x=lx;d.y=h.y+(i-(k-1)/2)*G;d.side=h.side;d.r=7})});
+  }else{
+    /* stacked layout: each side's pieces top to bottom, each hub level with the middle of its own */
+    var G=52,GAP=46,TOP=110,CX=700;
+    var sideH=function(side){var hs=N.filter(function(h){return h.hub===1&&h.side===side});return hs.reduce(function(a,h){return a+h.kids.length*G},0)+(hs.length-1)*GAP-G};
+    var M=Math.max(sideH('l'),sideH('r'));
+    ['l','r'].forEach(function(side){var y=TOP+(M-sideH(side))/2;
+      N.filter(function(h){return h.hub===1&&h.side===side}).forEach(function(h){var y0=y;
+        h.kids.forEach(function(d){d.x=side==='l'?250:1150;d.y=y;d.side=side;d.r=7;y+=G});
+        h.x=side==='l'?470:930;h.y=(y0+y-G)/2;h.r=13;y+=GAP})});
+    by[CENTRE].x=CX;by[CENTRE].y=TOP+M/2;by[CENTRE].r=by[CENTRE].r||22;
+    svg.setAttribute('viewBox','-60 40 1520 '+(M+170));
+  }
+  var tracked=N.filter(function(d){return d.hub!==1});
+  function sv(t,a,txt){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);if(txt!=null)e.textContent=txt;return e}
+  function el(t,c,txt){var e=document.createElement(t);if(c)e.className=c;if(txt!=null)e.textContent=txt;return e}
+  /* A progress dot: dashed ring, ring, half filled, filled. */
+  function dot(st,r,c){var g=sv('g');
+    if(st==='plan'){g.append(sv('circle',{r:r,fill:'var(--bg)',stroke:'var(--mute)','stroke-width':1.5,'stroke-dasharray':'2.5 2'}));return g}
+    g.append(sv('circle',{r:r,fill:'var(--bg)',stroke:c,'stroke-width':2}));
+    if(st==='now')g.append(sv('path',{d:'M0 '+(-r)+' A'+r+' '+r+' 0 0 0 0 '+r+' Z',fill:c}));
+    if(st==='done')g.append(sv('circle',{r:r,fill:c}));
+    return g}
+  function hubState(h){var s=h.kids.map(function(k){return k.st});
+    if(s.every(function(x){return x==='done'}))return 'done';
+    if(s.some(function(x){return x==='now'}))return 'now';
+    if(s.every(function(x){return x==='plan'}))return 'plan';return 'built'}
+  var gE=sv('g'),gN=sv('g');svg.append(gE,gN);
+  N.forEach(function(d){if(d.id===CENTRE)return;var p=d.p?by[d.p]:by[CENTRE];
+    var st=d.hub===1?hubState(d):d.st;
+    gE.append(sv('path',{d:'M'+p.x+' '+p.y+' L'+d.x+' '+d.y,'class':'edge'+(st==='now'?' now':st==='plan'?' plan':'')}))});
+  N.forEach(function(d){
+    var st=d.hub===1?hubState(d):d.st;
+    var g=sv('g',{'class':'n',tabindex:'0',role:'button',transform:'translate('+d.x+','+d.y+')'});
+    g.append(sv('circle',{'class':'hit',r:26}),sv('circle',{'class':'ring',r:d.r+7}),dot(st,d.r,C[d.kind]));
+    var a,x0,ys;
+    if(d.lab==='right-high'){a='start';x0=24;ys=[-40,-18]}
+    else if(d.lab==='right'){a='start';x0=24;ys=[-6,16]}
+    else if(d.hub===2){a='middle';x0=0;ys=[60,82]}
+    else if(d.hub===1){a='middle';x0=0;ys=d.below?[44,66]:[-46,-24]}
+    else{a=d.side==='l'?'end':'start';x0=d.side==='l'?-17:17;ys=[-2,18]}
+    var sub=d.s||'';
+    if(d.hub===1){var c={};d.kids.forEach(function(k){c[k.st]=(c[k.st]||0)+1});var parts=[];
+      if(c.done)parts.push(c.done+' done');if(c.now)parts.push(c.now+' refining');if(c.built)parts.push(c.built+' built');if(c.plan)parts.push(c.plan+' planned');sub=parts.join(' · ')}
+    g.append(sv('text',{'class':d.hub?'hubt':'leaf',x:x0,y:ys[0],'text-anchor':a},d.n),sv('text',{'class':'sub',x:x0,y:ys[1],'text-anchor':a},sub));
+    g.setAttribute('aria-label',d.n+', '+(d.hub===1?'':LABEL[st]+', ')+sub);
+    g.addEventListener('click',function(){pick(d)});
+    g.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick(d)}});
+    d.g=g;gN.append(g)});
+  var lg=document.getElementById('legend'),cnt={};tracked.forEach(function(d){cnt[d.st]=(cnt[d.st]||0)+1});
+  STATES.forEach(function(st){var sp=el('span');var s=sv('svg',{viewBox:'-8 -8 16 16'});s.append(dot(st,6,'var(--fg)'));
+    sp.append(s,document.createTextNode(LABEL[st]+' '),el('b',null,cnt[st]||0));lg.append(sp)});
+  function pick(d){N.forEach(function(x){x.g.classList.toggle('sel',x===d)});
+    var p=document.getElementById('panel');p.innerHTML='';
+    var h=el('div');h.append(el('b',null,d.n));
+    var r=el('div');r.append(el('p',null,d.t));
+    if(d.opts){r.append(el('div','lbl','The five earlier ideas'));var ol=el('ul','opts');
+      d.opts.forEach(function(x){var li=el('li');li.append(el('b',null,x[0]),document.createTextNode(': '+x[1]));ol.append(li)});r.append(ol)}
+    if(d.gate){r.append(el('div','lbl','How each reel is made'));var gl=el('ul','gate');d.gate.forEach(function(x){gl.append(el('li',null,x))});r.append(gl)}
+    if(d.steps){r.append(el('div','lbl',d.id==='dig'?'What’s happened so far':'The pieces'));var stl=el('div','steps');
+      d.steps.forEach(function(x){var row=el('div');var sg=sv('svg',{viewBox:'-8 -8 16 16'});sg.append(dot(x[3],6.5,C[d.kind]));
+        var tx=el('span');tx.append(el('b',null,x[1]),el('small',null,x[2]));row.append(sg,tx);stl.append(row)});r.append(stl)}
+    if(d.shape){r.append(el('div','lbl','Posting it'));var sh=el('div','shape');
+      d.shape.forEach(function(x){var c=el('div');c.append(el('b',null,x[0]),document.createTextNode(' '+x[1]));sh.append(c)});r.append(sh)}
+    if(d.hub!==1){var s=el('div','state');var sg=sv('svg',{viewBox:'-8 -8 16 16'});sg.append(dot(d.st,6,C[d.kind]));s.append(sg,document.createTextNode(LABEL[d.st]));r.append(s)}
+    else r.append(el('div','note','This dot fills from the pieces around it.'));
+    p.append(h,r)}
+  pick(by[FIRST]);
+})();
+</script>
+</body>
+</html>
