@@ -85,8 +85,9 @@ export default (() => {
 .maps { padding: clamp(48px, 9vh, 96px) 0; border-top: 1px solid var(--rule); }
 .maps-head { display: flex; align-items: flex-start; justify-content: space-between; gap: clamp(28px, 4vw, 56px); margin-bottom: 20px; }
 .maps-text { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
-.maps-head { position: relative; }
-.maps-phone { position: absolute; top: 0; bottom: 0; right: 12%; margin: 0; }
+/* the phone hangs just right of the widest line, as tall as the text */
+.maps-head { position: relative; width: fit-content; max-width: 100%; }
+.maps-phone { position: absolute; top: 0; bottom: 0; left: 100%; margin: 0 0 0 clamp(32px, 4vw, 56px); }
 .maps-phone figcaption { position: absolute; left: 50%; top: 100%; transform: translateX(-50%); margin-top: 8px; font-size: 12px; color: var(--gray); white-space: nowrap; }
 .omap-phone {
   height: 100%; aspect-ratio: 9 / 16; box-sizing: border-box;
@@ -167,7 +168,8 @@ export default (() => {
 
 @media all and (max-width: 720px) {
   .maps-head { flex-direction: column; }
-  .maps-phone { position: static; align-self: center; margin-bottom: 24px; }
+  .maps-head { width: auto; }
+  .maps-phone { position: static; align-self: center; margin: 0 0 24px; }
   .omap-phone { height: auto; width: min(220px, 60vw); border-width: 5px; border-radius: 20px; }
   .omap-stage svg { min-width: 1000px; }
   .omap-pop { position: fixed; left: 0; right: 0; bottom: 0; top: auto; width: auto; max-height: 62vh; border-radius: 14px 14px 0 0; border-width: 1px 0 0; padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
