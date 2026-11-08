@@ -8,7 +8,6 @@ document.addEventListener("nav", () => {
   const svg = root.querySelector("svg")
   const panel = root.querySelector(".omap-panel")
   const hint = root.querySelector(".omap-hint")
-  const allBtn = root.querySelector(".omap-all")
   const resetBtn = root.querySelector(".omap-reset")
   const stage = root.querySelector(".omap-stage")
   // on a narrow screen the map scrolls sideways: keep what was just opened in view
@@ -86,11 +85,15 @@ document.addEventListener("nav", () => {
       d.g.style.transitionDelay = (reduce ? 0 : t + 260) + "ms"; d.g.classList.add("on")
     }
     function hide(d) { d.shown = false; d.g.classList.remove("on", "sel", "open"); if (d.edge) d.edge.classList.remove("on") }
-    function openCentre() { centre.g.classList.add("open"); hubs.forEach((h, i) => show(h, i * 110)); hint.textContent = "Tap a branch to open it." }
-    function openHub(h) { h.g.classList.add("open"); h.kids.forEach((k, i) => show(k, i * 70)) }
+    // one tap on the centre opens everything: the branches first, then each branch's pieces
+    function openHub(h, base) { h.g.classList.add("open"); h.kids.forEach((k, i) => show(k, base + i * 70)) }
+    function openCentre() {
+      centre.g.classList.add("open")
+      hubs.forEach((h, i) => { show(h, i * 110); openHub(h, 650 + i * 160) })
+      hint.textContent = "Tap any dot to read about it."
+    }
     function tap(d) {
       if (d === centre && !centre.g.classList.contains("open")) openCentre()
-      else if (d.hub === 1 && !d.g.classList.contains("open")) { openHub(d); focusX(d.kids.length ? (d.x + d.kids[0].x) / 2 : d.x, true); if (hubs.every((h) => h.g.classList.contains("open"))) hint.textContent = "" }
       pick(d)
     }
     function pick(d) {
@@ -107,10 +110,8 @@ document.addEventListener("nav", () => {
       if (d.shape) { r.append(el("div", "lbl", "Posting it")); const sh = el("div", "shape")
         d.shape.forEach((x) => { const c = el("div"); c.append(el("b", null, x[0]), document.createTextNode(" " + x[1])); sh.append(c) }); r.append(sh) }
       if (d.hub !== 1) { const s = el("div", "state"); const g = sv("svg", { viewBox: "-8 -8 16 16" }); g.append(dot(d.state, 6, C[d.kind])); s.append(g, document.createTextNode(LABEL[d.state])); r.append(s) }
-      else if (!d.kids.every((k) => k.shown)) r.append(el("div", "state", "Tap it again to see its pieces."))
       panel.append(h, r)
     }
-    allBtn.addEventListener("click", () => { openCentre(); hubs.forEach((h, i) => setTimeout(() => openHub(h), reduce ? 0 : 300 + i * 120)); hint.textContent = "" })
     resetBtn.addEventListener("click", () => { focusX(centre.x, true); N.forEach((d) => { if (d !== centre) hide(d) }); centre.g.classList.remove("open", "sel"); panel.innerHTML = ""; hint.textContent = "Tap the dot to open it." })
     centre.g.classList.add("on")
     focusX(centre.x, false)

@@ -20,9 +20,6 @@ export default (() => {
         <div class="omap-bar">
           <span class="omap-hint mono" aria-live="polite"></span>
           <span class="omap-keys">
-            <button type="button" class="omap-all">
-              Open it all
-            </button>
             <button type="button" class="omap-reset">
               Start again
             </button>
