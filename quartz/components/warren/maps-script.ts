@@ -115,9 +115,32 @@ function initMap() {
     }
     // one tap on the centre opens everything: the branches first, then each branch's pieces
     function openHub(h, base) { h.g.classList.add("open"); h.kids.forEach((k, i) => show(k, base + i * 70)) }
+    let isOpen = false, io = null
     function openCentre() {
+      isOpen = true
       centre.g.classList.add("open")
       hubs.forEach((h, i) => { show(h, i * 110); openHub(h, 650 + i * 160) })
+    }
+    // the reverse: the pieces fold back first, then the branches, each line pulling back into the phone
+    function hide(d, delay) {
+      if (!d.shown) return; d.shown = false
+      const t = reduce ? 0 : delay
+      if (d.edge) { d.edge.style.transitionDelay = (reduce ? 0 : t + 150) + "ms"; d.edge.classList.remove("on") }
+      d.g.style.transitionDelay = t + "ms"; d.g.classList.remove("on", "open")
+    }
+    function closeCentre() {
+      isOpen = false
+      close()
+      centre.g.classList.remove("open")
+      N.filter((d) => d !== centre && d.hub !== 1).reverse().forEach((d, i) => hide(d, i * 35))
+      hubs.forEach((h, i) => hide(h, 450 + i * 90))
+    }
+    // tapping the phone folds the system back into it, and tapping again brings it back out
+    const phone = root.querySelector(".omap-phone")
+    if (phone) {
+      const toggle = () => { if (io) { io.disconnect(); io = null } isOpen ? closeCentre() : openCentre() }
+      phone.addEventListener("click", toggle)
+      phone.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); toggle() } })
     }
     function tap(d) {
       if (d === centre && !centre.g.classList.contains("open")) openCentre()
@@ -175,11 +198,11 @@ function initMap() {
     // the map opens by itself, whole, as it scrolls into view, and stays open
     if (reduce || !("IntersectionObserver" in window)) openCentre()
     else {
-      const io = new IntersectionObserver((entries) => {
-        if (entries.some((en) => en.isIntersecting)) { io.disconnect(); openCentre() }
+      io = new IntersectionObserver((entries) => {
+        if (entries.some((en) => en.isIntersecting)) { io.disconnect(); io = null; openCentre() }
       }, { rootMargin: "0px 0px -20% 0px", threshold: 0 })
       io.observe(stage)
-      cleanup(() => io.disconnect())
+      cleanup(() => { if (io) io.disconnect() })
     }
   })()
 }

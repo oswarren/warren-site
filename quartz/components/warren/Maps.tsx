@@ -49,7 +49,7 @@ export default (() => {
             <div
               class="omap-phone"
               tabindex={0}
-              aria-label="Wild Clay Archive on a phone. Scroll to read the whole page."
+              aria-label="Wild Clay Archive on a phone. Scroll to read the whole page. Tap to fold the system in or out."
             >
               <img
                 src="./maps/wca-phone.jpg"
@@ -94,7 +94,7 @@ export default (() => {
    and the phone is 290 units tall, so it spans x 618 to 782 and y 375 to 665 */
 .omap-canvas { position: relative; min-width: 760px; }
 .omap-phone {
-  position: absolute; z-index: 1; left: 46.103%; top: 27.206%; width: 11.25%; height: 42.647%; box-sizing: border-box;
+  position: absolute; z-index: 1; cursor: pointer; left: 46.103%; top: 27.206%; width: 11.25%; height: 42.647%; box-sizing: border-box;
   border: 4px solid var(--dark); border-radius: 16px; background: var(--lightgray);
   overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none;
   box-shadow: 0 10px 30px rgba(22, 24, 26, 0.10);
