@@ -1,10 +1,14 @@
 // Client script for the opening map on the home page. The map starts as one dot. As it scrolls into
 // view it grows the branches out of it, then their pieces, and stays open. Tapping a dot shows what it is below.
-// The data is a plain file beside the map's own page (maps/<name>.json). Dot states are a snapshot.
+// The data sits in the page itself (Maps.tsx reads maps/<name>.json at build). Dot states are a snapshot.
+// It runs on its own as soon as the page is ready, and again after each in-site navigation, so the
+// map draws even when the site's other scripts are slow or missing; a flag keeps it from drawing twice.
 export const mapsScript = `
-document.addEventListener("nav", () => {
+;(() => {
+function initMap() {
   const root = document.querySelector(".omap")
-  if (!root) return
+  if (!root || root.dataset.ready) return
+  root.dataset.ready = "1"
   const svg = root.querySelector("svg")
   const panel = root.querySelector(".omap-panel")
   const hint = root.querySelector(".omap-hint")
@@ -19,8 +23,9 @@ document.addEventListener("nav", () => {
   const NS = "http://www.w3.org/2000/svg"
   const C = { pro: "#2a78d6", cer: "#eb6834", biz: "#008300", web: "#e87ba4", ana: "#1baf7a", wri: "#eda100" }
   const LABEL = { plan: "Planned", built: "Built, needs work", now: "Refining now", done: "Done" }
+  const cleanup = (f) => { if (window.addCleanup) window.addCleanup(f) }
   let alive = true
-  window.addCleanup(() => { alive = false })
+  cleanup(() => { alive = false })
 
   const sv = (t, a, txt) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (txt != null) e.textContent = txt; return e }
   const el = (t, c, txt) => { const e = document.createElement(t); if (c) e.className = c; if (txt != null) e.textContent = txt; return e }
@@ -33,7 +38,8 @@ document.addEventListener("nav", () => {
     return g
   }
 
-  fetch(root.dataset.src).then((r) => r.json()).then((D) => {
+  ;(() => {
+    const D = JSON.parse(root.querySelector(".omap-data").textContent)
     if (!alive) return
     const N = D.nodes, by = {}
     N.forEach((d) => { by[d.id] = d; d.kids = [] })
@@ -119,8 +125,12 @@ document.addEventListener("nav", () => {
         if (entries.some((en) => en.isIntersecting)) { io.disconnect(); openCentre() }
       }, { rootMargin: "0px 0px -20% 0px", threshold: 0 })
       io.observe(stage)
-      window.addCleanup(() => io.disconnect())
+      cleanup(() => io.disconnect())
     }
-  }).catch(() => { if (hint) hint.textContent = "" })
-})
+  })()
+}
+document.addEventListener("nav", initMap)
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initMap)
+else initMap()
+})()
 `

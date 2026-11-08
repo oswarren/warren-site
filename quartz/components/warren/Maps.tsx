@@ -1,14 +1,26 @@
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "../types"
 import { classNames } from "../../util/lang"
+import fs from "fs"
+import path from "path"
 import { mapsScript } from "./maps-script"
 
+// the map's data goes into the page itself, so nothing has to be fetched to draw it
+const readMap = (name: string) => {
+  try {
+    return fs
+      .readFileSync(path.join(process.cwd(), "maps", name + ".json"), "utf8")
+      .replace(/</g, "\\u003c")
+  } catch {
+    return "{}"
+  }
+}
+
 // Right under the statement on the home page: a map of a system I'm running, that opens as it scrolls
-// into view (maps-script.ts). Its data is maps/clay.json, copied into public/ by scripts/build.mjs beside
-// the map's own page. Every dot shows how far along that piece is.
+// into view (maps-script.ts). Its data is maps/clay.json, read at build into the page. Every dot shows how far along that piece is.
 export default (() => {
   const Maps: QuartzComponent = ({ displayClass }: QuartzComponentProps) => (
     <section class={classNames(displayClass, "maps")}>
-      <div class="maps-head reveal">
+      <div class="maps-head">
         <span class="mono">Maps of what I’m running</span>
         <h2 class="serif">Around the clay map</h2>
         <p>
@@ -16,7 +28,12 @@ export default (() => {
           Each dot is one piece, filled in as it comes along.
         </p>
       </div>
-      <div class="omap" data-src="./maps/clay.json">
+      <div class="omap">
+        <script
+          type="application/json"
+          class="omap-data"
+          dangerouslySetInnerHTML={{ __html: readMap("clay") }}
+        />
         <div class="omap-bar">
           <span class="omap-hint mono" aria-live="polite"></span>
         </div>
@@ -43,6 +60,7 @@ export default (() => {
           </span>
         </div>
       </div>
+      <script dangerouslySetInnerHTML={{ __html: mapsScript }} />
     </section>
   )
 
