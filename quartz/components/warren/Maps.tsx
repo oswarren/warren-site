@@ -85,11 +85,12 @@ export default (() => {
 .maps { padding: clamp(48px, 9vh, 96px) 0; border-top: 1px solid var(--rule); }
 .maps-head { display: flex; align-items: flex-start; justify-content: space-between; gap: clamp(28px, 4vw, 56px); margin-bottom: 20px; }
 .maps-text { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
-.maps-phone { flex: none; width: 190px; margin: 0 12% 0 0; display: flex; flex-direction: column; gap: 8px; }
-.maps-phone figcaption { font-size: 12px; color: var(--gray); text-align: center; }
+.maps-head { position: relative; }
+.maps-phone { position: absolute; top: 0; bottom: 0; right: 12%; margin: 0; }
+.maps-phone figcaption { position: absolute; left: 50%; top: 100%; transform: translateX(-50%); margin-top: 8px; font-size: 12px; color: var(--gray); white-space: nowrap; }
 .omap-phone {
-  width: 100%; aspect-ratio: 9 / 16;
-  border: 5px solid var(--dark); border-radius: 20px; background: var(--lightgray);
+  height: 100%; aspect-ratio: 9 / 16; box-sizing: border-box;
+  border: 3px solid var(--dark); border-radius: 12px; background: var(--lightgray);
   overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none;
   box-shadow: 0 10px 30px rgba(22, 24, 26, 0.10);
 }
@@ -166,7 +167,8 @@ export default (() => {
 
 @media all and (max-width: 720px) {
   .maps-head { flex-direction: column; }
-  .maps-phone { width: min(220px, 60vw); align-self: center; margin-right: 0; }
+  .maps-phone { position: static; align-self: center; margin-bottom: 24px; }
+  .omap-phone { height: auto; width: min(220px, 60vw); border-width: 5px; border-radius: 20px; }
   .omap-stage svg { min-width: 1000px; }
   .omap-pop { position: fixed; left: 0; right: 0; bottom: 0; top: auto; width: auto; max-height: 62vh; border-radius: 14px 14px 0 0; border-width: 1px 0 0; padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
   .omap .gate, .omap .shape { grid-template-columns: 1fr; }
