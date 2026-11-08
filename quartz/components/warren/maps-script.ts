@@ -128,6 +128,7 @@ function initMap() {
       x.addEventListener("click", close)
       const h = el("div", "omap-name"); h.append(el("b", null, d.n)); if (d.s && d.hub !== 1) h.append(el("span", null, d.s))
       const r = el("div", "omap-body"); r.append(el("p", null, d.t))
+      if (d.link) { const a = el("a", "omap-link", d.link[0] + " →"); a.href = d.link[1]; a.target = "_blank"; a.rel = "noopener"; r.append(a) }
       if (d.opts) { r.append(el("div", "lbl", "Other ideas I weighed")); const ol = el("ul", "opts")
         d.opts.forEach((x) => { const li = el("li"); li.append(el("b", null, x[0]), document.createTextNode(": " + x[1])); ol.append(li) }); r.append(ol) }
       if (d.gate) { r.append(el("div", "lbl", "How each video is made")); const gl = el("ul", "gate"); d.gate.forEach((x) => gl.append(el("li", null, x))); r.append(gl) }
