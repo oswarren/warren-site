@@ -25,7 +25,7 @@ export default (() => {
         <h2 class="serif">The Wild Clay Archive system</h2>
         <p>
           Wild Clay Archive is an app I made that shows where to dig clay anywhere in the US. This is everything around it
-          that helps people find it. Each dot is one piece, filled in as it comes along.
+          that helps it grow. This is how I keep track.
         </p>
       </div>
       <div class="omap">
