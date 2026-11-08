@@ -75,9 +75,8 @@ export default (() => {
             <i class="k done"></i>Done
           </span>
           <span>
-            <svg class="k-auto" viewBox="-8 -8 16 16" aria-hidden="true">
-              <path d="M3.6 -2.2 A4.2 4.2 0 1 0 4.2 0.9" />
-              <path d="M4.9 -4.3 L3.7 -2 L1.3 -2.8" />
+            <svg class="k-auto" viewBox="-12 -4 24 8" aria-hidden="true">
+              <path class="flow" d="M-12 0 H12" />
             </svg>
             Runs on its own
           </span>
@@ -174,8 +173,13 @@ export default (() => {
 .omap-key .k.plan { border-style: dashed; border-color: var(--gray); }
 .omap-key .k.now { background: linear-gradient(90deg, var(--dark) 50%, transparent 50%); }
 .omap-key .k.done { background: var(--dark); }
-.omap .auto path, .omap-key .k-auto path { fill: none; stroke: var(--dark); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
-.omap-key .k-auto { width: 15px; height: 15px; overflow: visible; }
+.omap .flow { fill: none; stroke-width: 3; stroke-linecap: round; stroke-dasharray: 0 14; opacity: 0; transition: opacity .4s .5s; animation: omap-flow 1.4s linear infinite; }
+.omap .e.on + .flow, .omap .state .flow, .omap-key .flow { opacity: 1; }
+.omap-key .k-auto { width: 24px; height: 8px; overflow: visible; }
+.omap .state .flow { stroke-width: 2.5; stroke-dasharray: 0 7; animation-duration: .9s; }
+.omap-key .k-auto .flow { stroke: var(--dark); stroke-width: 2.5; stroke-dasharray: 0 7; animation-duration: .9s; }
+.omap .state svg:has(.flow) { width: 22px; }
+@keyframes omap-flow { to { stroke-dashoffset: 14; } }
 
 @media all and (max-width: 720px) {
   /* phones get the top-to-bottom version (maps-script.ts), so nothing scrolls sideways */
@@ -188,6 +192,7 @@ export default (() => {
 @media (prefers-reduced-motion: reduce) {
   .omap .e, .omap .n, .omap .n .in { transition: none; }
   .omap .n.opens.on:not(.open) .ring { animation: none; }
+  .omap .flow { animation: none; }
 }
 `
   Maps.afterDOMLoaded = mapsScript

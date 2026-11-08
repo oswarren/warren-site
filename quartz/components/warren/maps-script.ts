@@ -36,12 +36,6 @@ function initMap() {
     if (st === "done") g.append(sv("circle", { r, fill: c }))
     return g
   }
-  // a small circling arrow: this piece runs on its own
-  function loop() {
-    const g = sv("g", { class: "auto" })
-    g.append(sv("circle", { r: 6.5, class: "d-bg" }), sv("path", { d: "M3.6 -2.2 A4.2 4.2 0 1 0 4.2 0.9" }), sv("path", { d: "M4.9 -4.3 L3.7 -2 L1.3 -2.8" }))
-    return g
-  }
 
   ;(() => {
     const D = JSON.parse(root.querySelector(".omap-data").textContent)
@@ -85,13 +79,14 @@ function initMap() {
         d.edge = sv("path", { d: path, class: "e" + (d.state === "now" ? " now" : d.state === "plan" ? " plan" : "") })
         d.edge.style.setProperty("--len", len)
         gE.append(d.edge)
+        // a piece that runs on its own keeps sending small dots along its line into its branch
+        if (d.auto) gE.append(sv("path", { d: path, class: "flow", stroke: C[d.kind] }))
       }
       const g = sv("g", { class: "n" + (d.hub ? " opens" : ""), tabindex: "0", role: "button", transform: "translate(" + d.x + "," + d.y + ")" })
       const inner = sv("g", { class: "in" })
       // the centre is the phone itself (Maps.tsx), so it has no dot of its own, only its name under the phone
       if (d === centre) inner.append(sv("circle", { class: "hit", r: 26 }))
       else inner.append(sv("circle", { class: "hit", r: 26 }), sv("circle", { class: "ring", r: d.r + 7 }), dot(d.state, d.r, C[d.kind]))
-      if (d.auto) { const m = loop(); m.setAttribute("transform", "translate(" + (d.r + 6) + "," + -(d.r + 6) + ") scale(1.3)"); inner.append(m) }
       let a, x0, ys
       if (vert) { a = "start"; if (d === centre) { x0 = 24; ys = [34, 56] } else if (d.hub === 1) { x0 = 26; ys = [9, 31] } else { x0 = 17; ys = [-2, 18] } }
       else if (d.lab === "right-high") { a = "start"; x0 = 24; ys = [-40, -18] }
@@ -150,7 +145,7 @@ function initMap() {
           const tx = el("span"); tx.append(el("b", null, x[1]), el("small", null, x[2])); row.append(s, tx); stl.append(row) }); r.append(stl) }
       if (d.shape) { r.append(el("div", "lbl", "Posting it")); const sh = el("div", "shape")
         d.shape.forEach((x) => { const c = el("div"); c.append(el("b", null, x[0]), document.createTextNode(" " + x[1])); sh.append(c) }); r.append(sh) }
-      if (d.auto) { const s = el("div", "state"); const g = sv("svg", { viewBox: "-8 -8 16 16" }); g.append(loop()); s.append(g, document.createTextNode("Runs on its own")); r.append(s) }
+      if (d.auto) { const s = el("div", "state"); const g = sv("svg", { viewBox: "-8 -8 16 16" }); g.append(sv("path", { d: "M-7 0 H7", class: "flow", stroke: C[d.kind] })); s.append(g, document.createTextNode("Runs on its own")); r.append(s) }
       if (d.hub !== 1) { const s = el("div", "state"); const g = sv("svg", { viewBox: "-8 -8 16 16" }); g.append(dot(d.state, 6, C[d.kind])); s.append(g, document.createTextNode(LABEL[d.state])); r.append(s) }
       pop.append(x, h, r)
       pop.hidden = false
