@@ -26,7 +26,8 @@ export default (() => {
           <h2 class="serif">The Wild Clay Archive system</h2>
           <p>
             Wild Clay Archive is an app I made that shows where to dig clay anywhere in the US.
-            <br />
+          </p>
+          <p>
             This is the system that helps it grow.
           </p>
         </div>
@@ -97,6 +98,7 @@ export default (() => {
 .omap-phone:focus-visible { outline: 3px solid var(--secondary); outline-offset: 3px; }
 .maps-head .mono { font-size: 12px; color: var(--gray); }
 .maps-head h2 { margin: 0; font-weight: 300; font-size: clamp(30px, 3.8vw, 54px); line-height: 1.05; letter-spacing: -0.02em; color: var(--dark); }
+.maps-head p + p { margin-top: 0.75em; }
 .maps-head p { margin: 0; font-size: 19px; line-height: 1.5; color: var(--darkgray); max-width: 52ch; }
 
 .omap-stage { overflow-x: auto; overscroll-behavior-x: contain; margin-top: 8px; }
