@@ -211,14 +211,16 @@ function initMeanwhile() {
   const w = document.querySelector(".maps-meanwhile .ing")
   if (!w || w.dataset.ready) return
   w.dataset.ready = "1"
-  // with reduced motion, nothing cycles and every photo shows fully
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { document.querySelectorAll(".mw-photos figure").forEach((f) => f.classList.add("on")); return }
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+  const pic = document.querySelector(".maps-meanwhile .mw-pic")
+  const srcs = pic ? pic.dataset.srcs.split("|") : []
+  srcs.forEach((k) => { const im = new Image(); im.src = "./maps/meanwhile/" + k + ".jpg" })  // load them all now so each swap is instant
   const words = w.dataset.words.split("|")
   let i = 0
   const t = setInterval(() => {
-    w.classList.add("out")
+    w.classList.add("out"); if (pic) pic.classList.add("out")
     setTimeout(() => { i = (i + 1) % words.length; w.textContent = words[i]; w.classList.remove("out")
-      document.querySelectorAll(".mw-photos figure").forEach((f, j) => f.classList.toggle("on", j === i)) }, 350)
+      if (pic) { pic.src = "./maps/meanwhile/" + srcs[i] + ".jpg"; pic.classList.remove("out") } }, 350)
   }, 2600)
   if (window.addCleanup) window.addCleanup(() => clearInterval(t))
 }

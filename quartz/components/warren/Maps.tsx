@@ -24,12 +24,8 @@ export default (() => {
         <div class="maps-text">
           <span class="mono">Systems I’m running</span>
           <h2 class="serif">The Wild Clay Archive system</h2>
-          <p>
-            Wild Clay Archive is an app I made that shows where to dig clay anywhere in the US.
-          </p>
-          <p>
-            This is the system that helps it grow.
-          </p>
+          <p>Wild Clay Archive is an app I made that shows where to dig clay anywhere in the US.</p>
+          <p>This is the system that helps it grow.</p>
         </div>
       </div>
       <div class="omap">
@@ -86,30 +82,24 @@ export default (() => {
       <div class="maps-meanwhile">
         <span class="mono">While the system runs</span>
         <p class="serif">
-          I’m{" "}
-          <span
-            class="ing"
-            data-words="digging clay|testing what I dug|filming the next dig|making pots|hunting new spots"
-          >
-            digging clay
+          I’m {/* a small photo in the sentence, changing with the words (maps-script.ts) */}
+          <span class="mw-w">
+            <img
+              class="mw-pic"
+              src="./maps/meanwhile/dig.jpg"
+              data-srcs="dig|test|film|pots|hunt"
+              alt=""
+              decoding="async"
+            />{" "}
+            <span
+              class="ing"
+              data-words="digging clay|testing what I dug|filming the next dig|making pots|hunting new spots"
+            >
+              digging clay
+            </span>
           </span>
           .
         </p>
-        {/* one photo for each thing in the line above, lit up as its words come round */}
-        <div class="mw-photos">
-          {[
-            ["dig", "digging clay", "A dug clay bank in Seagrove, North Carolina, with a ruler showing the red clay layers."],
-            ["test", "testing what I dug", "Test pieces of dug clay laid out in a small kiln."],
-            ["film", "filming the next dig", "A frame from a video at a dig: What clay is under my feet?"],
-            ["pots", "making pots", "Hands shaping red clay on a banding wheel."],
-            ["hunt", "hunting new spots", "A lump of raw clay from a new spot."],
-          ].map(([k, w, alt], i) => (
-            <figure class={i === 0 ? "on" : ""} data-i={i}>
-              <img src={`./maps/meanwhile/${k}.jpg`} alt={alt} loading="lazy" decoding="async" />
-              <figcaption class="mono">{w}</figcaption>
-            </figure>
-          ))}
-        </div>
       </div>
       <script dangerouslySetInnerHTML={{ __html: mapsScript }} />
     </section>
@@ -201,13 +191,10 @@ export default (() => {
 .maps-meanwhile p { margin: 0; font-weight: 300; font-size: clamp(30px, 3.8vw, 54px); line-height: 1.1; letter-spacing: -0.02em; color: var(--dark); }
 .maps-meanwhile .ing { display: inline-block; font-style: italic; transition: opacity .35s ease, transform .35s ease; }
 .maps-meanwhile .ing.out { opacity: 0; transform: translateY(8px); }
-.mw-photos { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(8px, 1.4vw, 16px); margin-top: 22px; }
-.mw-photos figure { margin: 0; display: flex; flex-direction: column; gap: 8px; opacity: .45; transition: opacity .4s ease; }
-.mw-photos figure.on { opacity: 1; }
-.mw-photos img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; border-radius: 6px; background: var(--lightgray); }
-.mw-photos figcaption { font-size: 12px; color: var(--gray); line-height: 1.3; }
-.mw-photos figure.on figcaption { color: var(--dark); }
-@media all and (max-width: 720px) { .mw-photos figcaption { display: none; } }
+.maps-meanwhile .mw-pic { display: inline-block; height: 1.05em; width: 1.4em; object-fit: cover; border-radius: .18em; vertical-align: -0.12em; margin: 0 .08em 0 .1em; transition: opacity .35s ease; }
+.maps-meanwhile .mw-pic.out { opacity: 0; }
+.maps-meanwhile .mw-w { white-space: nowrap; }
+@media all and (max-width: 720px) { .maps-meanwhile p { font-size: 26px; } }
 .omap-key { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 20px; font-size: 12px; color: var(--gray); }
 .omap-key span { display: inline-flex; align-items: center; gap: 7px; }
 .omap-key .k { width: 11px; height: 11px; border-radius: 50%; border: 1.5px solid var(--dark); display: inline-block; box-sizing: border-box; }
