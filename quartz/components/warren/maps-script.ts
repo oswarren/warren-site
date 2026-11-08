@@ -36,6 +36,12 @@ function initMap() {
     if (st === "done") g.append(sv("circle", { r, fill: c }))
     return g
   }
+  // a small circling arrow: this piece runs on its own
+  function loop() {
+    const g = sv("g", { class: "auto" })
+    g.append(sv("circle", { r: 6.5, class: "d-bg" }), sv("path", { d: "M3.6 -2.2 A4.2 4.2 0 1 0 4.2 0.9" }), sv("path", { d: "M4.9 -4.3 L3.7 -2 L1.3 -2.8" }))
+    return g
+  }
 
   ;(() => {
     const D = JSON.parse(root.querySelector(".omap-data").textContent)
@@ -85,6 +91,7 @@ function initMap() {
       // the centre is the phone itself (Maps.tsx), so it has no dot of its own, only its name under the phone
       if (d === centre) inner.append(sv("circle", { class: "hit", r: 26 }))
       else inner.append(sv("circle", { class: "hit", r: 26 }), sv("circle", { class: "ring", r: d.r + 7 }), dot(d.state, d.r, C[d.kind]))
+      if (d.auto) { const m = loop(); m.setAttribute("transform", "translate(" + (d.r + 6) + "," + -(d.r + 6) + ") scale(1.3)"); inner.append(m) }
       let a, x0, ys
       if (vert) { a = "start"; if (d === centre) { x0 = 24; ys = [34, 56] } else if (d.hub === 1) { x0 = 26; ys = [9, 31] } else { x0 = 17; ys = [-2, 18] } }
       else if (d.lab === "right-high") { a = "start"; x0 = 24; ys = [-40, -18] }
@@ -97,7 +104,7 @@ function initMap() {
         if (c.done) parts.push(c.done + " done"); if (c.now) parts.push(c.now + " refining"); if (c.built) parts.push(c.built + " built"); if (c.plan) parts.push(c.plan + " planned"); sub = parts.join(" · ") }
       inner.append(sv("text", { class: d.hub ? "t-hub" : "t-leaf", x: x0, y: ys[0], "text-anchor": a }, d.n), sv("text", { class: "t-sub", x: x0, y: ys[1], "text-anchor": a }, sub))
       g.append(inner)
-      g.setAttribute("aria-label", d.n + (d.hub === 1 ? "" : ", " + LABEL[d.state]) + (sub ? ", " + sub : ""))
+      g.setAttribute("aria-label", d.n + (d.hub === 1 ? "" : ", " + LABEL[d.state]) + (d.auto ? ", runs on its own" : "") + (sub ? ", " + sub : ""))
       g.addEventListener("click", () => tap(d))
       g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tap(d) } })
       d.g = g; gN.append(g)
@@ -143,6 +150,7 @@ function initMap() {
           const tx = el("span"); tx.append(el("b", null, x[1]), el("small", null, x[2])); row.append(s, tx); stl.append(row) }); r.append(stl) }
       if (d.shape) { r.append(el("div", "lbl", "Posting it")); const sh = el("div", "shape")
         d.shape.forEach((x) => { const c = el("div"); c.append(el("b", null, x[0]), document.createTextNode(" " + x[1])); sh.append(c) }); r.append(sh) }
+      if (d.auto) { const s = el("div", "state"); const g = sv("svg", { viewBox: "-8 -8 16 16" }); g.append(loop()); s.append(g, document.createTextNode("Runs on its own")); r.append(s) }
       if (d.hub !== 1) { const s = el("div", "state"); const g = sv("svg", { viewBox: "-8 -8 16 16" }); g.append(dot(d.state, 6, C[d.kind])); s.append(g, document.createTextNode(LABEL[d.state])); r.append(s) }
       pop.append(x, h, r)
       pop.hidden = false

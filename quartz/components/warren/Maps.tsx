@@ -74,6 +74,13 @@ export default (() => {
           <span>
             <i class="k done"></i>Done
           </span>
+          <span>
+            <svg class="k-auto" viewBox="-8 -8 16 16" aria-hidden="true">
+              <path d="M3.6 -2.2 A4.2 4.2 0 1 0 4.2 0.9" />
+              <path d="M4.9 -4.3 L3.7 -2 L1.3 -2.8" />
+            </svg>
+            Runs on its own
+          </span>
         </div>
       </div>
       <script dangerouslySetInnerHTML={{ __html: mapsScript }} />
@@ -158,7 +165,7 @@ export default (() => {
 .omap .steps small { display: block; color: var(--gray); font-size: 14px; }
 .omap .shape { display: grid; grid-template-columns: 1fr; gap: 12px; margin-top: 8px; max-width: 820px; font-size: 14.5px; }
 .omap .shape div { border-top: 2px solid var(--dark); padding-top: 6px; }
-.omap .state { display: inline-flex; align-items: center; gap: 7px; margin-top: 10px; font-size: 14px; color: var(--gray); }
+.omap .state { display: inline-flex; align-items: center; gap: 7px; margin: 10px 18px 0 0; font-size: 14px; color: var(--gray); }
 .omap .state svg { margin-top: 0; width: 14px; height: 14px; }
 
 .omap-key { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 20px; font-size: 12px; color: var(--gray); }
@@ -167,6 +174,8 @@ export default (() => {
 .omap-key .k.plan { border-style: dashed; border-color: var(--gray); }
 .omap-key .k.now { background: linear-gradient(90deg, var(--dark) 50%, transparent 50%); }
 .omap-key .k.done { background: var(--dark); }
+.omap .auto path, .omap-key .k-auto path { fill: none; stroke: var(--dark); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.omap-key .k-auto { width: 15px; height: 15px; overflow: visible; }
 
 @media all and (max-width: 720px) {
   /* phones get the top-to-bottom version (maps-script.ts), so nothing scrolls sideways */
