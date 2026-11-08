@@ -1,0 +1,120 @@
+// Client script for the opening map on the home page. The map starts as one dot. Tapping it grows
+// the branches out of it; tapping a branch grows its pieces; tapping anything shows what it is below.
+// The data is a plain file beside the map's own page (maps/<name>.json). Dot states are a snapshot.
+export const mapsScript = `
+document.addEventListener("nav", () => {
+  const root = document.querySelector(".omap")
+  if (!root) return
+  const svg = root.querySelector("svg")
+  const panel = root.querySelector(".omap-panel")
+  const hint = root.querySelector(".omap-hint")
+  const allBtn = root.querySelector(".omap-all")
+  const resetBtn = root.querySelector(".omap-reset")
+  const stage = root.querySelector(".omap-stage")
+  // on a narrow screen the map scrolls sideways: keep what was just opened in view
+  const focusX = (x, smooth) => {
+    if (stage.scrollWidth <= stage.clientWidth) return
+    const scale = svg.clientWidth / 1450
+    stage.scrollTo({ left: (x + 50) * scale - stage.clientWidth / 2, behavior: smooth && !reduce ? "smooth" : "auto" })
+  }
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+  const NS = "http://www.w3.org/2000/svg"
+  const C = { pro: "#2a78d6", cer: "#eb6834", biz: "#008300", web: "#e87ba4", ana: "#1baf7a", wri: "#eda100" }
+  const LABEL = { plan: "Planned", built: "Built, needs work", now: "Refining now", done: "Done" }
+  let alive = true
+  window.addCleanup(() => { alive = false })
+
+  const sv = (t, a, txt) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); if (txt != null) e.textContent = txt; return e }
+  const el = (t, c, txt) => { const e = document.createElement(t); if (c) e.className = c; if (txt != null) e.textContent = txt; return e }
+  function dot(st, r, c) {
+    const g = sv("g")
+    if (st === "plan") { g.append(sv("circle", { r, class: "d-bg", stroke: "var(--gray)", "stroke-width": 1.5, "stroke-dasharray": "2.5 2" })); return g }
+    g.append(sv("circle", { r, class: "d-bg", stroke: c, "stroke-width": 2 }))
+    if (st === "now") g.append(sv("path", { d: "M0 " + -r + " A" + r + " " + r + " 0 0 0 0 " + r + " Z", fill: c }))
+    if (st === "done") g.append(sv("circle", { r, fill: c }))
+    return g
+  }
+
+  fetch(root.dataset.src).then((r) => r.json()).then((D) => {
+    if (!alive) return
+    const N = D.nodes, by = {}
+    N.forEach((d) => { by[d.id] = d; d.kids = [] })
+    N.forEach((d) => { if (d.p) by[d.p].kids.push(d) })
+    const centre = N.find((d) => d.hub === 2)
+    N.forEach((h) => { if (h.hub !== 1) return; const k = h.kids.length, G = k > 4 ? 66 : 72, lx = h.side === "l" ? 230 : 1170
+      h.kids.forEach((d, i) => { d.x = lx; d.y = h.y + (i - (k - 1) / 2) * G; d.side = h.side; d.r = 7 }) })
+    const hubState = (h) => { const s = h.kids.map((k) => k.st)
+      if (s.every((x) => x === "done")) return "done"; if (s.some((x) => x === "now")) return "now"
+      if (s.every((x) => x === "plan")) return "plan"; return "built" }
+    N.forEach((d) => { d.state = d.hub === 1 ? hubState(d) : d.st })
+
+    const gE = sv("g"), gN = sv("g"); svg.append(gE, gN)
+    N.forEach((d) => {
+      if (d !== centre) {
+        const p = d.p ? by[d.p] : centre
+        const len = Math.hypot(d.x - p.x, d.y - p.y)
+        d.edge = sv("path", { d: "M" + p.x + " " + p.y + " L" + d.x + " " + d.y, class: "e" + (d.state === "now" ? " now" : d.state === "plan" ? " plan" : "") })
+        d.edge.style.setProperty("--len", len)
+        gE.append(d.edge)
+      }
+      const g = sv("g", { class: "n" + (d.hub ? " opens" : ""), tabindex: "0", role: "button", transform: "translate(" + d.x + "," + d.y + ")" })
+      const inner = sv("g", { class: "in" })
+      inner.append(sv("circle", { class: "hit", r: 26 }), sv("circle", { class: "ring", r: d.r + 7 }), dot(d.state, d.r, C[d.kind]))
+      let a, x0, ys
+      if (d.lab === "right-high") { a = "start"; x0 = 24; ys = [-40, -18] }
+      else if (d.lab === "right") { a = "start"; x0 = 24; ys = [-6, 16] }
+      else if (d.hub === 2) { a = "middle"; x0 = 0; ys = [58, 80] }
+      else if (d.hub === 1) { a = "middle"; x0 = 0; ys = d.below ? [44, 66] : [-44, -24] }
+      else { a = d.side === "l" ? "end" : "start"; x0 = d.side === "l" ? -17 : 17; ys = [-2, 18] }
+      let sub = d.s || ""
+      if (d.hub === 1) { const c = {}; d.kids.forEach((k) => { c[k.st] = (c[k.st] || 0) + 1 }); const parts = []
+        if (c.done) parts.push(c.done + " done"); if (c.now) parts.push(c.now + " refining"); if (c.built) parts.push(c.built + " built"); if (c.plan) parts.push(c.plan + " planned"); sub = parts.join(" · ") }
+      inner.append(sv("text", { class: d.hub ? "t-hub" : "t-leaf", x: x0, y: ys[0], "text-anchor": a }, d.n), sv("text", { class: "t-sub", x: x0, y: ys[1], "text-anchor": a }, sub))
+      g.append(inner)
+      g.setAttribute("aria-label", d.n + (d.hub === 1 ? "" : ", " + LABEL[d.state]) + (sub ? ", " + sub : ""))
+      g.addEventListener("click", () => tap(d))
+      g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tap(d) } })
+      d.g = g; gN.append(g)
+    })
+
+    const hubs = N.filter((d) => d.hub === 1)
+    // show a node, its edge drawing out first, the dot arriving at the end of it
+    function show(d, delay) {
+      if (d.shown) return; d.shown = true
+      const t = reduce ? 0 : delay
+      if (d.edge) { d.edge.style.transitionDelay = t + "ms"; d.edge.classList.add("on") }
+      d.g.style.transitionDelay = (reduce ? 0 : t + 260) + "ms"; d.g.classList.add("on")
+    }
+    function hide(d) { d.shown = false; d.g.classList.remove("on", "sel", "open"); if (d.edge) d.edge.classList.remove("on") }
+    function openCentre() { centre.g.classList.add("open"); hubs.forEach((h, i) => show(h, i * 110)); hint.textContent = "Tap a branch to open it." }
+    function openHub(h) { h.g.classList.add("open"); h.kids.forEach((k, i) => show(k, i * 70)) }
+    function tap(d) {
+      if (d === centre && !centre.g.classList.contains("open")) openCentre()
+      else if (d.hub === 1 && !d.g.classList.contains("open")) { openHub(d); focusX(d.kids.length ? (d.x + d.kids[0].x) / 2 : d.x, true); if (hubs.every((h) => h.g.classList.contains("open"))) hint.textContent = "" }
+      pick(d)
+    }
+    function pick(d) {
+      N.forEach((x) => x.g.classList.toggle("sel", x === d))
+      panel.innerHTML = ""
+      const h = el("div", "omap-name"); h.append(el("b", null, d.n)); if (d.s && d.hub !== 1) h.append(el("span", null, d.s))
+      const r = el("div", "omap-body"); r.append(el("p", null, d.t))
+      if (d.opts) { r.append(el("div", "lbl", "The five earlier ideas")); const ol = el("ul", "opts")
+        d.opts.forEach((x) => { const li = el("li"); li.append(el("b", null, x[0]), document.createTextNode(": " + x[1])); ol.append(li) }); r.append(ol) }
+      if (d.gate) { r.append(el("div", "lbl", "How each reel is made")); const gl = el("ul", "gate"); d.gate.forEach((x) => gl.append(el("li", null, x))); r.append(gl) }
+      if (d.steps) { r.append(el("div", "lbl", "What’s happened so far")); const stl = el("div", "steps")
+        d.steps.forEach((x) => { const row = el("div"); const s = sv("svg", { viewBox: "-8 -8 16 16" }); s.append(dot(x[3], 6.5, C[d.kind]))
+          const tx = el("span"); tx.append(el("b", null, x[1]), el("small", null, x[2])); row.append(s, tx); stl.append(row) }); r.append(stl) }
+      if (d.shape) { r.append(el("div", "lbl", "Posting it")); const sh = el("div", "shape")
+        d.shape.forEach((x) => { const c = el("div"); c.append(el("b", null, x[0]), document.createTextNode(" " + x[1])); sh.append(c) }); r.append(sh) }
+      if (d.hub !== 1) { const s = el("div", "state"); const g = sv("svg", { viewBox: "-8 -8 16 16" }); g.append(dot(d.state, 6, C[d.kind])); s.append(g, document.createTextNode(LABEL[d.state])); r.append(s) }
+      else if (!d.kids.every((k) => k.shown)) r.append(el("div", "state", "Tap it again to see its pieces."))
+      panel.append(h, r)
+    }
+    allBtn.addEventListener("click", () => { openCentre(); hubs.forEach((h, i) => setTimeout(() => openHub(h), reduce ? 0 : 300 + i * 120)); hint.textContent = "" })
+    resetBtn.addEventListener("click", () => { focusX(centre.x, true); N.forEach((d) => { if (d !== centre) hide(d) }); centre.g.classList.remove("open", "sel"); panel.innerHTML = ""; hint.textContent = "Tap the dot to open it." })
+    centre.g.classList.add("on")
+    focusX(centre.x, false)
+    hint.textContent = "Tap the dot to open it."
+  }).catch(() => { if (hint) hint.textContent = "" })
+})
+`
