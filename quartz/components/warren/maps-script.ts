@@ -81,7 +81,7 @@ function initMap(root) {
       potImg = sv("image", { href: src(pots[0].n), x: -W / 2, y: -H / 2, width: W, height: H, class: "pot" })
       pots.forEach((p) => { const im = new Image(); im.src = src(p.n) })
       return [sv("rect", { class: "hit", x: -W / 2, y: -H / 2, width: W, height: H }),
-        sv("rect", { class: "ring", x: -W / 2 - 8, y: -H / 2 - 8, width: W + 16, height: H + 16, rx: 14 }), potImg]
+        potImg]  // no outline box around the pot
     }
     function gridSquare(S, col) {
       const c = S / 100, x0 = -S / 2, y0 = -S / 2, id = "pg" + Math.random().toString(36).slice(2, 7)
