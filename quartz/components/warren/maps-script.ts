@@ -62,11 +62,13 @@ function initMap() {
       }
       const g = sv("g", { class: "n" + (d.hub ? " opens" : ""), tabindex: "0", role: "button", transform: "translate(" + d.x + "," + d.y + ")" })
       const inner = sv("g", { class: "in" })
-      inner.append(sv("circle", { class: "hit", r: 26 }), sv("circle", { class: "ring", r: d.r + 7 }), dot(d.state, d.r, C[d.kind]))
+      // the centre is the phone itself (Maps.tsx), so it has no dot of its own, only its name under the phone
+      if (d === centre) inner.append(sv("circle", { class: "hit", r: 26 }))
+      else inner.append(sv("circle", { class: "hit", r: 26 }), sv("circle", { class: "ring", r: d.r + 7 }), dot(d.state, d.r, C[d.kind]))
       let a, x0, ys
       if (d.lab === "right-high") { a = "start"; x0 = 24; ys = [-40, -18] }
       else if (d.lab === "right") { a = "start"; x0 = 24; ys = [-6, 16] }
-      else if (d.hub === 2) { a = "middle"; x0 = 0; ys = [58, 80] }
+      else if (d.hub === 2) { a = "middle"; x0 = 0; ys = [178, 200] }
       else if (d.hub === 1) { a = "middle"; x0 = 0; ys = d.below ? [44, 66] : [-44, -24] }
       else { a = d.side === "l" ? "end" : "start"; x0 = d.side === "l" ? -17 : 17; ys = [-2, 18] }
       let sub = d.s || ""

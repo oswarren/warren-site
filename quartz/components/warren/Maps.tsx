@@ -31,22 +31,6 @@ export default (() => {
             This is the system that helps it grow.
           </p>
         </div>
-        {/* the app itself on a phone, beside the intro with its top lined up: scroll it to read the page */}
-        <figure class="maps-phone">
-          <div
-            class="omap-phone"
-            tabindex={0}
-            aria-label="Wild Clay Archive on a phone. Scroll to read the whole page."
-          >
-            <img
-              src="./maps/wca-phone.jpg"
-              alt="The Wild Clay Archive map on a phone, showing soil around Seagrove, North Carolina, with Georgeville soil marked as a strong lead."
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-          <figcaption class="mono">Scroll the phone</figcaption>
-        </figure>
       </div>
       <div class="omap">
         <script
@@ -55,11 +39,26 @@ export default (() => {
           dangerouslySetInnerHTML={{ __html: readMap("clay") }}
         />
         <div class="omap-stage">
-          <svg
-            viewBox="-50 50 1450 870"
-            role="group"
-            aria-label="Diagram of the Wild Clay Archive system: the app in the centre, with where people find it, the portfolio, numbers and launch around it."
-          ></svg>
+          <div class="omap-canvas">
+            <svg
+              viewBox="-50 50 1450 870"
+              role="group"
+              aria-label="Diagram of the Wild Clay Archive system: the app in the centre, with where people find it, the portfolio, numbers and launch around it."
+            ></svg>
+            {/* the app itself sits at the centre of the diagram, on a phone you can scroll */}
+            <div
+              class="omap-phone"
+              tabindex={0}
+              aria-label="Wild Clay Archive on a phone. Scroll to read the whole page."
+            >
+              <img
+                src="./maps/wca-phone.jpg"
+                alt="The Wild Clay Archive map on a phone, showing soil around Seagrove, North Carolina, with Georgeville soil marked as a strong lead."
+                loading="lazy"
+                decoding="async"
+              />
+            </div>
+          </div>
         </div>
         <div class="omap-pop" role="dialog" aria-live="polite" hidden></div>
         <div class="omap-key mono">
@@ -83,15 +82,14 @@ export default (() => {
 
   Maps.css = `
 .maps { padding: clamp(48px, 9vh, 96px) 0; border-top: 1px solid var(--rule); }
-.maps-head { display: flex; align-items: flex-start; justify-content: space-between; gap: clamp(28px, 4vw, 56px); margin-bottom: 20px; }
-.maps-text { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
-/* the phone hangs just right of the widest line, as tall as the text */
-.maps-head { position: relative; width: fit-content; max-width: 100%; }
-.maps-phone { position: absolute; top: 0; bottom: 0; left: 100%; margin: 0 0 0 clamp(32px, 4vw, 56px); }
-.maps-phone figcaption { position: absolute; left: 50%; top: 100%; transform: translateX(-50%); margin-top: 8px; font-size: 12px; color: var(--gray); white-space: nowrap; }
+.maps-head { margin-bottom: 20px; }
+.maps-text { display: flex; flex-direction: column; gap: 10px; }
+/* the phone takes the app's place in the diagram: the app sits at 700,520 in the viewBox (-50 50 1450 870),
+   and the phone is 290 units tall, so it spans x 618 to 782 and y 375 to 665 */
+.omap-canvas { position: relative; min-width: 760px; }
 .omap-phone {
-  height: 100%; aspect-ratio: 9 / 16; box-sizing: border-box;
-  border: 3px solid var(--dark); border-radius: 12px; background: var(--lightgray);
+  position: absolute; z-index: 1; left: 46.103%; top: 37.356%; width: 11.25%; height: 33.333%; box-sizing: border-box;
+  border: 4px solid var(--dark); border-radius: 16px; background: var(--lightgray);
   overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: none;
   box-shadow: 0 10px 30px rgba(22, 24, 26, 0.10);
 }
@@ -104,7 +102,7 @@ export default (() => {
 .maps-head p { margin: 0; font-size: 19px; line-height: 1.5; color: var(--darkgray); max-width: 52ch; }
 
 .omap-stage { overflow-x: auto; overscroll-behavior-x: contain; margin-top: 8px; }
-.omap-stage svg { display: block; width: 100%; min-width: 760px; height: auto; }
+.omap-stage svg { display: block; width: 100%; height: auto; }
 
 .omap text { font-family: var(--bodyFont); fill: var(--dark); paint-order: stroke; stroke: var(--light); stroke-width: 5px; stroke-linejoin: round; }
 .omap .t-hub { font-size: 26px; font-weight: 500; }
@@ -167,11 +165,7 @@ export default (() => {
 .omap-key .k.done { background: var(--dark); }
 
 @media all and (max-width: 720px) {
-  .maps-head { flex-direction: column; }
-  .maps-head { width: auto; }
-  .maps-phone { position: static; align-self: center; margin: 0 0 24px; }
-  .omap-phone { height: auto; width: min(220px, 60vw); border-width: 5px; border-radius: 20px; }
-  .omap-stage svg { min-width: 1000px; }
+  .omap-canvas { min-width: 1000px; }
   .omap-pop { position: fixed; left: 0; right: 0; bottom: 0; top: auto; width: auto; max-height: 62vh; border-radius: 14px 14px 0 0; border-width: 1px 0 0; padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
   .omap .gate, .omap .shape { grid-template-columns: 1fr; }
 }
