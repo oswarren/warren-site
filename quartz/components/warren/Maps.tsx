@@ -15,6 +15,44 @@ const readMap = (name: string) => {
   }
 }
 
+
+// A tiny picture of a system's diagram for its button: the same lines and dots, no words.
+const KC: Record<string, string> = { pro: "#2a78d6", cer: "#eb6834", biz: "#008300", web: "#e87ba4", ana: "#1baf7a", wri: "#eda100" }
+const mini = (key: string, viewBox: string, phone: boolean) => {
+  let D: any
+  try {
+    D = JSON.parse(fs.readFileSync(path.join(process.cwd(), "maps", key + ".json"), "utf8"))
+  } catch {
+    return null
+  }
+  const N: any[] = D.nodes || [], by: Record<string, any> = {}
+  N.forEach((d) => { by[d.id] = { ...d, kids: [] } })
+  Object.values(by).forEach((d: any) => { if (d.p) { by[d.p].kids.push(d); if (!d.kind) d.kind = by[d.p].kind } })
+  const centre: any = Object.values(by).find((d: any) => d.hub === 2)
+  Object.values(by).forEach((h: any) => {
+    if (h.hub !== 1) return
+    const k = h.kids.length, G = k > 4 ? 66 : 72, lx = h.side === "l" ? 230 : 1170
+    h.kids.forEach((d: any, i: number) => { if (d.x == null) { d.x = lx; d.y = h.y + (i - (k - 1) / 2) * G } })
+  })
+  const all: any[] = Object.values(by)
+  return (
+    <svg class="mini" viewBox={viewBox} aria-hidden="true">
+      {all.filter((d) => d !== centre).map((d) => {
+        const p = d.p ? by[d.p] : centre
+        return <line x1={p.x} y1={p.y} x2={d.x} y2={d.y} />
+      })}
+      {all.filter((d) => d !== centre).map((d) => (
+        <circle cx={d.x} cy={d.y} r={d.hub === 1 ? 22 : 15} fill={d.st === "done" ? KC[d.kind] : "var(--light)"} stroke={KC[d.kind]} stroke-width="8" />
+      ))}
+      {phone ? (
+        <rect x={centre.x - 82} y={centre.y - 145} width="164" height="290" rx="22" fill="var(--light)" stroke="var(--dark)" stroke-width="10" />
+      ) : (
+        <circle cx={centre.x} cy={centre.y} r="34" fill="var(--light)" stroke={KC[centre.kind]} stroke-width="10" />
+      )}
+    </svg>
+  )
+}
+
 // The systems shown, one at a time; the buttons swap between them. The therapy practice stays unnamed.
 const SYSTEMS = [
   {
@@ -71,7 +109,8 @@ export default (() => {
               data-sys={s.key}
               aria-selected={i === 0 ? "true" : "false"}
             >
-              {s.name}
+              {mini(s.key, s.viewBox, s.phone)}
+              <span>{s.name}</span>
             </button>
           ))}
         </div>
@@ -141,11 +180,15 @@ export default (() => {
   Maps.css = `
 .maps { padding: clamp(48px, 9vh, 96px) 0; border-top: 1px solid var(--rule); }
 .maps-head { display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px; }
-.maps-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
-.maps-tab { font: inherit; font-size: 15px; font-weight: 500; padding: 7px 14px; border-radius: 999px; border: 1.5px solid var(--dark); background: none; color: var(--dark); cursor: pointer; transition: background .15s, color .15s; }
-.maps-tab[aria-selected="true"] { background: var(--dark); color: var(--light); }
-.maps-tab:hover:not([aria-selected="true"]) { background: var(--lightgray); }
+.maps-tabs { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; max-width: 980px; }
+.maps-tab { font: inherit; display: flex; flex-direction: column; gap: 8px; align-items: stretch; text-align: left; padding: 10px 10px 12px; border-radius: 10px; border: 1.5px solid var(--lightgray); background: none; color: var(--dark); cursor: pointer; transition: border-color .15s, background .15s; }
+.maps-tab span { font-size: 14px; font-weight: 500; line-height: 1.25; }
+.maps-tab .mini { display: block; width: 100%; height: auto; aspect-ratio: 2 / 1; }
+.maps-tab .mini line { stroke: var(--lightgray); stroke-width: 5; }
+.maps-tab[aria-selected="true"] { border-color: var(--dark); }
+.maps-tab:hover:not([aria-selected="true"]) { border-color: var(--gray); }
 .maps-tab:focus-visible { outline: 3px solid var(--secondary); outline-offset: 2px; }
+@media all and (max-width: 720px) { .maps-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .maps-tab span { font-size: 13px; } }
 .maps-sys[hidden] { display: none; }
 .maps-text { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
 .maps-text h2 { margin: 0; font-weight: 300; font-size: clamp(30px, 3.8vw, 54px); line-height: 1.05; letter-spacing: -0.02em; color: var(--dark); }
