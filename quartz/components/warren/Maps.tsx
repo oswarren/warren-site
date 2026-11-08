@@ -83,7 +83,7 @@ export default (() => {
 
   Maps.css = `
 .maps { padding: clamp(48px, 9vh, 96px) 0; border-top: 1px solid var(--rule); }
-.maps-head { display: flex; align-items: flex-start; gap: clamp(28px, 4vw, 56px); margin-bottom: 20px; }
+.maps-head { display: flex; align-items: flex-start; justify-content: space-between; gap: clamp(28px, 4vw, 56px); margin-bottom: 20px; }
 .maps-text { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
 .maps-phone { flex: none; width: 190px; margin: 0; display: flex; flex-direction: column; gap: 8px; }
 .maps-phone figcaption { font-size: 12px; color: var(--gray); text-align: center; }
