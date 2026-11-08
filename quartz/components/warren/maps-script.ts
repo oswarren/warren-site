@@ -46,6 +46,23 @@ function initMap() {
     const centre = N.find((d) => d.hub === 2)
     N.forEach((h) => { if (h.hub !== 1) return; const k = h.kids.length, G = k > 4 ? 66 : 72, lx = h.side === "l" ? 230 : 1170
       h.kids.forEach((d, i) => { d.x = lx; d.y = h.y + (i - (k - 1) / 2) * G; d.side = h.side; d.r = 7 }) })
+    // On a phone the whole system runs top to bottom so it fits the screen: the phone at the top,
+    // then each branch down one line on the left, its pieces stepping off it to the right.
+    const vert = window.matchMedia("(max-width: 720px)").matches
+    if (vert) {
+      root.classList.add("vert")
+      const order = ["find", "port", "numbers", "launch"].map((k) => by[k]).filter(Boolean)
+      N.forEach((h) => { if (h.hub === 1 && !order.includes(h)) order.push(h) })
+      const SX = 70, PX = 112
+      centre.x = SX; centre.y = 0
+      let y = 110, prev = centre
+      order.forEach((h) => {
+        h.x = SX; h.y = y; h.from = prev; prev = h
+        h.kids.forEach((k, i) => { k.x = PX; k.y = y + 62 + i * 54 })
+        y += 62 + h.kids.length * 54 + 40
+      })
+      svg.setAttribute("viewBox", "0 -20 390 " + (y - 30))
+    }
     const hubState = (h) => { const s = h.kids.map((k) => k.st)
       if (s.every((x) => x === "done")) return "done"; if (s.some((x) => x === "now")) return "now"
       if (s.every((x) => x === "plan")) return "plan"; return "built" }
@@ -54,9 +71,12 @@ function initMap() {
     const gE = sv("g"), gN = sv("g"); svg.append(gE, gN)
     N.forEach((d) => {
       if (d !== centre) {
-        const p = d.p ? by[d.p] : centre
-        const len = Math.hypot(d.x - p.x, d.y - p.y)
-        d.edge = sv("path", { d: "M" + p.x + " " + p.y + " L" + d.x + " " + d.y, class: "e" + (d.state === "now" ? " now" : d.state === "plan" ? " plan" : "") })
+        const p = d.from || (d.p ? by[d.p] : centre)
+        // on a phone, pieces step down then across from their branch
+        const elbow = vert && d.p
+        const len = elbow ? Math.abs(d.y - p.y) + Math.abs(d.x - p.x) : Math.hypot(d.x - p.x, d.y - p.y)
+        const path = elbow ? "M" + p.x + " " + p.y + " V" + d.y + " H" + d.x : "M" + p.x + " " + p.y + " L" + d.x + " " + d.y
+        d.edge = sv("path", { d: path, class: "e" + (d.state === "now" ? " now" : d.state === "plan" ? " plan" : "") })
         d.edge.style.setProperty("--len", len)
         gE.append(d.edge)
       }
@@ -66,7 +86,8 @@ function initMap() {
       if (d === centre) inner.append(sv("circle", { class: "hit", r: 26 }))
       else inner.append(sv("circle", { class: "hit", r: 26 }), sv("circle", { class: "ring", r: d.r + 7 }), dot(d.state, d.r, C[d.kind]))
       let a, x0, ys
-      if (d.lab === "right-high") { a = "start"; x0 = 24; ys = [-40, -18] }
+      if (vert) { a = "start"; if (d === centre) { x0 = 24; ys = [34, 56] } else if (d.hub === 1) { x0 = 26; ys = [9, 31] } else { x0 = 17; ys = [-2, 18] } }
+      else if (d.lab === "right-high") { a = "start"; x0 = 24; ys = [-40, -18] }
       else if (d.lab === "right") { a = "start"; x0 = 24; ys = [-6, 16] }
       else if (d.hub === 2) { a = "middle"; x0 = 0; ys = [178, 200] }
       else if (d.hub === 1) { a = "middle"; x0 = 0; ys = d.below ? [44, 66] : [-44, -24] }

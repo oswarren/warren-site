@@ -165,7 +165,10 @@ export default (() => {
 .omap-key .k.done { background: var(--dark); }
 
 @media all and (max-width: 720px) {
-  .omap-canvas { min-width: 1000px; }
+  /* phones get the top-to-bottom version (maps-script.ts), so nothing scrolls sideways */
+  .omap-canvas { min-width: 0; }
+  .omap.vert .omap-canvas { display: flex; flex-direction: column; }
+  .omap.vert .omap-phone { order: -1; position: static; display: block; width: 36%; height: auto; aspect-ratio: 9 / 16; border-width: 4px; border-radius: 18px; }
   .omap-pop { position: fixed; left: 0; right: 0; bottom: 0; top: auto; width: auto; max-height: 62vh; border-radius: 14px 14px 0 0; border-width: 1px 0 0; padding-bottom: calc(20px + env(safe-area-inset-bottom, 0px)); }
   .omap .gate, .omap .shape { grid-template-columns: 1fr; }
 }
