@@ -24,8 +24,9 @@ export default (() => {
         <span class="mono">Systems I’m running</span>
         <h2 class="serif">The Wild Clay Archive system</h2>
         <p>
-          Wild Clay Archive is an app I made that shows where to dig clay anywhere in the US. This is everything around it
-          that helps it grow. This is how I keep track.
+          Wild Clay Archive is an app I made that shows where to dig clay anywhere in the US.
+          <br />
+          This is the system that helps it grow.
         </p>
       </div>
       <div class="omap">
