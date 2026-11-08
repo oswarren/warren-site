@@ -1,5 +1,5 @@
 // Client script for the opening map on the home page. The map starts as one dot. As it scrolls into
-// view it grows the branches out of it, then their pieces, and stays open. Tapping a dot shows what it is below.
+// view it grows the branches out of it, then their pieces, and stays open. Tapping a dot opens a card beside it.
 // The data sits in the page itself (Maps.tsx reads maps/<name>.json at build). Dot states are a snapshot.
 // It runs on its own as soon as the page is ready, and again after each in-site navigation, so the
 // map draws even when the site's other scripts are slow or missing; a flag keeps it from drawing twice.
@@ -10,7 +10,7 @@ function initMap() {
   if (!root || root.dataset.ready) return
   root.dataset.ready = "1"
   const svg = root.querySelector("svg")
-  const panel = root.querySelector(".omap-panel")
+  const pop = root.querySelector(".omap-pop")
   const hint = root.querySelector(".omap-hint")
   const stage = root.querySelector(".omap-stage")
   // on a narrow screen the map scrolls sideways: keep what was just opened in view
@@ -102,7 +102,9 @@ function initMap() {
     }
     function pick(d) {
       N.forEach((x) => x.g.classList.toggle("sel", x === d))
-      panel.innerHTML = ""
+      pop.innerHTML = ""
+      const x = el("button", "omap-x", "×"); x.type = "button"; x.setAttribute("aria-label", "Close")
+      x.addEventListener("click", close)
       const h = el("div", "omap-name"); h.append(el("b", null, d.n)); if (d.s && d.hub !== 1) h.append(el("span", null, d.s))
       const r = el("div", "omap-body"); r.append(el("p", null, d.t))
       if (d.opts) { r.append(el("div", "lbl", "The five earlier ideas")); const ol = el("ul", "opts")
@@ -114,8 +116,29 @@ function initMap() {
       if (d.shape) { r.append(el("div", "lbl", "Posting it")); const sh = el("div", "shape")
         d.shape.forEach((x) => { const c = el("div"); c.append(el("b", null, x[0]), document.createTextNode(" " + x[1])); sh.append(c) }); r.append(sh) }
       if (d.hub !== 1) { const s = el("div", "state"); const g = sv("svg", { viewBox: "-8 -8 16 16" }); g.append(dot(d.state, 6, C[d.kind])); s.append(g, document.createTextNode(LABEL[d.state])); r.append(s) }
-      panel.append(h, r)
+      pop.append(x, h, r)
+      pop.hidden = false
+      place(d)
     }
+    // the card sits beside the dot: to its right when the dot is on the left half, else to its left.
+    // On a phone it is a sheet along the bottom of the screen instead (CSS), so nothing to place.
+    function place(d) {
+      pop.style.left = pop.style.top = ""
+      if (window.matchMedia("(max-width: 720px)").matches) return
+      const o = root.getBoundingClientRect(), r = d.g.querySelector(".hit").getBoundingClientRect()
+      const cx = r.left + r.width / 2 - o.left, cy = r.top + r.height / 2 - o.top
+      const w = pop.offsetWidth, gap = 26
+      let left = cx < o.width / 2 ? cx + gap : cx - gap - w
+      left = Math.max(0, Math.min(left, o.width - w))
+      pop.style.left = left + "px"
+      pop.style.top = Math.max(0, cy - 36) + "px"
+    }
+    function close() { pop.hidden = true; pop.innerHTML = ""; N.forEach((x) => x.g.classList.remove("sel")) }
+    const onDoc = (e) => { if (!pop.hidden && !e.target.closest(".omap-pop") && !e.target.closest(".omap .n")) close() }
+    const onKey = (e) => { if (e.key === "Escape" && !pop.hidden) close() }
+    document.addEventListener("click", onDoc)
+    document.addEventListener("keydown", onKey)
+    cleanup(() => { document.removeEventListener("click", onDoc); document.removeEventListener("keydown", onKey) })
     centre.g.classList.add("on")
     focusX(centre.x, false)
     // the map opens by itself, whole, as it scrolls into view, and stays open
