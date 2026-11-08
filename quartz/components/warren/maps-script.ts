@@ -76,14 +76,12 @@ function initMap(root) {
     let potAt = 0, potImg = null
     const price = (n) => "#" + n.toLocaleString("en-US") + " · $" + (n / 100).toFixed(2)
     function potPhoto(W) {
-      const H = W * 4 / 3, id = "pc" + Math.random().toString(36).slice(2, 7)
-      const clip = sv("clipPath", { id }); clip.append(sv("rect", { x: -W / 2, y: -H / 2, width: W, height: H, rx: 10 }))
-      const defs = sv("defs"); defs.append(clip)
-      potImg = sv("image", { href: "./maps/penny-pots/" + pots[0] + ".jpg", x: -W / 2, y: -H / 2, width: W, height: H, "clip-path": "url(#" + id + ")", preserveAspectRatio: "xMidYMid slice" })
-      pots.forEach((n) => { const im = new Image(); im.src = "./maps/penny-pots/" + n + ".jpg" })
-      return [defs, sv("rect", { class: "hit", x: -W / 2 - 6, y: -H / 2 - 6, width: W + 12, height: H + 12 }),
-        sv("rect", { class: "ring", x: -W / 2 - 7, y: -H / 2 - 7, width: W + 14, height: H + 14, rx: 14 }),
-        potImg, sv("rect", { x: -W / 2, y: -H / 2, width: W, height: H, rx: 10, fill: "none", stroke: "var(--dark)", "stroke-width": 3 })]
+      // a cut-out pot, so it sits right on the page; its shape sets the height
+      const H = W * (pots[0].h || 1), src = (n) => "./maps/penny-pots/" + n + ".png"
+      potImg = sv("image", { href: src(pots[0].n), x: -W / 2, y: -H / 2, width: W, height: H, class: "pot" })
+      pots.forEach((p) => { const im = new Image(); im.src = src(p.n) })
+      return [sv("rect", { class: "hit", x: -W / 2, y: -H / 2, width: W, height: H }),
+        sv("rect", { class: "ring", x: -W / 2 - 8, y: -H / 2 - 8, width: W + 16, height: H + 16, rx: 14 }), potImg]
     }
     function gridSquare(S, col) {
       const c = S / 100, x0 = -S / 2, y0 = -S / 2, id = "pg" + Math.random().toString(36).slice(2, 7)
@@ -118,7 +116,7 @@ function initMap(root) {
       // the centre is the phone itself (Maps.tsx), so it has no dot of its own, only its name under the phone
       if (d === centre && phone) inner.append(sv("circle", { class: "hit", r: 26 }))
       else if (d === centre && grid) inner.append(...gridSquare(vert ? 120 : 170, C[d.kind]))
-      else if (d === centre && pots) inner.append(...potPhoto(vert ? 96 : 132))
+      else if (d === centre && pots) inner.append(...potPhoto(vert ? 110 : 170))
       else inner.append(sv("circle", { class: "hit", r: 26 }), sv("circle", { class: "ring", r: d.r + 7 }), dot(d.state, d.r, C[d.kind]))
       let a, x0, ys
       if (vert) { a = "start"; if (d === centre) { x0 = phone ? 24 : grid ? 74 : pots ? 62 : 34; ys = phone ? [34, 56] : grid || pots ? [-8, 14] : [-2, 20] } else if (d.hub === 1) { x0 = 26; ys = [9, 31] } else { x0 = 17; ys = [-2, 18] } }
@@ -128,13 +126,13 @@ function initMap(root) {
       else if (d.hub === 1) { a = "middle"; x0 = 0; ys = d.below ? [44, 66] : [-44, -24] }
       else { a = d.side === "l" ? "end" : "start"; x0 = d.side === "l" ? -17 : 17; ys = [-2, 18] }
       let sub = d.s || ""
-      if (d === centre && pots) sub = price(pots[0])
+      if (d === centre && pots) sub = price(pots[0].n)
       if (d.hub === 1) { const c = {}; d.kids.forEach((k) => { c[k.st] = (c[k.st] || 0) + 1 }); const parts = []
         if (c.done) parts.push(c.done + " done"); if (c.now) parts.push(c.now + " refining"); if (c.built) parts.push(c.built + " built"); if (c.plan) parts.push(c.plan + " planned"); sub = parts.join(" · ") }
       inner.append(sv("text", { class: d.hub ? "t-hub" : "t-leaf", x: x0, y: ys[0], "text-anchor": a }, d.n), sv("text", { class: "t-sub", x: x0, y: ys[1], "text-anchor": a }, sub))
       g.append(inner)
       g.setAttribute("aria-label", d.n + (d.hub === 1 ? "" : ", " + LABEL[d.state]) + (d.auto ? ", runs on its own" : "") + (sub ? ", " + sub : ""))
-      g.addEventListener("click", () => { if (d === centre && pots) { potAt = (potAt + 1) % pots.length; potImg.setAttribute("href", "./maps/penny-pots/" + pots[potAt] + ".jpg"); g.querySelector(".t-sub").textContent = price(pots[potAt]) } tap(d) })
+      g.addEventListener("click", () => { if (d === centre && pots) { potAt = (potAt + 1) % pots.length; potImg.setAttribute("href", "./maps/penny-pots/" + pots[potAt].n + ".png"); g.querySelector(".t-sub").textContent = price(pots[potAt].n) } tap(d) })
       g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tap(d) } })
       d.g = g; gN.append(g)
     })
