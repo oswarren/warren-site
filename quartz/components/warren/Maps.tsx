@@ -26,6 +26,7 @@ const mini = (key: string, viewBox: string, phone: boolean) => {
     return null
   }
   const N: any[] = D.nodes || [], by: Record<string, any> = {}
+  const KK = { ...KC, ...((D.theme && D.theme.colors) || {}) }
   N.forEach((d) => { by[d.id] = { ...d, kids: [] } })
   Object.values(by).forEach((d: any) => { if (d.p) { by[d.p].kids.push(d); if (!d.kind) d.kind = by[d.p].kind } })
   const centre: any = Object.values(by).find((d: any) => d.hub === 2)
@@ -42,12 +43,12 @@ const mini = (key: string, viewBox: string, phone: boolean) => {
         return <line x1={p.x} y1={p.y} x2={d.x} y2={d.y} />
       })}
       {all.filter((d) => d !== centre).map((d) => (
-        <circle cx={d.x} cy={d.y} r={d.hub === 1 ? 22 : 15} fill={d.st === "done" ? KC[d.kind] : "var(--light)"} stroke={KC[d.kind]} stroke-width="8" />
+        <circle cx={d.x} cy={d.y} r={d.hub === 1 ? 22 : 15} fill={d.st === "done" ? KK[d.kind] : "var(--light)"} stroke={KK[d.kind]} stroke-width="8" />
       ))}
       {phone ? (
         <rect x={centre.x - 82} y={centre.y - 145} width="164" height="290" rx="22" fill="var(--light)" stroke="var(--dark)" stroke-width="10" />
       ) : (
-        <circle cx={centre.x} cy={centre.y} r="34" fill="var(--light)" stroke={KC[centre.kind]} stroke-width="10" />
+        <circle cx={centre.x} cy={centre.y} r="34" fill="var(--light)" stroke={KK[centre.kind]} stroke-width="10" />
       )}
     </svg>
   )
@@ -247,11 +248,12 @@ export default (() => {
 .omap .t-hub { font-size: 26px; font-weight: 500; }
 .omap .t-leaf { font-size: 19px; }
 .omap .t-sub { font-size: 15px; fill: var(--gray); }
-.omap .d-bg { fill: var(--light); }
-.omap .e { fill: none; stroke: var(--lightgray); stroke-width: 1.5; stroke-dasharray: var(--len); stroke-dashoffset: var(--len); transition: stroke-dashoffset .55s cubic-bezier(.16,1,.3,1); }
+.omap .d-bg { fill: var(--omap-dot, var(--light)); }
+.omap .e { fill: none; stroke: var(--omap-edge, var(--lightgray)); stroke-width: 1.5; stroke-dasharray: var(--len); stroke-dashoffset: var(--len); transition: stroke-dashoffset .55s cubic-bezier(.16,1,.3,1); }
 .omap .e.on { stroke-dashoffset: 0; }
 .omap .e.plan.on { stroke-dasharray: 4 4; }
-.omap .e.now { stroke: var(--dark); stroke-width: 2.5; }
+.omap .e.now { stroke: var(--omap-now, var(--dark)); stroke-width: var(--omap-noww, 2.5); }
+.omap .e.now.on { stroke-dasharray: var(--omap-nowdash, none); }
 .omap .n { opacity: 0; pointer-events: none; cursor: pointer; transition: opacity .35s ease; }
 .omap .n .in { transform: scale(.3); transition: transform .45s cubic-bezier(.16,1,.3,1); transition-delay: inherit; }
 .omap .n.on { opacity: 1; pointer-events: auto; }
@@ -317,7 +319,7 @@ export default (() => {
 .omap-key .k.done { background: var(--dark); }
 /* a piece that runs on its own: its line is a row of black dots moving toward the branch, like the key */
 .omap .e.auto { stroke: transparent; }
-.omap .flow { fill: none; stroke: var(--dark); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 0 7; opacity: 0; transition: opacity .4s .5s; animation: omap-flow .9s linear infinite; }
+.omap .flow { fill: none; stroke: var(--omap-now, var(--dark)); stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 0 7; opacity: 0; transition: opacity .4s .5s; animation: omap-flow .9s linear infinite; }
 .omap .e.on + .flow, .omap .state .flow, .omap-key .flow { opacity: 1; }
 .omap-key .k-auto { width: 24px; height: 8px; overflow: visible; }
 .omap .state .flow { stroke-width: 2.5; stroke-dasharray: 0 7; animation-duration: .9s; }

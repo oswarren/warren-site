@@ -39,6 +39,8 @@ function initMap(root) {
   ;(() => {
     const D = JSON.parse(root.querySelector(".omap-data").textContent)
     if (!alive) return
+    // a system can take its colours from its centre (Penny: the glaze of pot #2,158)
+    if (D.theme) { Object.assign(C, D.theme.colors || {}); for (const k in D.theme.vars || {}) root.style.setProperty(k, D.theme.vars[k]) }
     const N = D.nodes, by = {}
     const phone = root.querySelector(".omap-phone")
     // Penny's centre is a square of 10,000 tiny cells, one per pot, the ones made filled in
