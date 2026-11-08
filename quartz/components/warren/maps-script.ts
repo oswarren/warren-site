@@ -73,7 +73,7 @@ function initMap(root) {
     const gE = sv("g"), gN = sv("g"); svg.append(gE, gN)
     // S units square, 100 by 100 cells; the first grid.made cells (in number order, row by row) filled
     // or a real pot, its number and price under it; each tap shows the next one
-    let potAt = 0, potImg = null
+    let potImg = null
     const price = (n) => "#" + n.toLocaleString("en-US") + " · $" + (n / 100).toFixed(2)
     function potPhoto(W) {
       // a cut-out pot, so it sits right on the page; its shape sets the height
@@ -132,7 +132,7 @@ function initMap(root) {
       inner.append(sv("text", { class: d.hub ? "t-hub" : "t-leaf", x: x0, y: ys[0], "text-anchor": a }, d.n), sv("text", { class: "t-sub", x: x0, y: ys[1], "text-anchor": a }, sub))
       g.append(inner)
       g.setAttribute("aria-label", d.n + (d.hub === 1 ? "" : ", " + LABEL[d.state]) + (d.auto ? ", runs on its own" : "") + (sub ? ", " + sub : ""))
-      g.addEventListener("click", () => { if (d === centre && pots) { potAt = (potAt + 1) % pots.length; potImg.setAttribute("href", "./maps/penny-pots/" + pots[potAt].n + ".png"); g.querySelector(".t-sub").textContent = price(pots[potAt].n) } tap(d) })
+      g.addEventListener("click", () => tap(d))
       g.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); tap(d) } })
       d.g = g; gN.append(g)
     })
@@ -174,6 +174,8 @@ function initMap(root) {
       phone.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); toggle() } })
     }
     function tap(d) {
+      // like the phone: tapping the centre (a pot, a site) folds the system into it, and tapping again brings it back out
+      if (d === centre && !phone) { if (io) { io.disconnect(); io = null } close(); isOpen ? closeCentre() : openCentre(); return }
       if (d === centre && !centre.g.classList.contains("open")) openCentre()
       pick(d)
     }
