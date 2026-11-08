@@ -211,12 +211,14 @@ function initMeanwhile() {
   const w = document.querySelector(".maps-meanwhile .ing")
   if (!w || w.dataset.ready) return
   w.dataset.ready = "1"
-  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return
+  // with reduced motion, nothing cycles and every photo shows fully
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) { document.querySelectorAll(".mw-photos figure").forEach((f) => f.classList.add("on")); return }
   const words = w.dataset.words.split("|")
   let i = 0
   const t = setInterval(() => {
     w.classList.add("out")
-    setTimeout(() => { i = (i + 1) % words.length; w.textContent = words[i]; w.classList.remove("out") }, 350)
+    setTimeout(() => { i = (i + 1) % words.length; w.textContent = words[i]; w.classList.remove("out")
+      document.querySelectorAll(".mw-photos figure").forEach((f, j) => f.classList.toggle("on", j === i)) }, 350)
   }, 2600)
   if (window.addCleanup) window.addCleanup(() => clearInterval(t))
 }
