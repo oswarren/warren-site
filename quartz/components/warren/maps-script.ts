@@ -5,8 +5,7 @@
 // map draws even when the site's other scripts are slow or missing; a flag keeps it from drawing twice.
 export const mapsScript = `
 ;(() => {
-function initMap() {
-  const root = document.querySelector(".omap")
+function initMap(root) {
   if (!root || root.dataset.ready) return
   root.dataset.ready = "1"
   const svg = root.querySelector("svg")
@@ -15,8 +14,8 @@ function initMap() {
   // on a narrow screen the map scrolls sideways: keep what was just opened in view
   const focusX = (x, smooth) => {
     if (stage.scrollWidth <= stage.clientWidth) return
-    const scale = svg.clientWidth / 1450
-    stage.scrollTo({ left: (x + 50) * scale - stage.clientWidth / 2, behavior: smooth && !reduce ? "smooth" : "auto" })
+    const vb = svg.viewBox.baseVal, scale = svg.clientWidth / vb.width
+    stage.scrollTo({ left: (x - vb.x) * scale - stage.clientWidth / 2, behavior: smooth && !reduce ? "smooth" : "auto" })
   }
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches
   const NS = "http://www.w3.org/2000/svg"
@@ -41,17 +40,18 @@ function initMap() {
     const D = JSON.parse(root.querySelector(".omap-data").textContent)
     if (!alive) return
     const N = D.nodes, by = {}
+    const phone = root.querySelector(".omap-phone")
     N.forEach((d) => { by[d.id] = d; d.kids = [] })
-    N.forEach((d) => { if (d.p) by[d.p].kids.push(d) })
+    N.forEach((d) => { if (d.p) { by[d.p].kids.push(d); if (!d.kind) d.kind = by[d.p].kind } })
     const centre = N.find((d) => d.hub === 2)
     N.forEach((h) => { if (h.hub !== 1) return; const k = h.kids.length, G = k > 4 ? 66 : 72, lx = h.side === "l" ? 230 : 1170
-      h.kids.forEach((d, i) => { d.x = lx; d.y = h.y + (i - (k - 1) / 2) * G; d.side = h.side; d.r = 7 }) })
+      h.kids.forEach((d, i) => { if (d.x != null) { d.side = h.side; d.r = 7; return } d.x = lx; d.y = h.y + (i - (k - 1) / 2) * G; d.side = h.side; d.r = 7 }) })
     // On a phone the whole system runs top to bottom so it fits the screen: the phone at the top,
     // then each branch down one line on the left, its pieces stepping off it to the right.
     const vert = window.matchMedia("(max-width: 720px)").matches
     if (vert) {
       root.classList.add("vert")
-      const order = ["find", "port", "numbers", "launch"].map((k) => by[k]).filter(Boolean)
+      const order = (D.order || ["find", "port", "numbers", "launch"]).map((k) => by[k]).filter(Boolean)
       N.forEach((h) => { if (h.hub === 1 && !order.includes(h)) order.push(h) })
       const SX = 70, PX = 112
       centre.x = SX; centre.y = 0
@@ -61,7 +61,7 @@ function initMap() {
         h.kids.forEach((k, i) => { k.x = PX; k.y = y + 62 + i * 54 })
         y += 62 + h.kids.length * 54 + 40
       })
-      svg.setAttribute("viewBox", "0 -20 390 " + (y - 30))
+      svg.setAttribute("viewBox", (phone ? "0 -20 390 " : "0 -34 390 ") + (y - (phone ? 30 : 16)))
     }
     const hubState = (h) => { const s = h.kids.map((k) => k.st)
       if (s.every((x) => x === "done")) return "done"; if (s.some((x) => x === "now")) return "now"
@@ -85,13 +85,13 @@ function initMap() {
       const g = sv("g", { class: "n" + (d.hub ? " opens" : ""), tabindex: "0", role: "button", transform: "translate(" + d.x + "," + d.y + ")" })
       const inner = sv("g", { class: "in" })
       // the centre is the phone itself (Maps.tsx), so it has no dot of its own, only its name under the phone
-      if (d === centre) inner.append(sv("circle", { class: "hit", r: 26 }))
+      if (d === centre && phone) inner.append(sv("circle", { class: "hit", r: 26 }))
       else inner.append(sv("circle", { class: "hit", r: 26 }), sv("circle", { class: "ring", r: d.r + 7 }), dot(d.state, d.r, C[d.kind]))
       let a, x0, ys
-      if (vert) { a = "start"; if (d === centre) { x0 = 24; ys = [34, 56] } else if (d.hub === 1) { x0 = 26; ys = [9, 31] } else { x0 = 17; ys = [-2, 18] } }
+      if (vert) { a = "start"; if (d === centre) { x0 = phone ? 24 : 34; ys = phone ? [34, 56] : [-2, 20] } else if (d.hub === 1) { x0 = 26; ys = [9, 31] } else { x0 = 17; ys = [-2, 18] } }
       else if (d.lab === "right-high") { a = "start"; x0 = 24; ys = [-40, -18] }
       else if (d.lab === "right") { a = "start"; x0 = 24; ys = [-6, 16] }
-      else if (d.hub === 2) { a = "middle"; x0 = 0; ys = [178, 200] }
+      else if (d.hub === 2) { a = "middle"; x0 = 0; ys = phone ? [178, 200] : [56, 78] }
       else if (d.hub === 1) { a = "middle"; x0 = 0; ys = d.below ? [44, 66] : [-44, -24] }
       else { a = d.side === "l" ? "end" : "start"; x0 = d.side === "l" ? -17 : 17; ys = [-2, 18] }
       let sub = d.s || ""
@@ -136,7 +136,6 @@ function initMap() {
       hubs.forEach((h, i) => hide(h, 450 + i * 90))
     }
     // tapping the phone folds the system back into it, and tapping again brings it back out
-    const phone = root.querySelector(".omap-phone")
     if (phone) {
       const toggle = () => { if (io) { io.disconnect(); io = null } isOpen ? closeCentre() : openCentre() }
       phone.addEventListener("click", toggle)
@@ -227,8 +226,23 @@ function initMeanwhile() {
 document.addEventListener("nav", initMeanwhile)
 if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initMeanwhile)
 else initMeanwhile()
-document.addEventListener("nav", initMap)
-if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initMap)
-else initMap()
+// "Systems I'm running" shows one system at a time; the buttons above swap which one.
+// Each system opens by itself the first time it comes into view.
+function initAll() {
+  document.querySelectorAll(".omap").forEach(initMap)
+  const tabs = document.querySelectorAll(".maps-tab")
+  tabs.forEach((b) => {
+    if (b.dataset.ready) return
+    b.dataset.ready = "1"
+    b.addEventListener("click", () => {
+      tabs.forEach((t) => t.setAttribute("aria-selected", t === b ? "true" : "false"))
+      document.querySelectorAll(".maps-sys").forEach((p) => { p.hidden = p.dataset.sys !== b.dataset.sys })
+      document.querySelectorAll(".omap-pop").forEach((p) => { p.hidden = true })
+    })
+  })
+}
+document.addEventListener("nav", initAll)
+if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", initAll)
+else initAll()
 })()
 `

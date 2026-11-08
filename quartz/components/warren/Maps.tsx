@@ -15,77 +15,130 @@ const readMap = (name: string) => {
   }
 }
 
+// The systems shown, one at a time; the buttons swap between them. Framework waits for the owner's OK.
+const SYSTEMS = [
+  {
+    key: "clay",
+    name: "Wild Clay Archive",
+    title: "The Wild Clay Archive system",
+    intro: [
+      "Wild Clay Archive is an app I made that shows where to dig clay anywhere in the US.",
+      "This is the system that helps it grow.",
+    ],
+    viewBox: "-50 190 1450 680",
+    aria: "Diagram of the Wild Clay Archive system: the app in the centre, with where people find it, numbers and launch around it.",
+    phone: true,
+  },
+  {
+    key: "penny",
+    name: "A Penny For Your Pottery",
+    title: "The A Penny For Your Pottery system",
+    intro: [
+      "A Penny For Your Pottery is 10,000 pots I’m making, each priced at its number in pennies.",
+      "This is the system that gets each one photographed, sold and found.",
+    ],
+    viewBox: "-60 190 1520 736",
+    aria: "Diagram of the A Penny For Your Pottery system: the 10,000 pots in the centre, with the pots, the stores, where people find them and behind the scenes around it.",
+    phone: false,
+  },
+]
+
 // Right under the statement on the home page: a map of a system I'm running, that opens as it scrolls
 // into view (maps-script.ts). Its data is maps/clay.json, read at build into the page. Every dot shows how far along that piece is.
 export default (() => {
   const Maps: QuartzComponent = ({ displayClass }: QuartzComponentProps) => (
     <section class={classNames(displayClass, "maps")}>
       <div class="maps-head">
-        <div class="maps-text">
-          <span class="mono">Systems I’m running</span>
-          <h2 class="serif">The Wild Clay Archive system</h2>
-          <p>Wild Clay Archive is an app I made that shows where to dig clay anywhere in the US.</p>
-          <p>This is the system that helps it grow.</p>
+        <span class="mono">Systems I’m running</span>
+        <div class="maps-tabs" role="tablist" aria-label="Pick a system">
+          {SYSTEMS.map((s, i) => (
+            <button
+              type="button"
+              class="maps-tab"
+              role="tab"
+              data-sys={s.key}
+              aria-selected={i === 0 ? "true" : "false"}
+            >
+              {s.name}
+            </button>
+          ))}
         </div>
       </div>
-      <div class="omap">
-        <script
-          type="application/json"
-          class="omap-data"
-          dangerouslySetInnerHTML={{ __html: readMap("clay") }}
-        />
-        <div class="omap-stage">
-          <div class="omap-canvas">
-            <svg
-              viewBox="-50 190 1450 680"
-              role="group"
-              aria-label="Diagram of the Wild Clay Archive system: the app in the centre, with where people find it, numbers and launch around it."
-            ></svg>
-            {/* the app itself sits at the centre of the diagram, on a phone you can scroll */}
-            <div
-              class="omap-phone"
-              tabindex={0}
-              aria-label="Wild Clay Archive on a phone. Scroll to read the whole page. Tap to fold the system in or out."
-            >
-              <img
-                src="./maps/wca-phone.jpg"
-                alt="The Wild Clay Archive map on a phone, showing soil around Seagrove, North Carolina, with Georgeville soil marked as a strong lead."
-                loading="lazy"
-                decoding="async"
-              />
+      {SYSTEMS.map((s, i) => (
+        <div class="maps-sys" data-sys={s.key} role="tabpanel" hidden={i !== 0}>
+          <div class="maps-text">
+            <h2 class="serif">{s.title}</h2>
+            {s.intro.map((t) => (
+              <p>{t}</p>
+            ))}
+          </div>
+          <div class="omap">
+            <script
+              type="application/json"
+              class="omap-data"
+              dangerouslySetInnerHTML={{ __html: readMap(s.key) }}
+            />
+            <div class="omap-stage">
+              <div class="omap-canvas">
+                <svg viewBox={s.viewBox} role="group" aria-label={s.aria}></svg>
+                {s.phone && (
+                  /* the app itself sits at the centre of the diagram, on a phone you can scroll */
+                  <div
+                    class="omap-phone"
+                    tabindex={0}
+                    aria-label="Wild Clay Archive on a phone. Scroll to read the whole page. Tap to fold the system in or out."
+                  >
+                    <img
+                      src="./maps/wca-phone.jpg"
+                      alt="The Wild Clay Archive map on a phone, showing soil around Seagrove, North Carolina, with Georgeville soil marked as a strong lead."
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+            <div class="omap-pop" role="dialog" aria-live="polite" hidden></div>
+            <div class="omap-key mono">
+              <span>
+                <i class="k plan"></i>Planned
+              </span>
+              <span>
+                <i class="k built"></i>Built, needs work
+              </span>
+              <span>
+                <i class="k now"></i>Refining now
+              </span>
+              <span>
+                <i class="k done"></i>Done
+              </span>
+              <span>
+                <svg class="k-auto" viewBox="-12 -4 24 8" aria-hidden="true">
+                  <path class="flow" d="M12 0 H-12" />
+                </svg>
+                Runs on its own
+              </span>
             </div>
           </div>
         </div>
-        <div class="omap-pop" role="dialog" aria-live="polite" hidden></div>
-        <div class="omap-key mono">
-          <span>
-            <i class="k plan"></i>Planned
-          </span>
-          <span>
-            <i class="k built"></i>Built, needs work
-          </span>
-          <span>
-            <i class="k now"></i>Refining now
-          </span>
-          <span>
-            <i class="k done"></i>Done
-          </span>
-          <span>
-            <svg class="k-auto" viewBox="-12 -4 24 8" aria-hidden="true">
-              <path class="flow" d="M12 0 H-12" />
-            </svg>
-            Runs on its own
-          </span>
-        </div>
-      </div>
+      ))}
       <script dangerouslySetInnerHTML={{ __html: mapsScript }} />
     </section>
   )
 
   Maps.css = `
 .maps { padding: clamp(48px, 9vh, 96px) 0; border-top: 1px solid var(--rule); }
-.maps-head { margin-bottom: 20px; }
-.maps-text { display: flex; flex-direction: column; gap: 10px; }
+.maps-head { display: flex; flex-direction: column; gap: 14px; margin-bottom: 22px; }
+.maps-tabs { display: flex; flex-wrap: wrap; gap: 8px; }
+.maps-tab { font: inherit; font-size: 15px; font-weight: 500; padding: 7px 14px; border-radius: 999px; border: 1.5px solid var(--dark); background: none; color: var(--dark); cursor: pointer; transition: background .15s, color .15s; }
+.maps-tab[aria-selected="true"] { background: var(--dark); color: var(--light); }
+.maps-tab:hover:not([aria-selected="true"]) { background: var(--lightgray); }
+.maps-tab:focus-visible { outline: 3px solid var(--secondary); outline-offset: 2px; }
+.maps-sys[hidden] { display: none; }
+.maps-text { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+.maps-text h2 { margin: 0; font-weight: 300; font-size: clamp(30px, 3.8vw, 54px); line-height: 1.05; letter-spacing: -0.02em; color: var(--dark); }
+.maps-text p + p { margin-top: 0.75em; }
+.maps-text p { margin: 0; font-size: 19px; line-height: 1.5; color: var(--darkgray); max-width: 52ch; }
 /* the phone takes the app's place in the diagram: the app sits at 700,520 in the viewBox (-50 190 1450 680),
    and the phone is 290 units tall, so it spans x 618 to 782 and y 375 to 665 */
 .omap-canvas { position: relative; min-width: 760px; }
@@ -99,9 +152,6 @@ export default (() => {
 .omap-phone img { display: block; width: 100%; height: auto; }
 .omap-phone:focus-visible { outline: 3px solid var(--secondary); outline-offset: 3px; }
 .maps-head .mono { font-size: 12px; color: var(--gray); }
-.maps-head h2 { margin: 0; font-weight: 300; font-size: clamp(30px, 3.8vw, 54px); line-height: 1.05; letter-spacing: -0.02em; color: var(--dark); }
-.maps-head p + p { margin-top: 0.75em; }
-.maps-head p { margin: 0; font-size: 19px; line-height: 1.5; color: var(--darkgray); max-width: 52ch; }
 
 .omap-stage { overflow-x: auto; overscroll-behavior-x: contain; margin-top: 8px; }
 .omap-stage svg { display: block; width: 100%; height: auto; }
