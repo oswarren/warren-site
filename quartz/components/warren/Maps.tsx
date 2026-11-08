@@ -53,6 +53,30 @@ const mini = (key: string, viewBox: string, phone: boolean) => {
   )
 }
 
+// A row of big numbers for a system, taken from its own counts (maps/<key>.json "stats")
+const stats = (key: string) => {
+  let D: any
+  try {
+    D = JSON.parse(fs.readFileSync(path.join(process.cwd(), "maps", key + ".json"), "utf8"))
+  } catch {
+    return null
+  }
+  if (!D.stats) return null
+  return (
+    <div class="maps-stats">
+      <dl>
+        {D.stats.map(([v, l]: [string, string]) => (
+          <div>
+            <dt>{v}</dt>
+            <dd>{l}</dd>
+          </div>
+        ))}
+      </dl>
+      {D.statsAsOf && <small class="mono">{D.statsAsOf}</small>}
+    </div>
+  )
+}
+
 // The systems shown, one at a time; the buttons swap between them. The therapy practice stays unnamed.
 const SYSTEMS = [
   {
@@ -123,6 +147,7 @@ export default (() => {
               <p>{t}</p>
             ))}
           </div>
+          {stats(s.key)}
           <div class="omap">
             <script
               type="application/json"
@@ -190,6 +215,13 @@ export default (() => {
 .maps-tab:focus-visible { outline: 3px solid var(--secondary); outline-offset: 2px; }
 @media all and (max-width: 720px) { .maps-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .maps-tab span { font-size: 13px; } }
 .maps-sys[hidden] { display: none; }
+.maps-stats { margin: 4px 0 28px; }
+.maps-stats dl { display: flex; flex-wrap: wrap; gap: 18px 44px; margin: 0; }
+.maps-stats dl div { display: flex; flex-direction: column; gap: 2px; }
+.maps-stats dt { font-weight: 300; font-size: clamp(30px, 3.4vw, 46px); line-height: 1; letter-spacing: -0.02em; color: var(--dark); }
+.maps-stats dd { margin: 0; font-size: 14px; color: var(--gray); }
+.maps-stats small { display: block; margin-top: 12px; font-size: 12px; color: var(--gray); }
+@media all and (max-width: 720px) { .maps-stats dl { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 20px; } }
 .maps-text { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
 .maps-text h2 { margin: 0; font-weight: 300; font-size: clamp(30px, 3.8vw, 54px); line-height: 1.05; letter-spacing: -0.02em; color: var(--dark); }
 .maps-text p + p { margin-top: 0.75em; }
