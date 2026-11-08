@@ -215,7 +215,6 @@ export default (() => {
 .maps-tab:focus-visible { outline: 3px solid var(--secondary); outline-offset: 2px; }
 @media all and (max-width: 720px) { .maps-tabs { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; } .maps-tab span { font-size: 13px; } }
 .maps-sys[hidden] { display: none; }
-.omap .pot { filter: drop-shadow(0 14px 14px rgba(22, 24, 26, 0.18)); }
 .maps-stats { margin: 4px 0 28px; }
 .maps-stats dl { display: flex; flex-wrap: wrap; gap: 18px 44px; margin: 0; }
 .maps-stats dl div { display: flex; flex-direction: column; gap: 2px; }
