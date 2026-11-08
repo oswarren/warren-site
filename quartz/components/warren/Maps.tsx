@@ -15,7 +15,7 @@ const readMap = (name: string) => {
   }
 }
 
-// The systems shown, one at a time; the buttons swap between them. Framework waits for the owner's OK.
+// The systems shown, one at a time; the buttons swap between them. The therapy practice stays unnamed.
 const SYSTEMS = [
   {
     key: "clay",
@@ -39,6 +39,18 @@ const SYSTEMS = [
     ],
     viewBox: "-60 190 1520 736",
     aria: "Diagram of the A Penny For Your Pottery system: the 10,000 pots in the centre, with the pots, the stores, where people find them and behind the scenes around it.",
+    phone: false,
+  },
+  {
+    key: "framework",
+    name: "A therapy practice",
+    title: "The therapy practice system",
+    intro: [
+      "A therapy practice near Philadelphia hired me to run its website.",
+      "This is the system that helps more people looking for a therapist find it.",
+    ],
+    viewBox: "-60 190 1520 736",
+    aria: "Diagram of a therapy practice’s website system: the site in the centre, with what is live, what waits for an OK, numbers and where people find the practice around it.",
     phone: false,
   },
 ]
