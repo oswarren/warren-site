@@ -301,6 +301,10 @@ export default (() => {
 .omap .shape div { border-top: 2px solid var(--dark); padding-top: 6px; }
 .omap .state { display: inline-flex; align-items: center; gap: 7px; margin: 10px 18px 0 0; font-size: 14px; color: var(--gray); }
 .omap .state svg { margin-top: 0; width: 14px; height: 14px; }
+/* the owner's private note under a card (maps-script.ts, priv): shows only on the claude.ai copy of the page */
+.omap-note { display: block; width: 100%; margin-top: 8px; padding: 8px 10px; box-sizing: border-box; font: inherit; font-size: 14.5px; line-height: 1.45; color: var(--darkgray); background: var(--omap-dot, var(--light)); border: 1px solid var(--lightgray); border-radius: 8px; resize: vertical; }
+.omap-note:focus { outline: 2px solid var(--dark); outline-offset: 1px; }
+.omap-note-st { min-height: 1.2em; margin-top: 4px; font-size: 12px; color: var(--gray); }
 
 .maps-meanwhile { margin-top: clamp(40px, 7vh, 72px); display: flex; flex-direction: column; gap: 8px; }
 .maps-meanwhile .mono { font-size: 12px; color: var(--gray); }

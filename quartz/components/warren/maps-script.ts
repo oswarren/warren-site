@@ -5,12 +5,33 @@
 // map draws even when the site's other scripts are slow or missing; a flag keeps it from drawing twice.
 export const mapsScript = `
 ;(() => {
+// Private notes. On the copy of this page published to claude.ai, the owner can keep a note on any
+// piece, read only by the owner or an editor there: it lives in that page's own store (collection
+// "notes", one document per piece, "<system>.<piece>"), never in this repo or on the site, where
+// window.claude does not exist and nothing of this shows.
+const priv = (async () => {
+  try {
+    if (!window.claude || !window.claude.use) return null
+    const [db, user] = await Promise.all([window.claude.use("db"), window.claude.use("user")])
+    if (!db || !user) return null
+    const [own, edit] = await Promise.all([user.isOwner(), user.canEdit()])
+    if (!own && !edit) return null
+    const notes = {}, hooks = new Set()
+    db.collection("notes").onSnapshot((snap) => {
+      snap.docChanges().forEach((c) => { if (c.type === "removed") delete notes[c.doc.id]; else notes[c.doc.id] = c.doc.data() })
+      hooks.forEach((f) => f())
+    }, () => {})
+    return { db, notes, hooks }
+  } catch (e) { return null }
+})()
 function initMap(root) {
   if (!root || root.dataset.ready) return
   root.dataset.ready = "1"
   const svg = root.querySelector("svg")
   const pop = root.querySelector(".omap-pop")
   const stage = root.querySelector(".omap-stage")
+  const sysEl = root.closest(".maps-sys"), sys = (sysEl && sysEl.dataset.sys) || "map"
+  let sel = null
   // on a narrow screen the map scrolls sideways: keep what was just opened in view
   const focusX = (x, smooth) => {
     if (stage.scrollWidth <= stage.clientWidth) return
@@ -182,6 +203,8 @@ function initMap(root) {
       pick(d)
     }
     function pick(d) {
+      if (sel && sel !== d) dropNote(sel)
+      sel = d
       N.forEach((x) => x.g.classList.toggle("sel", x === d))
       pop.innerHTML = ""
       const x = el("button", "omap-x", "×"); x.type = "button"; x.setAttribute("aria-label", "Close")
@@ -208,7 +231,26 @@ function initMap(root) {
       pop.append(x, h, r)
       pop.hidden = false
       place(d)
+      priv.then((P) => { if (P && alive && sel === d && !pop.hidden) noteBox(P, d, r) })
     }
+    // the owner's private note on this piece (see priv above): a box under the card, saved when you leave it
+    function noteBox(P, d, r) {
+      const key = sys + "." + d.id, ref = P.db.doc("notes/" + key)
+      r.append(el("div", "lbl priv", "Notes, only you see these"))
+      const ta = el("textarea", "omap-note"); ta.rows = 4; ta.placeholder = "What’s really going on with this piece"
+      const st = el("div", "omap-note-st", "")
+      let saved = (P.notes[key] && P.notes[key].text) || ""
+      ta.value = saved
+      const save = () => { const v = ta.value.trim(); if (v === saved) return; saved = v; st.textContent = "Saving…"
+        ;(v ? ref.set({ text: v, at: new Date().toISOString() }) : ref.delete()).then(() => { st.textContent = v ? "Saved" : "Cleared" }, () => { st.textContent = "That didn’t save. Try again in a moment." }) }
+      const refresh = () => { if (document.activeElement === ta) return; const v = (P.notes[key] && P.notes[key].text) || ""; if (v !== saved) { saved = v; ta.value = v } }
+      ta.addEventListener("blur", save)
+      ta.addEventListener("keydown", (e) => { if ((e.metaKey || e.ctrlKey) && e.key === "Enter") { e.preventDefault(); save() } })
+      P.hooks.add(refresh)
+      d.noteSave = save; d.noteOff = () => P.hooks.delete(refresh)
+      r.append(ta, st)
+    }
+    function dropNote(d) { if (d.noteSave) d.noteSave(); if (d.noteOff) d.noteOff(); d.noteSave = d.noteOff = null }
     // the card sits beside the dot: to its right when the dot is on the left half, else to its left.
     // On a phone it is a sheet along the bottom of the screen instead (CSS), so nothing to place.
     function place(d) {
@@ -222,12 +264,12 @@ function initMap(root) {
       pop.style.left = left + "px"
       pop.style.top = Math.max(0, cy - 36) + "px"
     }
-    function close() { pop.hidden = true; pop.innerHTML = ""; N.forEach((x) => x.g.classList.remove("sel")) }
+    function close() { if (sel) dropNote(sel); sel = null; pop.hidden = true; pop.innerHTML = ""; N.forEach((x) => x.g.classList.remove("sel")) }
     const onDoc = (e) => { if (!pop.hidden && !e.target.closest(".omap-pop") && !e.target.closest(".omap .n")) close() }
     const onKey = (e) => { if (e.key === "Escape" && !pop.hidden) close() }
     document.addEventListener("click", onDoc)
     document.addEventListener("keydown", onKey)
-    cleanup(() => { document.removeEventListener("click", onDoc); document.removeEventListener("keydown", onKey) })
+    cleanup(() => { document.removeEventListener("click", onDoc); document.removeEventListener("keydown", onKey); if (sel) dropNote(sel) })
     centre.g.classList.add("on")
     focusX(centre.x, false)
     // the map opens by itself, whole, as it scrolls into view, and stays open
