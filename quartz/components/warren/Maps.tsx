@@ -110,7 +110,7 @@ const SYSTEMS = [
   {
     key: "framework",
     name: "A therapy practice",
-    title: "The therapy practice system",
+    title: "The Therapy Practice system",
     intro: [
       "A therapy practice near Philadelphia hired me to run its website.",
       "This is the system that helps more people looking for a therapist find it.",
