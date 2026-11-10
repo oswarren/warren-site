@@ -316,6 +316,8 @@ function initAll() {
       tabs.forEach((t) => t.setAttribute("aria-selected", t === b ? "true" : "false"))
       document.querySelectorAll(".maps-sys").forEach((p) => { p.hidden = p.dataset.sys !== b.dataset.sys })
       document.querySelectorAll(".omap-pop").forEach((p) => { p.hidden = true })
+      // the page's tint follows the system now showing (motion.ts listens for scroll)
+      window.dispatchEvent(new Event("scroll"))
     })
   })
 }
