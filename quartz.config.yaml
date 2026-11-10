@@ -14,6 +14,15 @@ configuration:
   locale: en-US
   baseUrl: warrenstetler.com
   ignorePatterns:
+    # 2026-11-10: the site is the home page alone (the statement and the maps). The older pages stay in
+    # content/ to return to, but are not built: remove a line here to bring one back.
+    - "about.md"
+    - "use.md"
+    - "work-with-me.md"
+    - "systems/**"
+    - "sent/**"
+    - "artifacts/**"
+    - "photos/**"
     - private
     - templates
     - .obsidian
