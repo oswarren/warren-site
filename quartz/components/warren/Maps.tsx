@@ -248,7 +248,8 @@ export default (() => {
 .omap-stage { overflow-x: auto; overscroll-behavior-x: contain; margin-top: 8px; }
 .omap-stage svg { display: block; width: 100%; height: auto; }
 
-.omap text { font-family: var(--bodyFont); fill: var(--dark); paint-order: stroke; stroke: var(--light); stroke-width: 5px; stroke-linejoin: round; }
+/* the outline that lifts a label off the lines is the page's own colour, tint included */
+.omap text { font-family: var(--bodyFont); fill: var(--dark); paint-order: stroke; stroke: var(--tone, var(--light)); stroke-width: 5px; stroke-linejoin: round; transition: stroke 1400ms ease; }
 .omap .t-hub { font-size: 26px; font-weight: 500; }
 .omap .t-leaf { font-size: 19px; }
 .omap .t-sub { font-size: 15px; fill: var(--gray); }
