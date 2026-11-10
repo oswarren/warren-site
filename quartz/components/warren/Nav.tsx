@@ -3,7 +3,7 @@ import { resolveRelative, FullSlug } from "../../util/path"
 import { classNames } from "../../util/lang"
 import { motionScript } from "./motion"
 
-// Top bar, kept quiet: the name on the left and one way in, Work with me. Work, About and Use left the
+// Top bar, kept quiet: the name on the left, nothing else. Work, About, Work with me and Use left the
 // bar on 2026-11-10 (their pages still exist).
 interface Link {
   label: string
@@ -17,7 +17,7 @@ interface Options {
 
 const defaultOptions: Options = {
   links: [],
-  paths: [{ label: "Work with me", target: "work-with-me" }],
+  paths: [],
 }
 
 export default ((userOpts?: Partial<Options>) => {
