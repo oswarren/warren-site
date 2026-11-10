@@ -3,8 +3,8 @@ import { resolveRelative, FullSlug } from "../../util/path"
 import { classNames } from "../../util/lang"
 import { motionScript } from "./motion"
 
-// Top bar, kept quiet: the name on the left; work and about; then the two ways in, which stay
-// reachable on every page. No clock: the home page's one alive clue is the countdown in the hero.
+// Top bar, kept quiet: the name on the left and one way in, Work with me. Work, About and Use left the
+// bar on 2026-11-10 (their pages still exist).
 interface Link {
   label: string
   target: string // slug
@@ -16,14 +16,8 @@ interface Options {
 }
 
 const defaultOptions: Options = {
-  links: [
-    { label: "Work", target: "systems/index", prefixes: ["systems/", "sent/"] },
-    { label: "About", target: "about" },
-  ],
-  paths: [
-    { label: "Work with me", target: "work-with-me" },
-    { label: "Use something I've built", target: "use" },
-  ],
+  links: [],
+  paths: [{ label: "Work with me", target: "work-with-me" }],
 }
 
 export default ((userOpts?: Partial<Options>) => {

@@ -1,22 +1,14 @@
 import { QuartzComponent, QuartzComponentConstructor, QuartzComponentProps } from "../types"
 import { classNames } from "../../util/lang"
-import { runsAttr } from "./data"
 
-// The opening viewport of the home page: the statement, and one clue that the page is alive.
-// The clue is real and it moves: the name of the next system that will run without him, counting
-// down every second (motion.ts). Nothing else. The statement is the page's title in content/index.md.
+// The opening viewport of the home page: the statement, nothing else (the countdown clue left on
+// 2026-11-10). The statement is the page's title in content/index.md.
 export default (() => {
-  const Hero: QuartzComponent = ({ fileData, allFiles, displayClass }: QuartzComponentProps) => {
+  const Hero: QuartzComponent = ({ fileData, displayClass }: QuartzComponentProps) => {
     const title = (fileData.frontmatter?.title as string | undefined) ?? ""
-    const runs = runsAttr(allFiles)
     return (
       <section class={classNames(displayClass, "hero")}>
         <h1 class="thesis serif">{title}</h1>
-        {runs && (
-          <p class="alive mono" data-runs={runs} aria-live="off">
-            &nbsp;
-          </p>
-        )}
       </section>
     )
   }

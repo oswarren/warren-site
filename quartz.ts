@@ -59,12 +59,8 @@ const shared: Partial<FullPageLayout> = {
     ConditionalRender({ component: Warren.ProjectHead(), condition: isProject }),
   ],
   afterBody: [
-    // home, in order: the maps of what I'm running, the selected systems, then the back of the watch, then the two ways in
+    // home: the statement, then the maps of what I'm running, and nothing below them (Warren, 2026-11-10)
     when(Warren.Maps(), isFront),
-    when(Warren.Featured(), isFront),
-    when(Warren.EvidenceHead(), isFront),
-    when(Warren.Balance(), isFront),
-    when(Warren.Ending(), isFront),
     // the work index
     when(Warren.Systems(), isSystemsIndex),
     // the two ways in
@@ -77,7 +73,8 @@ const shared: Partial<FullPageLayout> = {
   ],
   left: [],
   right: [],
-  footer: [Warren.WarrenFooter({ source: SOURCE, email: EMAIL })],
+  // no footer on home: the page ends at the maps' key
+  footer: [when(Warren.WarrenFooter({ source: SOURCE, email: EMAIL }), notFront)],
 }
 
 export const layout = await loadQuartzLayout({
