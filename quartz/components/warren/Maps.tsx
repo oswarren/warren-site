@@ -79,11 +79,12 @@ const stats = (key: string) => {
 }
 
 // The systems shown, one at a time; the buttons swap between them. The therapy practice stays unnamed.
+// the paper tints toward this once the maps are in view (motion.ts, data-tone): one tone for every
+// system, so the page changes with the scroll and not with the tab (Warren, 2026-11-10)
+const TONE = "#ede3d3"
 const SYSTEMS = [
   {
     key: "clay",
-    // the paper tints toward this while the map is in view (motion.ts, data-tone)
-    tone: "#ede3d3",
     name: "Wild Clay Archive",
     title: "The Wild Clay Archive system",
     intro: [
@@ -96,7 +97,6 @@ const SYSTEMS = [
   },
   {
     key: "penny",
-    tone: "#f1e8dc",
     name: "A Penny For Your Pottery",
     title: "The A Penny For Your Pottery system",
     intro: [
@@ -109,7 +109,6 @@ const SYSTEMS = [
   },
   {
     key: "framework",
-    tone: "#e8ece4",
     name: "A therapy practice",
     title: "The therapy practice system",
     intro: [
@@ -145,7 +144,7 @@ export default (() => {
         </div>
       </div>
       {SYSTEMS.map((s, i) => (
-        <div class="maps-sys" data-sys={s.key} data-tone={s.tone} role="tabpanel" hidden={i !== 0}>
+        <div class="maps-sys" data-sys={s.key} data-tone={TONE} role="tabpanel" hidden={i !== 0}>
           <div class="maps-text">
             <h2 class="serif">{s.title}</h2>
             {s.intro.map((t) => (
