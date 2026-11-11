@@ -71,6 +71,8 @@ function initMap(root) {
     const centre = N.find((d) => d.hub === 2)
     N.forEach((h) => { if (h.hub !== 1) return; const k = h.kids.length, G = k > 4 ? 66 : 72, lx = h.side === "l" ? 230 : 1170
       h.kids.forEach((d, i) => { if (d.x != null) { d.side = h.side; d.r = 7; return } d.x = lx; d.y = h.y + (i - (k - 1) / 2) * G; d.side = h.side; d.r = 7 }) })
+    // a piece can have a piece of its own (Instagram's reel maker): it carries its own x and y
+    N.forEach((d) => { if (d.p && by[d.p].hub !== 1) { d.r = 7; d.side = by[d.p].side } })
     // On a phone the whole system runs top to bottom so it fits the screen: the phone at the top,
     // then each branch down one line on the left, its pieces stepping off it to the right.
     const vert = window.matchMedia("(max-width: 720px)").matches
@@ -83,8 +85,10 @@ function initMap(root) {
       let y = grid || pots ? 190 : 110, prev = centre
       order.forEach((h) => {
         h.x = SX; h.y = y; h.from = prev; prev = h
-        h.kids.forEach((k, i) => { k.x = PX; k.y = y + 62 + i * 54 })
-        y += 62 + h.kids.length * 54 + 40
+        let row = 0
+        const place = (k, depth) => { k.x = PX + depth * 30; k.y = y + 62 + row * 54; row++; k.kids.forEach((g) => place(g, depth + 1)) }
+        h.kids.forEach((k) => place(k, 0))
+        y += 62 + row * 54 + 40
       })
       svg.setAttribute("viewBox", (phone ? "0 -20 390 " : "0 -34 390 ") + (y - (phone ? 30 : 16)))
     }
@@ -169,7 +173,7 @@ function initMap(root) {
       d.g.style.transitionDelay = (reduce ? 0 : t + 260) + "ms"; d.g.classList.add("on")
     }
     // one tap on the centre opens everything: the branches first, then each branch's pieces
-    function openHub(h, base) { h.g.classList.add("open"); h.kids.forEach((k, i) => show(k, base + i * 70)) }
+    function openHub(h, base) { h.g.classList.add("open"); h.kids.forEach((k, i) => { show(k, base + i * 70); k.kids.forEach((g, j) => show(g, base + i * 70 + 320 + j * 70)) }) }
     let isOpen = false, io = null
     function openCentre() {
       isOpen = true
